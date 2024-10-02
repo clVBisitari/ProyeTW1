@@ -1,8 +1,23 @@
 package com.tallerwebi.dominio;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Service("servicioUsuario")
+@Transactional
+
 public class ServicioUsuarioImpl implements ServicioUsuario{
+
+    private RepositorioUsuario repositorioUsuario;
+
+    @Autowired
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario){
+        this.repositorioUsuario = repositorioUsuario;
+    }
+
     @Override
     public Boolean cargarSaldo(int valor) {
         return null;
