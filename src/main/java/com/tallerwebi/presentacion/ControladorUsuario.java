@@ -49,6 +49,16 @@ public class ControladorUsuario {
 
         return new ModelAndView("contactos",model);
     }
+   /* @RequestMapping(path = "/suspender/usuario=?", method = RequestMethod.POST)
+    public ModelAndView suspenderUsuario(Usuario usuario) { /// servicioSuspenderUsuario
 
+        if(usuario.getEnSuspencion()!=true){
+            String mensaje = "el usuario ya se encuentra suspedido"
+            ModelMap modeloUserSuspendido = new ModelMap();
+            return new ModelAndView("redirect:/contactos");
+        }
+        return new ModelAndView("redirect:/contactos");
+
+    }*/
 }
 

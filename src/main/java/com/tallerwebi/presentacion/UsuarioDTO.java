@@ -3,6 +3,7 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProyectoDeInversion;
 import com.tallerwebi.dominio.Usuario;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsuarioDTO {
@@ -13,10 +14,9 @@ public class UsuarioDTO {
     private String apellido;
     private Integer dni;
     private Double saldo;
-    private List<Usuario> contactos; /// lo quiero mostrar?
+    private ArrayList<UsuarioDTO> contactos; /// lo quiero mostrar?
     //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoDeInversion proyecto;
-
     public Long getId() {
         return id;
     }
@@ -65,11 +65,11 @@ public class UsuarioDTO {
         this.saldo = saldo;
     }
 
-    public List<Usuario> getContactos() {
+    public List<UsuarioDTO> getContactos() {
         return contactos;
     }
 
-    public void setContactos(List<Usuario> contactos) {
+    public void setContactos(ArrayList<UsuarioDTO> contactos) {
         this.contactos = contactos;
     }
 

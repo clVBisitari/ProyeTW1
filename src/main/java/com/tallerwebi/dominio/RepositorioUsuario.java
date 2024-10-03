@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface RepositorioUsuario {
@@ -9,6 +10,6 @@ public interface RepositorioUsuario {
     Usuario buscar(String email);
     void modificar(Usuario usuario);
 
-    List<Usuario> obtenerContactos();
+    ArrayList<Usuario> obtenerContactos();
 }
 

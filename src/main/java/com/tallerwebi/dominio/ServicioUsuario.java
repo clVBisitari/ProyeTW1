@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ServicioUsuario {
@@ -23,5 +24,5 @@ public interface ServicioUsuario {
     public Boolean eliminarPublicacion(int idProyectoInver);
     public Boolean eliminarUsuario(int idUser);
 
-    List<Usuario> getContactos();
+    ArrayList<Usuario> getContactos();
 }

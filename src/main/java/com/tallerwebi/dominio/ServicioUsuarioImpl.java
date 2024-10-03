@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("servicioUsuario")
@@ -109,7 +110,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public List<Usuario> getContactos() {
+    public ArrayList<Usuario> getContactos() {
         return repositorioUsuario.obtenerContactos();
     }
 }
