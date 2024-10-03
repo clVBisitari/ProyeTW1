@@ -2,3 +2,5 @@
 /target/*
 /src/main/java/com/tallerwebi/config/TestConfigClass.java
 /src/main/java/com/tallerwebi/config/HibernateConfig.java
+target/classes/com/tallerwebi/config/HibernateConfig.class
+tallerwebi-base.iml
