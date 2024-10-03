@@ -34,12 +34,12 @@ public class ControladorUsuarioTest {
 @Test
     public void dadoQueExisteUnUsuarioAlIrAcontactosPuedeVerLaListaDeUsuariosContacto(){
        UsuarioDTO usuarioMock =mock(UsuarioDTO.class);
-       ArrayList<UsuarioDTO> contactos = new ArrayList<>();
-       contactos.add(new UsuarioDTO());
-       contactos.add(new UsuarioDTO());
-       contactos.add(new UsuarioDTO());
+       ArrayList<Usuario> contactos = new ArrayList<>();
+       contactos.add(new Usuario());
+       contactos.add(new Usuario());
+       contactos.add(new Usuario());
 
-    when(usuarioMock.getContactos()).thenReturn(contactos);
+    when(servicioUsuarioMock.getContactos()).thenReturn(contactos);
 
        ModelAndView mav = whenListarContactos(usuarioMock);
 
@@ -56,15 +56,28 @@ public class ControladorUsuarioTest {
 
     }
 
+    @Test
+    public void dadoQueExisteUnUsuarioAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos(){
+        UsuarioDTO usuarioMockEsperado =mock(UsuarioDTO.class);
+        ModelAndView mav = cuandoVaADashBoard(usuarioMockEsperado);
+        entoncesSeRenderizaLaVistaConDatos(mav,usuarioMockEsperado);
+    }
+    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav, UsuarioDTO usuarioMockEsperado) {
+        assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
+        assertThat(mav.getModel().get("UsuarioDTO"), equalTo(usuarioMockEsperado));
+    }
 
+    private ModelAndView cuandoVaADashBoard(UsuarioDTO usuarioMockEsperado) {
+      return controladorUsuario.irAdashboard(usuarioMockEsperado);
+    }
 
-/*
+    /*
     @Test
     public void dadoQueExisteUnUsuarioYEsAdminSePuedeSuspenderAOtro(){
 
         //given
         //when
-        Usuario usuarioQueSuspende = mock(Usuario.class);
+        UsuarioDTO usuarioQueSuspende = mock(UsuarioDTO.class);
         when(usuarioQueSuspende.getEsAdmin()).thenReturn(true);
         Usuario usuarioASuspender= mock(Usuario.class);
         ModelAndView mav = whenSuspenderUsuario(usuarioASuspender);

@@ -26,10 +26,10 @@ public class ControladorUsuario {
     }
 
     @RequestMapping("/dashboard")
-    public ModelAndView irAdashboard() {
+    public ModelAndView irAdashboard(@ModelAttribute("UsuarioDTO") UsuarioDTO usuarioDTO) {
 
         ModelMap modelo = new ModelMap();
-        modelo.put("UsuarioDTO", new UsuarioDTO());
+        modelo.put("UsuarioDTO", usuarioDTO);
         return new ModelAndView("dashboard", modelo);
     }
 

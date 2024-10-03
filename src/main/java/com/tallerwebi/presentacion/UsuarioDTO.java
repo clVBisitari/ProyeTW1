@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.Usuario;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class UsuarioDTO {
 
@@ -79,5 +80,18 @@ public class UsuarioDTO {
 
     public void setProyecto(ProyectoDeInversion proyecto) {
         this.proyecto = proyecto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioDTO that = (UsuarioDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni) && Objects.equals(saldo, that.saldo) && Objects.equals(contactos, that.contactos) && Objects.equals(proyecto, that.proyecto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
     }
 }
