@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
+import java.util.List;
 
 public interface RepositorioProyeInversion {
-    public List<ProyectoInversion> buscarProyectoInversion(String name);
-
+    List<ProyectoInversion> getMatchProyes(String name);
+    List<ProyectoInversion> getPublicacionesSuspendidas();
 }

@@ -1,18 +1,21 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service("servicioProyectoInversion")
 @Transactional
-public class ServicioProyectoInversionImpl {
+public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
+{
 
-    private ProyeInversionRepositorio repoProyeInversion;
+    private RepositorioProyeInversion repoProyeInversion;
 
     @Autowired
-    public ServicioProyectoInversionImpl(ProyeInversionRepositorio repoProyeInversion) {
+    public ServicioProyectoInversionImpl(RepositorioProyeInversion repoProyeInversion) {
         this.repoProyeInversion = repoProyeInversion;
     }
 
@@ -21,5 +24,10 @@ public class ServicioProyectoInversionImpl {
     {
         List<ProyectoInversion> resultadoBusqueda = this.repoProyeInversion.getMatchProyes(name);
         return resultadoBusqueda;
+    }
+    @Override
+    public List<ProyectoInversion> listarPublicacionesSupendidas(){
+        List<ProyectoInversion> publisSuspendidas = this.repoProyeInversion.getPublicacionesSuspendidas();
+        return publisSuspendidas;
     }
 }
