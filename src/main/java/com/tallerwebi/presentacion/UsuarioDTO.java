@@ -1,29 +1,23 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.presentacion;
 
-import javax.persistence.*;
+import com.tallerwebi.dominio.ProyectoDeInversion;
+import com.tallerwebi.dominio.Usuario;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-@Entity
-public class Usuario {
+public class UsuarioDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
-    @OneToMany
-    private List<Usuario>contactos;
-    private String password;
-    private Boolean esAdmin;
-    private Boolean enSuspencion;
-   @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
+    private ArrayList<UsuarioDTO> contactos; /// lo quiero mostrar?
+    //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoDeInversion proyecto;
-   ///private List<Inversion>
-
-
     public Long getId() {
         return id;
     }
@@ -72,36 +66,12 @@ public class Usuario {
         this.saldo = saldo;
     }
 
-    public List<Usuario> getContactos() {
+    public List<UsuarioDTO> getContactos() {
         return contactos;
     }
 
-    public void setContactos(List<Usuario> contactos) {
+    public void setContactos(ArrayList<UsuarioDTO> contactos) {
         this.contactos = contactos;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getEsAdmin() {
-        return esAdmin;
-    }
-
-    public void setEsAdmin(Boolean esAdmin) {
-        this.esAdmin = esAdmin;
-    }
-
-    public Boolean getEnSuspencion() {
-        return enSuspencion;
-    }
-
-    public void setEnSuspencion(Boolean enSuspencion) {
-        this.enSuspencion = enSuspencion;
     }
 
     public ProyectoDeInversion getProyecto() {
@@ -110,5 +80,18 @@ public class Usuario {
 
     public void setProyecto(ProyectoDeInversion proyecto) {
         this.proyecto = proyecto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UsuarioDTO that = (UsuarioDTO) o;
+        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni) && Objects.equals(saldo, that.saldo) && Objects.equals(contactos, that.contactos) && Objects.equals(proyecto, that.proyecto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
     }
 }
