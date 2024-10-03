@@ -107,4 +107,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     public Boolean eliminarUsuario(int idUser) {
         return null;
     }
+
+    @Override
+    public List<Usuario> getContactos() {
+        return repositorioUsuario.obtenerContactos();
+    }
 }

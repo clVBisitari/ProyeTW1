@@ -23,4 +23,5 @@ public interface ServicioUsuario {
     public Boolean eliminarPublicacion(int idProyectoInver);
     public Boolean eliminarUsuario(int idUser);
 
+    List<Usuario> getContactos();
 }
