@@ -17,22 +17,38 @@ import static org.mockito.Mockito.*;
 public class ControladorLoginTest {
 
 	private ControladorLogin controladorLogin;
+
+	private ServicioLogin servicioLoginMock;
+
+
+
+
 	private Usuario usuarioMock;
 	private DatosLogin datosLoginMock;
+
+
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
-	private ServicioLogin servicioLoginMock;
+
+
 
 
 	@BeforeEach
 	public void init(){
+		controladorLogin = new ControladorLogin(servicioLoginMock);
+		servicioLoginMock = mock(ServicioLogin.class);
+
+
+
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);
 		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
+
+
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
-		servicioLoginMock = mock(ServicioLogin.class);
-		controladorLogin = new ControladorLogin(servicioLoginMock);
+
+
 	}
 
 	@Test
@@ -53,9 +69,9 @@ public class ControladorLoginTest {
 	public void loginConUsuarioYPasswordCorrectosDeberiaLLevarAHome(){
 		// preparacion
 		Usuario usuarioEncontradoMock = mock(Usuario.class);
-		when(usuarioEncontradoMock.getRol()).thenReturn("ADMIN");
+		when(usuarioEncontradoMock.getEsAdmin()).thenReturn(true);
 
-		when(requestMock.getSession()).thenReturn(sessionMock);
+		when(requestMock.getSession()).thenReturn(sessionMock); //////////ver linea
 		when(servicioLoginMock.consultarUsuario(anyString(), anyString())).thenReturn(usuarioEncontradoMock);
 		
 		// ejecucion
@@ -63,7 +79,7 @@ public class ControladorLoginTest {
 		
 		// validacion
 		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
-		verify(sessionMock, times(1)).setAttribute("ROL", usuarioEncontradoMock.getRol());
+		verify(sessionMock, times(1)).setAttribute("esAdmin", usuarioEncontradoMock.getEsAdmin());
 	}
 
 	@Test
