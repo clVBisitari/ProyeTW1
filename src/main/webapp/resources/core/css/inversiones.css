@@ -1,0 +1,180 @@
+.investments__main {
+padding: 5%;
+margin-bottom: 60px;
+}
+
+.investments__header {
+display: flex;
+flex-direction: column;
+gap: 2rem;
+justify-content: center;
+align-items: center;
+}
+
+.investments__search {
+order: 1;
+width: 100%;
+display: flex;
+position: relative;
+}
+
+.investments__input {
+border-radius: 5px;
+width: 100%;
+font-size: 1.2rem;
+padding: .5rem;
+}
+
+.investments__icon {
+position: absolute;
+right: 5px;
+top: .5rem;
+fill: var(--dark);
+width: 20px;
+height: 20px;
+}
+
+.investments__button {
+order: 0;
+}
+
+.investments__content {
+display: flex;
+flex-direction: column;
+margin-top: 2rem;
+gap: 2rem;
+}
+
+.investments__start {
+order: 2;
+display: flex;
+flex-direction: column;
+gap: 2rem;
+}
+
+.investments__title {
+font-size: 1.3rem;
+font-weight: 500;
+color: #000;
+}
+
+.proyect {
+margin-left: .5rem;
+display: grid;
+row-gap: 1rem;
+color: var(--dark);
+grid-template-columns: repeat(2, auto);
+grid-template-rows: repeat(3, auto);
+justify-content: space-between;
+}
+
+.proyect__subtitle {
+grid-area: 1 / 1 / 2 / 3;
+font-size: 1.1rem;
+font-weight: 500;
+}
+
+.proyect__number {
+grid-area: 2 / 1 / 3 / 1;
+font-size: 1rem;
+}
+
+.proyect__description {
+grid-area: 2 / 2 / 3 / 2;
+font-size: 1rem;
+}
+
+.proyect__date {
+grid-area: 3 / 1 / 3 / 3;
+font-size: 1rem;
+}
+
+.investments__end {
+order: 1;
+display: flex;
+flex-direction: column;
+gap: 2rem;
+}
+
+.investment {
+margin-left: .5rem;
+}
+
+.investment__number {
+font-size: 1rem;
+}
+
+.investment__text {
+margin-top: .5rem;
+font-size: 1rem;
+}
+
+@media screen and (min-width: 769px) {
+
+.investments__main {
+width: calc(100% - 50px);
+margin-left: 50px;
+display: flex;
+flex-direction: column;
+padding: 2rem;
+}
+
+.investments__header{
+flex-direction: row;
+justify-content: space-between;
+}
+
+.investments__search{
+order: 0;
+width: 30%;
+}
+
+.investments__button{
+text-align: end;
+width: 30%;
+}
+
+.investments__content{
+margin-top: 4rem;
+flex-direction: row;
+justify-content: space-between;
+}
+
+.investments__start{
+order: 0;
+}
+
+.investments__end{
+background: #fff;
+border-radius: 5px;
+padding: .5rem;
+width: 30%;
+}
+
+.proyect {
+grid-template-columns: repeat(2, auto);
+grid-template-rows: repeat(2, 1fr);
+justify-content: space-between;
+align-items: center;
+gap: 0;
+}
+
+.proyect__subtitle {
+grid-area: auto;
+}
+
+.proyect__number {
+text-align: end;
+grid-area: auto;
+}
+
+.proyect__description {
+grid-area: auto;
+}
+
+.proyect__date {
+text-align: end;
+grid-area: auto;
+}
+
+}
