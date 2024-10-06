@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
     }
-
+    @Transactional
     @RequestMapping(path = "/contactos", method = RequestMethod.GET)
 
     public ModelAndView irAContactos(HttpServletRequest request) {
