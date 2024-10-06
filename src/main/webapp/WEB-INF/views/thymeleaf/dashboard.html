@@ -74,8 +74,8 @@
 <main class="dashboard__main">
     <nav class="dashboard__top">
         <div class="dashboard__left">
-            <img class="dashboard__userimg" src="../img/perfil.jpg" alt="foto de perfil" />
-            <h2 class="dashboard__usertext">Juan Carlos</h2>
+            <img class="dashboard__userimg" th:src="@{img/perfil.jpg}" alt="foto de perfil" />
+            <h2 class="dashboard__usertext" th:text="${usuario.email}">Juan Carlos</h2>
         </div>
         <div class="dashboard__right">
             <a class="dashboard__link" href="">Ir a Inversiones -></a>
