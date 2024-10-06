@@ -110,7 +110,10 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public ArrayList<Usuario> getContactos() {
-        return repositorioUsuario.obtenerContactos();
+    public List<Usuario> getContactos(String email) {
+
+        return repositorioUsuario.obtenerContactos(email);
+
+
     }
 }

@@ -24,5 +24,5 @@ public interface ServicioUsuario {
     public Boolean eliminarPublicacion(int idProyectoInver);
     public Boolean eliminarUsuario(int idUser);
 
-    ArrayList<Usuario> getContactos();
+    List<Usuario> getContactos(String email);
 }

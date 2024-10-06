@@ -83,27 +83,21 @@
         </form>
     </header>
     <section class="contacts__section">
-        <h2 class="contacts__title">Mis contactos</h2>
+        <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
+
+        <div th:each="contacto : ${contactos}">
         <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
+            <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/> hardcoreado!
+            <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
         </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
+        </div>
+
+        <div th:else="${contactos == null}">
+            <p  th:text="${noHayContactos}">No hay contactos en tu lista.</p>
+        </div>
+
+
+
     </section>
     <aside class="contacts__aside">
         <h3 class="contacts__atitle">Sugeridos</h3>

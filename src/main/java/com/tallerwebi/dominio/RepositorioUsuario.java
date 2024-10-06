@@ -10,6 +10,6 @@ public interface RepositorioUsuario {
     Usuario buscar(String email);
     void modificar(Usuario usuario);
 
-    ArrayList<Usuario> obtenerContactos();
+    List<Usuario> obtenerContactos(String email);
 }
 

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 @Controller
 public class ControladorLogin {
@@ -41,8 +42,15 @@ public class ControladorLogin {
             System.out.println("--- USUARIO ---");
             System.out.println(usuarioBuscado.getEmail());
             System.out.println(usuarioBuscado);
-            model.put("usuario", usuarioBuscado);
-            return new ModelAndView("dashboard", model);
+            HttpSession session = request.getSession();
+            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
+            session.setAttribute("USUARIO", usuarioBuscado); // Almacena el objeto Usuario completo
+
+            // También puedes agregar el usuario al modelo si prefieres pasarlo directamente
+
+
+            // Redirigir a la vista del dashboard
+            return new ModelAndView("redirect:/dashboard");
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
