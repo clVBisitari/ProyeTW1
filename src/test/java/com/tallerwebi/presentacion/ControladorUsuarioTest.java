@@ -57,21 +57,23 @@ public class ControladorUsuarioTest {
 
     }
 
-/*
 
   @Test
     public void dadoQueExisteUnUsuarioAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos(){
-        UsuarioDTO usuarioMockEsperado =mock(UsuarioDTO.class);
-        ModelAndView mav = cuandoVaADashBoard(usuarioMockEsperado);
-        entoncesSeRenderizaLaVistaConDatos(mav,usuarioMockEsperado);
+
+      when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
+      when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
+
+        ModelAndView mav = cuandoVaADashBoard(requestMock);
+        entoncesSeRenderizaLaVistaConDatos(mav);
     }
-    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav, UsuarioDTO usuarioMockEsperado) {
+    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav) {
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
-        assertThat(mav.getModel().get("UsuarioDTO"), equalTo(usuarioMockEsperado));
+        assertThat(mav.getModel().get("usuario"), equalTo(usuarioMock));
     }
 
     private ModelAndView cuandoVaADashBoard(HttpServletRequest request) {
-      return controladorUsuario.irAdashboard(request);
+      return controladorUsuario.irADashboard(request);
     }
 
     /*
