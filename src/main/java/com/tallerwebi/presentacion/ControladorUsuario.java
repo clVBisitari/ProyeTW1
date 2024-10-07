@@ -9,13 +9,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-
+@Transactional
 @Controller
 public class ControladorUsuario {
 
@@ -25,7 +26,7 @@ public class ControladorUsuario {
     public ControladorUsuario(ServicioUsuario servicioUsuario) {
         this.servicioUsuario = servicioUsuario;
     }
-
+    @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
 
@@ -70,28 +71,20 @@ public class ControladorUsuario {
 
 
     @RequestMapping(path = "/suspender/usuario/{nombre}", method = RequestMethod.POST)
-    public ModelAndView suspenderUsuario(@PathVariable("nombre")String nombre, @RequestParam("motivo") String motivo) { /// servicioSuspenderUsuario
-
-        ModelMap modeloUserSuspendido = new ModelMap();
-
+    public String suspenderUsuario(@PathVariable("nombre") String nombre, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
-
-        System.out.println("a ver esooooooooooooooooooooooooooo" +  usuario);
-
         // Lógica para suspender al usuario
-         servicioUsuario.suspenderUsuario(motivo, usuario.getId());
+        servicioUsuario.suspenderUsuario(motivo, usuario.getId());
 
-            if (usuario.getEnSuspencion()) {
-                String mensaje = "Usuario suspendido exitosamente";
-                modeloUserSuspendido.addAttribute("mensaje", mensaje);
-            }
+        System.out.println("quiero ver ahora como es el estado del usuarioooooooooo" + usuario );
 
-            /*else {
-                String mensaje = "Error al suspender el usuario";
-                modeloUserSuspendido.addAttribute("mensaje", mensaje);
-            }* no pongo esta parte xq se supone q si el contacto esta suspendido ni siquiera podria mostrar la opcion*/
+        if (usuario.getEnSuspencion()) {
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
+        } else {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
+        }
 
-        return new ModelAndView("redirect:/contactos", modeloUserSuspendido);
+        return "redirect:/contactos";
     }
 
 

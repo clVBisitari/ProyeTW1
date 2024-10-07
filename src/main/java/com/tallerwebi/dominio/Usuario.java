@@ -127,4 +127,21 @@ public class Usuario {
     public int hashCode() {
         return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspencion, proyecto);
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", saldo=" + saldo +
+                ", contactos=" + contactos +
+                ", password='" + password + '\'' +
+                ", esAdmin=" + esAdmin +
+                ", enSuspencion=" + enSuspencion +
+                ", proyecto=" + proyecto +
+                '}';
+    }
 }

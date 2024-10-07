@@ -90,6 +90,8 @@
             <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/> hardcoreado!
             <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
+            <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
+
             <div th:if="${usuarioActual.esAdmin}">
                 <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
                     <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
@@ -97,11 +99,6 @@
                     <input type="submit">suspender usuario </input>
                 </form>
             </div>
-
-            <div th:if="${modeloUserSuspendido != null}">
-                <p th:text="*{mensaje}">  </p>
-            </div>
-
         </article>
 
         </div>
