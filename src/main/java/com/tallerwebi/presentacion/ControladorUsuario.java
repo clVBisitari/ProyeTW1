@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -26,29 +29,45 @@ public class ControladorUsuario {
     }
 
     @RequestMapping("/dashboard")
-    public ModelAndView irAdashboard(@ModelAttribute("UsuarioDTO") UsuarioDTO usuarioDTO) {
-
-        ModelMap modelo = new ModelMap();
-        modelo.put("UsuarioDTO", usuarioDTO);
-        return new ModelAndView("dashboard", modelo);
-    }
-
-    @RequestMapping(path = "/contactos", method = RequestMethod.POST)
-
-    public ModelAndView irAContactos(@ModelAttribute("UsuarioDTO") UsuarioDTO usuarioDTO) {
+    public ModelAndView irADashboard(HttpServletRequest request) {
 
         ModelMap model = new ModelMap();
 
-        List<Usuario> contactos = servicioUsuario.getContactos();
-        if (contactos!=null){
-            model.put("contactos",contactos);
+        HttpSession session = request.getSession(false); // Obtener la sesión actual, no crear una nueva
+        if (session != null && session.getAttribute("USUARIO") != null) {
+            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+          //  logger.debug("Usuario en sesión: {}", usuario.getNombre());
+            model.put("usuario", usuario); // Agregar el objeto Usuario al modelo
 
+            return new ModelAndView("dashboard", model);
         } else {
-            model.put("noHayContactos", "No hay contactos en tu lista");
+        //    logger.debug("No hay usuario en la sesión, redirigiendo al login");
+            return new ModelAndView("redirect:/login");
         }
-
-        return new ModelAndView("contactos",model);
     }
+    @Transactional
+    @RequestMapping(path = "/contactos", method = RequestMethod.GET)
+
+    public ModelAndView irAContactos(HttpServletRequest request) {
+
+        ModelMap model = new ModelMap();
+
+        HttpSession session = request.getSession(false); // Obtener la sesión actual, no crear una nueva
+        if (session != null && session.getAttribute("USUARIO") != null) {
+            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+
+            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail()); //mando email para usar metodos que ya estaban
+            if (contactos != null && !contactos.isEmpty()) {
+                model.put("contactos", contactos);
+            } else {
+                model.put("noHayContactos", "No hay contactos en tu lista");
+            }
+
+        } return new ModelAndView("contactos", model);
+    }
+
+}
+
    /* @RequestMapping(path = "/suspender/usuario=?", method = RequestMethod.POST)
     public ModelAndView suspenderUsuario(Usuario usuario) { /// servicioSuspenderUsuario
 
@@ -60,5 +79,5 @@ public class ControladorUsuario {
         return new ModelAndView("redirect:/contactos");
 
     }*/
-}
+
 

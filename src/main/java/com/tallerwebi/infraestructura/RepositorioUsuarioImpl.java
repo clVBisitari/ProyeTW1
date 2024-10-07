@@ -49,7 +49,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public ArrayList<Usuario> obtenerContactos() {
+    public List<Usuario> obtenerContactos(String email) {
+        Usuario usuario = buscar(email);
+        if (usuario != null) {
+            return usuario.getContactos(); // Asegúrate de que getContactos() devuelve una List<Usuario>
+        }
         return null;
     }
 

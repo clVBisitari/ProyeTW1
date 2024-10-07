@@ -21,7 +21,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link" th:href="@{/contactos}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Contactos</title>
                 <path
@@ -74,8 +74,8 @@
 <main class="dashboard__main">
     <nav class="dashboard__top">
         <div class="dashboard__left">
-            <img class="dashboard__userimg" src="../img/perfil.jpg" alt="foto de perfil" />
-            <h2 class="dashboard__usertext">Juan Carlos</h2>
+            <img class="dashboard__userimg" th:src="@{img/perfil.jpg}" alt="foto de perfil" />
+            <h2 class="dashboard__usertext" th:text="${usuario.email}">Juan Carlos</h2>
         </div>
         <div class="dashboard__right">
             <a class="dashboard__link" href="">Ir a Inversiones -></a>
