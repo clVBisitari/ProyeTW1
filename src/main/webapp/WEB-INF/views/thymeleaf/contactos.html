@@ -85,13 +85,13 @@
     <section class="contacts__section">
         <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
 
-        <div th:each="contacto : ${contactos}">
+        <div th:each="usuario : ${contactos}">
         <article class="contacts__article">
             <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/> hardcoreado!
-            <p class="contacts__text" th:text="${contacto.nombre}">Usuario</p>
+            <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
-            <div th:if="${usuario.esAdmin}">
-                <form th:action="@{/suspender/usuario/{nombre}(nombre=${contacto.nombre})}" method="post">
+            <div th:if="${usuarioActual.esAdmin}">
+                <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
                     <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
 
                     <input type="submit">suspender usuario </input>

@@ -9,7 +9,7 @@ public interface ServicioUsuario {
     public Boolean modificarIngresoMensual(int valor);
     public ProyectoDeInversion publicarProyectoPropio(String descripción,int montoRequerido, Rubro rubro,int plazoParaInicio);
     public Boolean eliminarProyectoPropio(String motivo,int idProyecto); //
-    public Usuario buscarUsuario(String nombreUsuario);
+    public Usuario buscarUsuarioPorNombre(String nombreUsuario);
     public Boolean agregarUsuarioAContactos(Usuario usuarioAGuardar);
     public Boolean invertirEnProyecto(int valor,int idProyecto); // ---
     public void activarRecomendacionesAutomaticas(Double valor,int idUser);//buscarObjetoUSer ... // ver si sacamos parametro o no por cuestion de tiempo

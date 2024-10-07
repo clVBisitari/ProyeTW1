@@ -57,7 +57,7 @@ public class ControladorUsuario {
 
             List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail()); //mando email para usar metodos que ya estaban
             if (contactos != null && !contactos.isEmpty()) {
-                model.put("usuario", session.getAttribute("USUARIO"));
+                model.put("usuarioActual", session.getAttribute("USUARIO"));
                 model.put("contactos", contactos);
 
             } else {
@@ -73,10 +73,14 @@ public class ControladorUsuario {
     public ModelAndView suspenderUsuario(@PathVariable("nombre")String nombre, @RequestParam("motivo") String motivo) { /// servicioSuspenderUsuario
 
         ModelMap modeloUserSuspendido = new ModelMap();
-        Usuario usuario = servicioUsuario.buscarUsuario(nombre);
 
-            // Lógica para suspender al usuario
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        System.out.println("a ver esooooooooooooooooooooooooooo" +  usuario);
+
+        // Lógica para suspender al usuario
          servicioUsuario.suspenderUsuario(motivo, usuario.getId());
+
             if (usuario.getEnSuspencion()) {
                 String mensaje = "Usuario suspendido exitosamente";
                 modeloUserSuspendido.addAttribute("mensaje", mensaje);

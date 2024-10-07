@@ -45,8 +45,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public Usuario buscarUsuario(String nombreUsuario) {
-        return null;
+    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
+        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
     @Override
@@ -91,6 +91,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
         return List.of();
     }
+
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
