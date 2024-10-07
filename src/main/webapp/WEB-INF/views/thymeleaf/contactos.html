@@ -88,8 +88,22 @@
         <div th:each="contacto : ${contactos}">
         <article class="contacts__article">
             <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/> hardcoreado!
-            <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
+            <p class="contacts__text" th:text="${contacto.nombre}">Usuario</p>
+
+            <div th:if="${usuario.esAdmin}">
+                <form th:action="@{/suspender/usuario/{nombre}(nombre=${contacto.nombre})}" method="post">
+                    <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
+
+                    <input type="submit">suspender usuario </input>
+                </form>
+            </div>
+
+            <div th:if="${modeloUserSuspendido != null}">
+                <p th:text="*{mensaje}">  </p>
+            </div>
+
         </article>
+
         </div>
 
         <div th:else="${contactos == null}">

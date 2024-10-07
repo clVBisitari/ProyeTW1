@@ -8,13 +8,15 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
     @OneToMany
+    @JoinColumn(name = "usuario_id")
+
     private List<Usuario>contactos;
     private String password;
     private Boolean esAdmin;
@@ -24,11 +26,11 @@ public class Usuario {
    ///private List<Inversion>
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

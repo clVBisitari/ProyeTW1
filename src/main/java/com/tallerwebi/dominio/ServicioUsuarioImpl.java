@@ -80,8 +80,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public Boolean suspenderUsuario(String motivo, int idUser) {
-        return null;
+    public void suspenderUsuario(String motivo, int idUser) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
+        usuario.setEnSuspencion(true);
+        repositorioUsuario.modificar(usuario);
+
     }
 
     @Override
