@@ -59,13 +59,11 @@ public class ControladorUsuario {
             if (contactos != null && !contactos.isEmpty()) {
                 model.put("usuarioActual", session.getAttribute("USUARIO"));
                 model.put("contactos", contactos);
-
-            } else {
+            }else {
                 model.put("noHayContactos", "No hay contactos en tu lista");
-            }
+            }return new ModelAndView("contactos", model);
 
-        }
-        return new ModelAndView("contactos", model);
+        }       return new ModelAndView("redirect:/login");
     }
 
 

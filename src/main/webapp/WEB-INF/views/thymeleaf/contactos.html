@@ -90,14 +90,16 @@
             <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
             <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
-            <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
-
-            <div th:if="${usuarioActual.esAdmin}">
+            <div th:if="${usuarioActual.esAdmin && !usuario.enSuspencion}">
                 <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
                     <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
 
                     <input type="submit">suspender usuario </input>
                 </form>
+            </div>
+
+            <div>  <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
+            <button>quitar suspencion</button>
             </div>
         </article>
 
