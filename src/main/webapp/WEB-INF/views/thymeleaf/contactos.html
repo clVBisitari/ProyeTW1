@@ -87,7 +87,7 @@
 
         <div th:each="usuario : ${contactos}">
         <article class="contacts__article">
-            <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/> hardcoreado!
+            <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
             <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
             <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
