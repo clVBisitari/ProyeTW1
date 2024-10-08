@@ -11,7 +11,7 @@
 <body class="body">
 <nav class="nav">
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link"th:href="@{/dashboard} ">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Inicio</title>
                 <path
@@ -21,7 +21,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link" th:href="@{/contactos}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Contactos</title>
                 <path
@@ -32,7 +32,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link" th:href="@{/contactos}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Inversiones</title>
                 <path
@@ -56,7 +56,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link"  th:href="@{/cerrarSesion}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Salir</title>
                 <path
@@ -83,27 +83,30 @@
         </form>
     </header>
     <section class="contacts__section">
-        <h2 class="contacts__title">Mis contactos</h2>
+        <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
+
+        <div th:each="usuario : ${contactos}">
         <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
+            <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
+            <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
+
+            <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
+
+            <div th:if="${usuarioActual.esAdmin}">
+                <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
+                    <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
+
+                    <input type="submit">suspender usuario </input>
+                </form>
+            </div>
         </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
+
+        </div>
+
+        <div th:else="${contactos == null}">
+            <p  th:text="${noHayContactos}">No hay contactos en tu lista.</p>
+        </div>
+        
     </section>
     <aside class="contacts__aside">
         <h3 class="contacts__atitle">Sugeridos</h3>

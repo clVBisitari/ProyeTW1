@@ -2,19 +2,22 @@ package com.tallerwebi.dominio;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
     @OneToMany
+    @JoinColumn(name = "usuario_id")
+
     private List<Usuario>contactos;
     private String password;
     private Boolean esAdmin;
@@ -24,11 +27,11 @@ public class Usuario {
    ///private List<Inversion>
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -110,5 +113,35 @@ public class Usuario {
 
     public void setProyecto(ProyectoDeInversion proyecto) {
         this.proyecto = proyecto;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Usuario usuario = (Usuario) o;
+        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspencion, usuario.enSuspencion) && Objects.equals(proyecto, usuario.proyecto);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspencion, proyecto);
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", saldo=" + saldo +
+                ", contactos=" + contactos +
+                ", password='" + password + '\'' +
+                ", esAdmin=" + esAdmin +
+                ", enSuspencion=" + enSuspencion +
+                ", proyecto=" + proyecto +
+                '}';
     }
 }

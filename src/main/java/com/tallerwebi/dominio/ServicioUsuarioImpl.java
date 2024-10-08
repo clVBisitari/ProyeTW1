@@ -45,8 +45,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public Usuario buscarUsuario(String nombreUsuario) {
-        return null;
+    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
+        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
     @Override
@@ -80,14 +80,18 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public Boolean suspenderUsuario(String motivo, int idUser) {
-        return null;
+    public void suspenderUsuario(String motivo, int idUser) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
+        usuario.setEnSuspencion(true);
+        repositorioUsuario.modificar(usuario);
+
     }
 
     @Override
     public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
         return List.of();
     }
+
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
@@ -110,7 +114,10 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public ArrayList<Usuario> getContactos() {
-        return repositorioUsuario.obtenerContactos();
+    public List<Usuario> getContactos(String email) {
+
+        return repositorioUsuario.obtenerContactos(email);
+
+
     }
 }
