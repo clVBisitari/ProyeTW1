@@ -95,12 +95,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
+
         return null;
     }
 
     @Override
-    public Boolean revertirSuspensionUsuario(int idUsuario) {
-        return null;
+    public void revertirSuspensionUsuario(int idUsuario) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUsuario);
+        usuario.setEnSuspencion(false);
+        repositorioUsuario.modificar(usuario);
     }
 
     @Override

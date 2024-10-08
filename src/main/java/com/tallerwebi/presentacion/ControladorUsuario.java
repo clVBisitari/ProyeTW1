@@ -82,6 +82,15 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
+    @RequestMapping(path = "/DesSuspender/usuario/{nombre}", method = RequestMethod.POST)
+    public String DesSuspenderUsuario(@PathVariable("nombre") String nombre, RedirectAttributes redirectAttributes) {
+
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        servicioUsuario.revertirSuspensionUsuario(usuario.getId());
+
+        return "redirect:/contactos";
+    }
 
 
 }

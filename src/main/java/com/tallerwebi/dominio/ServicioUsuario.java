@@ -19,7 +19,7 @@ public interface ServicioUsuario {
     public void suspenderUsuario(String motivo, int idUser);
     public List<Usuario> buscarUsuario(Usuario nombreUsuario); /// dev una lista y selecciona con el nombre -- de la mando de agregar user a contactos
     public Boolean revertirSuspensionProyecto(int idProyectoInversion); // en el obj proyect inversion, modificar el boolean en suspencion
-    public Boolean revertirSuspensionUsuario(int idUsuario); // en el obj proyect inversion, modificar el boolean en suspencion
+    public void revertirSuspensionUsuario(int idUsuario); // en el obj proyect inversion, modificar el boolean en suspencion
 
     public Boolean eliminarPublicacion(int idProyectoInver);
     public Boolean eliminarUsuario(int idUser);
