@@ -52,6 +52,7 @@ public class ControladorUsuario {
 
         HttpSession session = request.getSession(false);
 
+
         if (session != null && session.getAttribute("USUARIO") != null) {
             Usuario usuario = (Usuario) session.getAttribute("USUARIO");
 
@@ -91,6 +92,7 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
+
 
 
 }

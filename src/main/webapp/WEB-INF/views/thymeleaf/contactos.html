@@ -86,6 +86,7 @@
         <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
 
         <div th:each="usuario : ${contactos}">
+
             <article class="contacts__article">
                 <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
                 <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
