@@ -35,10 +35,8 @@ public class ControladorLoginTest {
 
 	@BeforeEach
 	public void init(){
-		controladorLogin = new ControladorLogin(servicioLoginMock);
 		servicioLoginMock = mock(ServicioLogin.class);
-
-
+		controladorLogin = new ControladorLogin(servicioLoginMock);
 
 		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
 		usuarioMock = mock(Usuario.class);

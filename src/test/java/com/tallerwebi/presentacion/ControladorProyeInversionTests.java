@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.ServicioProyectoInversion;
+import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -19,10 +21,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -40,12 +39,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ControladorProyeInversionTests {
 
     private ProyectoInversion proyeInversionMock;
-    private List<ProyectoInversion> proyeInvList;
+    private List<ProyectoInversion> proyeInvList = new ArrayList<ProyectoInversion>();
     ProyectoInversion proye1 = new ProyectoInversion();
     ProyectoInversion proye2 = new ProyectoInversion();
 
-    @InjectMocks
+    @Mock
     private ServicioProyectoInversion proyeInvServiceMock;
+
+    @InjectMocks
+    private ControladorProyeInversion controlador;
 
     @Autowired
     private WebApplicationContext wac;
@@ -58,27 +60,27 @@ public class ControladorProyeInversionTests {
         proye1.setId(1L);
         proye2.setTitulo("Proyecto 2");
         proye2.setId(2L);
-        proyeInvList = Arrays.asList(proye1, proye2);
+        proyeInvList.add(proye1);
+        proyeInvList.add(proye2);
 
-        when(proyeInversionMock.getTitulo()).thenReturn("ProyeInversion Mock");
 
-        proyeInvServiceMock = mock(ServicioProyectoInversion.class);
-
+        proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
     @Test
     public void DadosDatosValidos_CuandoSellamaaBuscarProyectos_RetornaListaOk() throws Exception {
-        MvcResult result = this.mockMvc.perform(get("/buscarProyeInversion").param("nombre","algo"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(model().attributeExists("response"))
-                .andReturn();
 
-        ModelAndView modelAndView = result.getModelAndView();
+        ModelAndView modelAndView = this.controlador.buscarProyectoInversion("algo");
+
         assert modelAndView != null;
+        var array = modelAndView.getModel().get("response");
+
         assertThat("redirect:inversiones", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
         assertThat(false, is(modelAndView.getModel().isEmpty()));
+        assertThat(((ArrayList<?>) array).size(), is(2));
     }
 
 }

@@ -83,6 +83,9 @@
     font-size: 1rem;
 }
 
+p.alert.alert-danger{
+    color: red;
+}
 
 @media screen and (min-width: 769px) {
     .login__aside {
