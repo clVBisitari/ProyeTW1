@@ -32,15 +32,13 @@ public class ControladorUsuario {
 
         ModelMap model = new ModelMap();
 
-        HttpSession session = request.getSession(false); // Obtener la sesión actual, no crear una nueva
+        HttpSession session = request.getSession();
         if (session != null && session.getAttribute("USUARIO") != null) {
             Usuario usuario = (Usuario) session.getAttribute("USUARIO");
-            //  logger.debug("Usuario en sesión: {}", usuario.getNombre());
-            model.put("usuario", usuario); // Agregar el objeto Usuario al modelo
+            model.put("usuario", usuario);
 
             return new ModelAndView("dashboard", model);
         } else {
-            //    logger.debug("No hay usuario en la sesión, redirigiendo al login");
             return new ModelAndView("redirect:/login");
         }
     }
@@ -52,11 +50,12 @@ public class ControladorUsuario {
 
         ModelMap model = new ModelMap();
 
-        HttpSession session = request.getSession(false); // Obtener la sesión actual, no crear una nueva
+        HttpSession session = request.getSession(false);
+
         if (session != null && session.getAttribute("USUARIO") != null) {
             Usuario usuario = (Usuario) session.getAttribute("USUARIO");
 
-            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail()); //mando email para usar metodos que ya estaban
+            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail());
             if (contactos != null && !contactos.isEmpty()) {
                 model.put("usuarioActual", session.getAttribute("USUARIO"));
                 model.put("contactos", contactos);
@@ -73,10 +72,9 @@ public class ControladorUsuario {
     @RequestMapping(path = "/suspender/usuario/{nombre}", method = RequestMethod.POST)
     public String suspenderUsuario(@PathVariable("nombre") String nombre, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
-        // Lógica para suspender al usuario
+
         servicioUsuario.suspenderUsuario(motivo, usuario.getId());
 
-        System.out.println("quiero ver ahora como es el estado del usuarioooooooooo" + usuario );
 
         if (usuario.getEnSuspencion()) {
             redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
@@ -87,14 +85,5 @@ public class ControladorUsuario {
         return "redirect:/contactos";
     }
 
-
-    /*
-        if (!usuario.getEnSuspencion()) {
-            String mensaje = "el usuario ya se encuentra suspedido";
-            ModelMap modeloUserSuspendido = new ModelMap();
-            return new ModelAndView("redirect:/contactos");
-        }
-        return new ModelAndView("redirect:/contactos");
-    }*/
 
 }

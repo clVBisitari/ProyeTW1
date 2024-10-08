@@ -41,19 +41,13 @@ public class ControladorLogin {
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            System.out.println("--- USUARIO ---");
-            System.out.println(usuarioBuscado.getEmail());
-            System.out.println(usuarioBuscado);
             HttpSession session = request.getSession();
+
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            session.setAttribute("USUARIO", usuarioBuscado); // Almacena el objeto Usuario completo
+            session.setAttribute("USUARIO", usuarioBuscado);
 
-            // También puedes agregar el usuario al modelo si prefieres pasarlo directamente
-
-
-            // Redirigir a la vista del dashboard
             return new ModelAndView("redirect:/dashboard");
+
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
