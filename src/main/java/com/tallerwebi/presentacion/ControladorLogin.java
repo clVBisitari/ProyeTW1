@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 @Controller
 public class ControladorLogin {
@@ -31,14 +33,21 @@ public class ControladorLogin {
         return new ModelAndView("login", modelo);
     }
 
+@Transactional
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
+
         ModelMap model = new ModelMap();
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
         if (usuarioBuscado != null) {
-            request.getSession().setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            return new ModelAndView("redirect:/home");
+            HttpSession session = request.getSession();
+
+            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
+            session.setAttribute("USUARIO", usuarioBuscado);
+
+            return new ModelAndView("redirect:/dashboard");
+
         } else {
             model.put("error", "Usuario o clave incorrecta");
         }
@@ -76,5 +85,19 @@ public class ControladorLogin {
     public ModelAndView inicio() {
         return new ModelAndView("redirect:/login");
     }
+
+    @RequestMapping(path = "/cerrarSesion", method = RequestMethod.GET)
+    public ModelAndView cerrarSesion(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false); // Obtener la sesión actual, no crear una nueva
+
+        if (session != null && session.getAttribute("USUARIO") != null) {
+            session.invalidate();
+        }
+        return new ModelAndView("redirect:/login");
+    }
 }
+
+
+
 

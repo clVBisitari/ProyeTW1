@@ -14,7 +14,7 @@ public class UsuarioDTO {
     private String apellido;
     private Integer dni;
     private Double saldo;
-    private ArrayList<UsuarioDTO> contactos; /// lo quiero mostrar?
+    private List<UsuarioDTO> contactos; /// lo quiero mostrar?
     //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
     public Long getId() {
@@ -69,7 +69,7 @@ public class UsuarioDTO {
         return contactos;
     }
 
-    public void setContactos(ArrayList<UsuarioDTO> contactos) {
+    public void setContactos(List<UsuarioDTO> contactos) {
         this.contactos = contactos;
     }
 

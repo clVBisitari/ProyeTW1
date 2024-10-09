@@ -74,5 +74,4 @@ public class ControladorProyeInversionTests {
         assertThat(false, is(modelAndView.getModel().isEmpty()));
         assertThat(((ArrayList<?>) array).size(), is(2));
     }
-
 }

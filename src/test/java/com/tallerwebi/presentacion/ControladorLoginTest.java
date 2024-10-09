@@ -20,33 +20,23 @@ public class ControladorLoginTest {
 
 	private ServicioLogin servicioLoginMock;
 
-
-
-
 	private Usuario usuarioMock;
 	private DatosLogin datosLoginMock;
 
-
 	private HttpServletRequest requestMock;
 	private HttpSession sessionMock;
-
-
-
 
 	@BeforeEach
 	public void init(){
 		servicioLoginMock = mock(ServicioLogin.class);
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 
-		datosLoginMock = new DatosLogin("dami@unlam.com", "123");
+		datosLoginMock = new DatosLogin("usuario@prueba.com", "123");
 		usuarioMock = mock(Usuario.class);
-		when(usuarioMock.getEmail()).thenReturn("dami@unlam.com");
-
+		when(usuarioMock.getEmail()).thenReturn("usuario@prueba.com");
 
 		requestMock = mock(HttpServletRequest.class);
 		sessionMock = mock(HttpSession.class);
-
-
 	}
 
 	@Test
@@ -76,7 +66,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
 		
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/home"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/dashboard"));
 		verify(sessionMock, times(1)).setAttribute("esAdmin", usuarioEncontradoMock.getEsAdmin());
 	}
 

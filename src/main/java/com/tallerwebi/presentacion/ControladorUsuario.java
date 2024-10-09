@@ -7,58 +7,83 @@ import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-
+@Transactional
 @Controller
 public class ControladorUsuario {
 
     private ServicioUsuario servicioUsuario;
 
     @Autowired
-    public ControladorUsuario(ServicioUsuario servicioUsuario){
+    public ControladorUsuario(ServicioUsuario servicioUsuario) {
         this.servicioUsuario = servicioUsuario;
     }
-
+    @Transactional
     @RequestMapping("/dashboard")
-    public ModelAndView irAdashboard(@ModelAttribute("UsuarioDTO") UsuarioDTO usuarioDTO) {
+    public ModelAndView irADashboard(HttpServletRequest request) {
+        ModelMap model = new ModelMap();
 
-        ModelMap modelo = new ModelMap();
-        modelo.put("UsuarioDTO", usuarioDTO);
-        return new ModelAndView("dashboard", modelo);
+        HttpSession session = request.getSession(false);
+
+        if (session == null || session.getAttribute("USUARIO") == null) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+        model.put("usuario", usuario);
+
+        return new ModelAndView("dashboard", model);
     }
 
-    @RequestMapping(path = "/contactos", method = RequestMethod.POST)
+    @Transactional
+    @RequestMapping(path = "/contactos", method = RequestMethod.GET)
 
-    public ModelAndView irAContactos(@ModelAttribute("UsuarioDTO") UsuarioDTO usuarioDTO) {
+    public ModelAndView irAContactos(HttpServletRequest request) {
 
         ModelMap model = new ModelMap();
 
-        List<Usuario> contactos = servicioUsuario.getContactos();
-        if (contactos!=null){
-            model.put("contactos",contactos);
+        HttpSession session = request.getSession(false);
 
-        } else {
-            model.put("noHayContactos", "No hay contactos en tu lista");
+        if (session != null && session.getAttribute("USUARIO") != null) {
+            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+
+            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail());
+            if (contactos != null && !contactos.isEmpty()) {
+                model.put("usuarioActual", session.getAttribute("USUARIO"));
+                model.put("contactos", contactos);
+
+            } else {
+                model.put("noHayContactos", "No hay contactos en tu lista");
+            }
+
         }
-
-        return new ModelAndView("contactos",model);
+        return new ModelAndView("contactos", model);
     }
-   /* @RequestMapping(path = "/suspender/usuario=?", method = RequestMethod.POST)
-    public ModelAndView suspenderUsuario(Usuario usuario) { /// servicioSuspenderUsuario
 
-        if(usuario.getEnSuspencion()!=true){
-            String mensaje = "el usuario ya se encuentra suspedido"
-            ModelMap modeloUserSuspendido = new ModelMap();
-            return new ModelAndView("redirect:/contactos");
+
+    @RequestMapping(path = "/suspender/usuario/{nombre}", method = RequestMethod.POST)
+    public String suspenderUsuario(@PathVariable("nombre") String nombre, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        servicioUsuario.suspenderUsuario(motivo, usuario.getId());
+
+
+        if (usuario.getEnSuspencion()) {
+            redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
+        } else {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
         }
-        return new ModelAndView("redirect:/contactos");
 
-    }*/
+        return "redirect:/contactos";
+    }
+
+
 }
-

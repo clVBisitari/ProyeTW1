@@ -1,7 +1,6 @@
 package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.RepositorioProyeInversion;
-import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -9,10 +8,8 @@ import org.hibernate.SessionFactory;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaBuilder;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -26,7 +23,6 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         this.sessionFactory = sessionFactory;
     }
 
-
     @Override
     public ProyectoInversion getProyectoById(Long idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
@@ -37,14 +33,13 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         }
     }
 
-    @Override
-    public List<ProyectoInversion>getProyectosInversion(Integer id){
+    public List<ProyectoInversion>getProyectosInversion(Integer idUsuario){
         final Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
         CriteriaQuery<ProyectoInversion> query = builder.createQuery(ProyectoInversion.class);
         Root<ProyectoInversion> root = query.from(ProyectoInversion.class);
         query.select(root)
-                .where(builder.equal(root.get("titular").get("id"), id));
+                .where(builder.equal(root.get("titular").get("id"), idUsuario));
         return session.createQuery(query).getResultList();
     }
 

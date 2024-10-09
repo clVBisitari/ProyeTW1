@@ -39,8 +39,8 @@
                         required
                 />
             </fieldset>
-
-            <button id="btn-login" class="button__primary">Iniciar sesión</button>
+            <button class="button__primary" id="btn-login">Iniciar sesión</button>
+            <p class="error" th:if="${error != null}" th:text="'Error ' + ${error}"></p>
         </form>
         <aside class="login__register">
             <p class="login__text">¿No tienes una cuenta? <a class="login__link" href="">Registrate</a></p>

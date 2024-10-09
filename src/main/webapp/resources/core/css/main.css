@@ -29,6 +29,11 @@ h5 {
     width: 100%;
 }
 
+.error{
+    font-size: 1rem;
+    color: #c02f25;
+}
+
 /* Buttons */
 
 .button__primary {
