@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.Frecuencia;
 import com.tallerwebi.dominio.Gasto;
 
 import org.hibernate.SessionFactory;
@@ -37,6 +38,50 @@ public class RepositorioGastoImpl {
     public void eliminarGasto(Long id) {
         String hql = "DELETE FROM Gasto WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", id);
+
+        query.executeUpdate();
+    }
+
+    public void modificarValorDeUnGasto(Long id, double valor) {
+        String hql = "UPDATE Gasto SET valor = :valor WHERE id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("valor", valor);
+        query.setParameter("id", id);
+
+        query.executeUpdate();
+    }
+
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, String fechaVencimiento) {
+        String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("fechaVencimiento", fechaVencimiento);
+        query.setParameter("id", id);
+
+        query.executeUpdate();
+    }
+
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, String fechaRecordatorio) {
+        String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("fechaRecordatorio", fechaRecordatorio);
+        query.setParameter("id", id);
+
+        query.executeUpdate();
+    }
+
+    public Gasto buscarGastoPorId(Long id) {
+        String hql = "FROM Gasto WHERE id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("id", id);
+
+        return (Gasto) query.uniqueResult();
+    }
+
+    public void modificarFrecuenciaDeUnGasto(Long id, Frecuencia frecuencia) {
+        String hql = "UPDATE Gasto SET frecuencia = :frecuencia WHERE id = :id";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("frecuencia", frecuencia);
         query.setParameter("id", id);
 
         query.executeUpdate();

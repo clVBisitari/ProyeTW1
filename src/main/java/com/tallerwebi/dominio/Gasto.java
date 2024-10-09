@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,16 +17,30 @@ public class Gasto {
     @Column(nullable = false)
     private double valor;
 
-    @ManyToOne
-    @JoinColumn(name = "gestor_id", nullable = false)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private ServicioGestorDeGastosImpl gestor;
+
+    @Column(nullable = false)
+    private String fechaVencimiento;
+
+    @Column
+    private String fechaRecordatorio;
+
+    @Column
+    private Frecuencia frecuencia;
+
+//    @Column
+  //  private Long gestorId;
 
     public Gasto() {}
 
-    public Gasto(String descripcion, double valor) {
+    public Gasto(String descripcion, double valor, String fechaVencimiento, Frecuencia frecuencia) {
         this.descripcion = descripcion;
         this.valor = valor;
+        this.fechaVencimiento = fechaVencimiento;
     }
+
 
     public void setId(Long id) {
         this.id = id;
@@ -42,10 +58,42 @@ public class Gasto {
         return valor;
     }
 
-   /* public ServicioGestorDeGastosImpl getGestor() {
+    public ServicioGestorDeGastosImpl getGestor() {
         return gestor;
     }
     public void setGestor(ServicioGestorDeGastosImpl gestor) {
         this.gestor = gestor;
+    }
+
+    public void setFechaVencimiento(String fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
+
+    public String getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaRecordatorio(String fechaRecordatorio) {
+        this.fechaRecordatorio = fechaRecordatorio;
+    }
+
+    public String getFechaRecordatorio() {
+        return fechaRecordatorio;
+    }
+
+    public void setFrecuencia(Frecuencia frecuencia){
+        this.frecuencia = frecuencia;
+    }
+
+    public Frecuencia getFrecuencia() {
+        return frecuencia;
+    }
+
+/*    public void setGestorId(Long gestorId) {
+        this.gestorId = gestorId;
+    }
+
+    public Long getGestorId() {
+        return gestorId;
     }*/
 }
