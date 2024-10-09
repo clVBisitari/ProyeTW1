@@ -29,18 +29,18 @@ public class ControladorUsuario {
     @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
-
         ModelMap model = new ModelMap();
 
-        HttpSession session = request.getSession();
-        if (session != null && session.getAttribute("USUARIO") != null) {
-            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
-            model.put("usuario", usuario);
+        HttpSession session = request.getSession(false);
 
-            return new ModelAndView("dashboard", model);
-        } else {
+        if (session == null || session.getAttribute("USUARIO") == null) {
             return new ModelAndView("redirect:/login");
         }
+
+        Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+        model.put("usuario", usuario);
+
+        return new ModelAndView("dashboard", model);
     }
 
     @Transactional
