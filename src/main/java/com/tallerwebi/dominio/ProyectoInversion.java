@@ -19,6 +19,8 @@ public class ProyectoInversion {
     private Integer montoRequerido;
     private Integer montoRecaudado;
     private Integer plazoParaInicio;
+    private Integer plazoParaFinal;
+    private Integer cantidadReportes;
     private boolean enSuspension;
     private String motivoSuspension;
 
@@ -101,5 +103,21 @@ public class ProyectoInversion {
 
     public void setMotivoSuspension(String motivoSuspension) {
         this.motivoSuspension = motivoSuspension;
+    }
+
+    public Integer getPlazoParaFinal() {
+        return plazoParaFinal;
+    }
+
+    public void setPlazoParaFinal(Integer plazoParaFinal) {
+        this.plazoParaFinal = plazoParaFinal;
+    }
+
+    public Integer getCantidadReportes() {
+        return cantidadReportes;
+    }
+
+    public void setCantidadReportes(Integer cantidadReportes) {
+        this.cantidadReportes = cantidadReportes;
     }
 }
