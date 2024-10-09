@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,56 +21,59 @@ import static org.mockito.Mockito.when;
 public class ControladorUsuarioTest {
 
     private ServicioUsuario servicioUsuarioMock;
-    private UsuarioDTO usuarioMock;
-
+    private Usuario usuarioMock;
     private ControladorUsuario controladorUsuario;
+    private HttpServletRequest requestMock;
+    private HttpSession sessionMock;
 
     @BeforeEach
 
     public void init(){
         servicioUsuarioMock = mock(ServicioUsuario.class);
         controladorUsuario  = new ControladorUsuario(servicioUsuarioMock);
-        usuarioMock = mock(UsuarioDTO.class);
+        usuarioMock = mock(Usuario.class);
         when(usuarioMock.getEmail()).thenReturn("test@unlam.edu.ar");
+        requestMock = mock(HttpServletRequest.class);
+        sessionMock = mock(HttpSession.class);
     }
-@Test
-    public void dadoQueExisteUnUsuarioAlIrAcontactosPuedeVerLaListaDeUsuariosContacto(){
-       UsuarioDTO usuarioMock =mock(UsuarioDTO.class);
-       ArrayList<Usuario> contactos = new ArrayList<>();
+  @Test
+    public void dadoQueExisteUnUsuarioAlIrAcontactosYTenerPuedeVerLaListaDeUsuariosContacto(){
+
+      when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
+      when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
+      //    when(usuarioMock.getEmail()).thenReturn("test@unlam.edu.ar");
+      List<Usuario> contactos = new ArrayList<>();
        contactos.add(new Usuario());
        contactos.add(new Usuario());
        contactos.add(new Usuario());
 
-    when(servicioUsuarioMock.getContactos()).thenReturn(contactos);
+      when(servicioUsuarioMock.getContactos(usuarioMock.getEmail())).thenReturn(contactos);
 
-       ModelAndView mav = whenListarContactos(usuarioMock);
+      ModelAndView modelAndView = controladorUsuario.irAContactos(requestMock);
 
-       thenListarUsuariosEsExitoso(mav);
-    }
-
-    private ModelAndView whenListarContactos(UsuarioDTO usuarioMock) {
-        ModelAndView mav =  controladorUsuario.irAContactos(usuarioMock);
-        return mav;/// sabemos que va a devolver un model and view
-    }
-    private void thenListarUsuariosEsExitoso(ModelAndView mav) {
-        assertThat(mav.getViewName(), equalToIgnoringCase("contactos"));
-        assertThat(mav.getModel().get("contactos"), is(notNullValue()));
+      assertThat(modelAndView.getViewName(), equalToIgnoringCase("contactos"));
+      assertThat(modelAndView.getModel().get("contactos"), is(equalTo(contactos)));
+      assertThat(modelAndView.getModel().get("contactos"), is(notNullValue()));
 
     }
 
-    @Test
+
+  @Test
     public void dadoQueExisteUnUsuarioAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos(){
-        UsuarioDTO usuarioMockEsperado =mock(UsuarioDTO.class);
-        ModelAndView mav = cuandoVaADashBoard(usuarioMockEsperado);
-        entoncesSeRenderizaLaVistaConDatos(mav,usuarioMockEsperado);
+
+      when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
+      when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
+
+        ModelAndView mav = cuandoVaADashBoard(requestMock);
+        entoncesSeRenderizaLaVistaConDatos(mav);
     }
-    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav, UsuarioDTO usuarioMockEsperado) {
+    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav) {
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
-        assertThat(mav.getModel().get("UsuarioDTO"), equalTo(usuarioMockEsperado));
+        assertThat(mav.getModel().get("usuario"), equalTo(usuarioMock));
     }
 
-    private ModelAndView cuandoVaADashBoard(UsuarioDTO usuarioMockEsperado) {
-      return controladorUsuario.irAdashboard(usuarioMockEsperado);
+    private ModelAndView cuandoVaADashBoard(HttpServletRequest request) {
+      return controladorUsuario.irADashboard(request);
     }
 
     /*

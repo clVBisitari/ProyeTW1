@@ -1,1 +1,0 @@
-INSERT INTO Usuario(id, email, password, esAdmin) VALUES(null, 'test@unlam.edu.ar', 'test', true);

@@ -1,19 +1,115 @@
-body {
-  padding-top: 5rem;
-}
-.starter-template {
-  padding: 3rem 1.5rem;
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: none;
+    font-family: "Inter", sans-serif;
 }
 
-h1{
-	color:#0000FF;
+:root {
+    --dark: #434343;
+    --grey: #8A8A8A;
+    --light: #F2F2F2;
+    --primary: #053C5E;
 }
 
-h2{
-	color:#FF0000;
+h1,
+h2,
+h3,
+h4,
+h5 {
+    font-family: "Merriweather", system-ui;
 }
 
-.navbar-brand{
-    margin:0 2rem;
+.body {
+    min-height: 100vh;
+    background: var(--light);
+    width: 100%;
+}
+
+.error{
+    font-size: 1rem;
+    color: #c02f25;
+}
+
+/* Buttons */
+
+.button__primary {
+    background: var(--primary);
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 1s;
+    box-shadow: 10px 10px 15px 0px var(--grey);
+}
+
+.button__primary:hover {
+    opacity: .9;
+}
+
+.button__secondary {
+    background: #fff;
+    border: 1px solid var(--primary);
+    border-radius: .5rem;
+    padding: .5rem 1rem;
+    color: var(--primary);
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 1s;
+}
+
+.button__secondary:hover {
+    background-color: var(--primary);
+    color: #fff;
+}
+
+/* Nav */
+
+.nav {
+    z-index: 99;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: var(--light);
+    border-top: 1px solid var(--dark);
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60px;
+    gap: 2rem;
+    justify-content: space-between;
+}
+
+.nav__link {
+    cursor: pointer;
+}
+
+.nav__icon {
+    width: 30px;
+    height: 30px;
+    fill: var(--dark);
+    transition: all 1s;
+}
+
+.nav__icon:hover {
+    fill: var(--light);
+    padding: 5px;
+    border-radius: 5px;
+    background: var(--primary);
+}
+
+@media screen and (min-width: 769px) {
+    .nav {
+        height: 100%;
+        width: 50px;
+        flex-direction: column;
+        border-top: none;
+        justify-content: center;
+        gap: 3rem;
+    }
 }
