@@ -19,7 +19,7 @@ public class Gasto {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private ServicioGestorDeGastosImpl gestor;
+    private GestorDeGastos gestor;
 
     @Column(nullable = false)
     private String fechaVencimiento;
@@ -58,10 +58,10 @@ public class Gasto {
         return valor;
     }
 
-    public ServicioGestorDeGastosImpl getGestor() {
+    public GestorDeGastos getGestor() {
         return gestor;
     }
-    public void setGestor(ServicioGestorDeGastosImpl gestor) {
+    public void setGestor(GestorDeGastos gestor) {
         this.gestor = gestor;
     }
 

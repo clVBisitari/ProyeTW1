@@ -2,8 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Frecuencia;
 import com.tallerwebi.dominio.Gasto;
-import com.tallerwebi.dominio.ServicioGestorDeGastosImpl;
-import com.tallerwebi.dominio.ServicioUsuarioImpl;
+import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,10 +38,10 @@ public class RepositorioGestorDeGastosImplTest {
     @Rollback
     @Transactional
     public void queSePuedaCrearUnGestorDeGastos(){
-        ServicioGestorDeGastosImpl gestor  = new ServicioGestorDeGastosImpl();
+        GestorDeGastos gestor  = new GestorDeGastos();
         this.sessionFactory.getCurrentSession().save(gestor);
 
-        List<ServicioGestorDeGastosImpl> gestorCreado = this.repositorioGestorDeGastosImpl.obtenerTodosLosGestores();
+        List<GestorDeGastos> gestorCreado = this.repositorioGestorDeGastosImpl.obtenerTodosLosGestores();
 
         assertThat(gestorCreado.size(), equalTo(1));
     }
@@ -51,7 +50,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Rollback
     @Transactional
     public void queSePuedaRegistrarUnGastoEnElGestorDeGastos(){
-        ServicioGestorDeGastosImpl gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
+        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         List<Gasto> gastos = this.repositorioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(gestor.getId());
 
@@ -62,11 +61,16 @@ public class RepositorioGestorDeGastosImplTest {
     @Rollback
     @Transactional
     public void queSePuedaEliminarUnGastoEnElGestorDeGastos(){
-        ServicioGestorDeGastosImpl gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
+        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         List<Gasto> gastos = this.repositorioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(gestor.getId());
+        Gasto gasto = gastos.get(0);
+        gestor.eliminarGasto(gasto);
 
-        assertThat(gastos.size(), equalTo(1));
+        this.sessionFactory.getCurrentSession().save(gestor);
+        gastos = this.repositorioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(gestor.getId());
+
+        assertThat(gastos.size(), equalTo(0));
     }
 
 
@@ -74,7 +78,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Rollback
     @Transactional
     public void queSePuedaRegistrarOtroGastoEnElGestorDeGastos(){
-        ServicioGestorDeGastosImpl gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
+        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         Gasto gastoAdicional = new Gasto();
         gestor.registrarGasto(gastoAdicional);
@@ -87,7 +91,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Transactional
     public void queElTotalDeGastosDelMesEnCursoSeActualiceAlRegistrarNuevosGastos(){
         Gasto gasto = new Gasto("impuesto", 50000, "10-10-2024", Frecuencia.MENSUAL);
-        ServicioGestorDeGastosImpl gestor = new ServicioGestorDeGastosImpl();
+        GestorDeGastos gestor = new GestorDeGastos();
         gestor.registrarGasto(gasto);
         this.sessionFactory.getCurrentSession().save(gasto);
 
@@ -95,9 +99,9 @@ public class RepositorioGestorDeGastosImplTest {
     }
 
 
-    private ServicioGestorDeGastosImpl dadoQueExisteUnGestorConUnGastoRegistrado() {
+    private GestorDeGastos dadoQueExisteUnGestorConUnGastoRegistrado() {
         Gasto gasto = new Gasto("impuesto",5000, "10-10-2024", Frecuencia.MENSUAL);
-        ServicioGestorDeGastosImpl gestor = new ServicioGestorDeGastosImpl();
+        GestorDeGastos gestor = new GestorDeGastos();
         gestor.registrarGasto(gasto);
         this.sessionFactory.getCurrentSession().save(gestor);
         return gestor;

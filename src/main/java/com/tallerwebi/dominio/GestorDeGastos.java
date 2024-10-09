@@ -1,19 +1,17 @@
 package com.tallerwebi.dominio;
 
-import org.hsqldb.SchemaObjectSet;
-
 import javax.persistence.*;
 import java.util.*;
 
 @Entity
-public class ServicioGestorDeGastosImpl {
+public class GestorDeGastos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "gestor", orphanRemoval = true)
-    List<Gasto> gastos = new ArrayList<Gasto>();
+    private List<Gasto> gastos = new ArrayList<Gasto>();
 
 
     public void setId(Long id) {
@@ -34,11 +32,4 @@ public class ServicioGestorDeGastosImpl {
         gasto.setGestor(null);
     }
 
-    /*public List<Gasto> getGastos() {
-        return gastos;
-    }
-
-    public void setGastos(List<Gasto> gastos) {
-        this.gastos = gastos;
-    }*/
 }

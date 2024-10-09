@@ -1,7 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.Gasto;
-import com.tallerwebi.dominio.ServicioGestorDeGastosImpl;
+import com.tallerwebi.dominio.GestorDeGastos;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,18 +20,15 @@ public class RepositorioGestorDeGastosImpl {
     }
 
     public List<Gasto> obtenerTodosLosGastosDeUnGestor(Long gestorDeGastosId) {
-        //String hql = "FROM Gasto WHERE gestorId = :gestorDeGastosId";
-        //String hql = "SELECT g FROM Gasto g JOIN ServicioGestorDeGastosImpl s ON g.gestor.id = s.id WHERE g.gestor.id = :gestorDeGastosId";
-        //String hql = "SELECT g FROM Gasto g JOIN ServicioGestorDeGastosImpl  s ON g.gestorId = s.id WHERE g.gestorId = :gestorDeGastosId";
-        String hql = "SELECT g FROM Gasto g Join ServicioGestorDeGastosImpl s ON g.gestor.id = s.id WHERE g.gestor.id = :gestorDeGastosId";
+        String hql = "SELECT g FROM Gasto g Join GestorDeGastos s ON g.gestor.id = s.id WHERE g.gestor.id = :gestorDeGastosId";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("gestorDeGastosId", gestorDeGastosId);
 
         return query.getResultList();
     }
 
-    public List<ServicioGestorDeGastosImpl> obtenerTodosLosGestores() {
-        String hql = "FROM ServicioGestorDeGastosImpl";
+    public List<GestorDeGastos> obtenerTodosLosGestores() {
+        String hql = "FROM GestorDeGastos";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
 
         return query.getResultList();
