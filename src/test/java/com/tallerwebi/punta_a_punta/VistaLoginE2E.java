@@ -44,15 +44,16 @@ public class VistaLoginE2E {
     }
 
     @Test
-    void deberiaDecirUNLAMEnElNavbar() {
-        String texto = vistaLogin.obtenerTextoDeLaBarraDeNavegacion();
-        assertThat("UNLAM", equalToIgnoringCase(texto));
+    void deberiaDecirBienvenidoEnTitulo() {
+        String texto = vistaLogin.obtenerTitulo();
+        System.out.println(texto);
+        assertThat("Bienvenido a AssistPyme", equalToIgnoringCase(texto));
     }
 
     @Test
     void deberiaDarUnErrorAlNoCompletarElLoginYTocarElBoton() {
-        vistaLogin.escribirEMAIL("damian@unlam.edu.ar");
-        vistaLogin.escribirClave("unlam");
+        vistaLogin.escribirEmail("usuario@inexistente.com");
+        vistaLogin.escribirClave("123");
         vistaLogin.darClickEnIniciarSesion();
         String texto = vistaLogin.obtenerMensajeDeError();
         assertThat("Error Usuario o clave incorrecta", equalToIgnoringCase(texto));
@@ -60,10 +61,10 @@ public class VistaLoginE2E {
 
     @Test
     void deberiaNavegarAlHomeSiElUsuarioExiste() {
-        vistaLogin.escribirEMAIL("test@unlam.edu.ar");
+        vistaLogin.escribirEmail("test@unlam.edu.ar");
         vistaLogin.escribirClave("test");
         vistaLogin.darClickEnIniciarSesion();
         String url = vistaLogin.obtenerURLActual();
-        assertThat(url, containsStringIgnoringCase("/spring/home"));
+        assertThat(url, containsStringIgnoringCase("/spring/dashboard"));
     }
 }
