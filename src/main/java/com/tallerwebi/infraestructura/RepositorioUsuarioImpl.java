@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Repository("repositorioUsuario")
@@ -49,8 +48,28 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public ArrayList<Usuario> obtenerContactos() {
+    public List<Usuario> obtenerContactos(String email) {
+        Usuario usuario = buscar(email);
+        if (usuario != null) {
+            return usuario.getContactos(); // Asegúrate de que getContactos() devuelve una List<Usuario>
+        }
         return null;
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorId(int id){
+        final Session session = sessionFactory.getCurrentSession();
+        return (Usuario) session.createCriteria(Usuario.class)
+                .add(Restrictions.eq("id", id))
+
+                .uniqueResult();
+    }
+    @Override
+    public Usuario buscarUsuarioPorNombre(String nombre){
+        final Session session = sessionFactory.getCurrentSession();
+        return (Usuario) session.createCriteria(Usuario.class)
+                .add(Restrictions.eq("nombre", nombre))
+                .uniqueResult();
     }
 
 }
