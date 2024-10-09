@@ -33,6 +33,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         }
     }
 
+    @Override
     public List<ProyectoInversion>getProyectosInversion(Integer idUsuario){
         final Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();
