@@ -6,18 +6,18 @@ import com.tallerwebi.presentacion.ControladorUsuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.isNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class ControladorUsuarioTest {
 
@@ -26,9 +26,11 @@ public class ControladorUsuarioTest {
     private ControladorUsuario controladorUsuario;
     private HttpServletRequest requestMock;
     private HttpSession sessionMock;
+    private RedirectAttributes redirectAttributesMock;
 
     @BeforeEach
     public void init() {
+        redirectAttributesMock = mock(RedirectAttributes.class);
         usuarioMock = mock(Usuario.class);
         when(usuarioMock.getEmail()).thenReturn("test@unlam.edu.ar");
 
@@ -71,32 +73,35 @@ public class ControladorUsuarioTest {
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioMock));
     }
 
-    /*
     @Test
     public void dadoQueExisteUnUsuarioYEsAdminSePuedeSuspenderAOtro(){
+         // Crear un nuevo objeto Usuario para suspender
+        String nombre = "marco";
+        Usuario usuarioASuspender = new Usuario();
+        usuarioASuspender.setId(16); // Establecer un ID ficticio
+        usuarioASuspender.setNombre(nombre);
+        usuarioASuspender.setEnSuspencion(true); // Simula que el usuario está suspendido
 
-        //given
-        //when
-        UsuarioDTO usuarioQueSuspende = mock(UsuarioDTO.class);
-        when(usuarioQueSuspende.getEsAdmin()).thenReturn(true);
-        Usuario usuarioASuspender= mock(Usuario.class);
-        ModelAndView mav = whenSuspenderUsuario(usuarioASuspender);
+        String motivo = "mal comportamiento";
 
-        //then --cuando el metodo es exitoso es porque me mando a la vista de contactos (usuario al que decoues se le pone una advertencia)
+        // Configurar el comportamiento del mock de ServicioUsuario
+        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
+        doNothing().when(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
 
-        thenLaSuspencionEsExitosa(mav);
+        // Invocar el método bajo prueba
+        String resultado = controladorUsuario.suspenderUsuario(nombre, motivo, redirectAttributesMock);
+
+        // Verificar que se haya llamado al método buscarUsuarioPorNombre
+        verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
+        // Verificar que se haya llamado al método suspenderUsuario
+        verify(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
+        // Verificar que se haya agregado el mensaje correcto a RedirectAttributes
+        verify(redirectAttributesMock).addFlashAttribute("mensaje", "Usuario suspendido");
+
+        // Aserción de redirección
+        assertThat(resultado, is("redirect:/contactos"));
 
     }
-
-    private ModelAndView whenSuspenderUsuario(Usuario userASuspender) {
-      ModelAndView mav =  controladorUsuario.suspenderUsuario(userASuspender);
-      return mav;/// sabemos que va a devolver un model and view
-    }
-
-    private void thenLaSuspencionEsExitosa(ModelAndView mav) {
-        assertThat(mav.getViewName(), equalToIgnoringCase("redirect:/contactos"));
-    }
-
 
     @Test void siElUsuarioEstaSuspendidoLaSuspencionDeUsuarioFalla(){
         Usuario usuarioASuspender = mock(Usuario.class);
@@ -109,8 +114,21 @@ public class ControladorUsuarioTest {
 
     }
 
+    private String whenSuspenderUsuario(String motivo, String nombre, RedirectAttributes redirectAttributesMock) {
+        //    verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
+
+        String mensajeExitoso =  controladorUsuario.suspenderUsuario(motivo,nombre, redirectAttributesMock);
+
+        return mensajeExitoso;
+    }
+
+    private void thenLaSuspencionEsExitosa(String mensajeExitoso) {
+
+        assertThat(mensajeExitoso, is("redirect:/contactos"));
+
+    }
     private void thenLaSuspencionEsFallida(ModelAndView mav) {
 
         assertThat(mav.getViewName(), equalToIgnoringCase("redirect:/contactos"));
-    }*/
+    }
 }

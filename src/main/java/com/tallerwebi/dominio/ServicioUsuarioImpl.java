@@ -84,7 +84,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
         usuario.setEnSuspencion(true);
         repositorioUsuario.modificar(usuario);
-
     }
 
     @Override
