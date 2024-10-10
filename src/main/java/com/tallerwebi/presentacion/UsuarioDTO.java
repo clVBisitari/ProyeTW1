@@ -18,6 +18,9 @@ public class UsuarioDTO {
     private List<UsuarioDTO> contactos; /// lo quiero mostrar?
     //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoDeInversion proyecto;
+    private Boolean esAdmin;
+    private Boolean enSuspencion;
+
     public Long getId() {
         return id;
     }
@@ -28,6 +31,22 @@ public class UsuarioDTO {
 
     public String getEmail() {
         return email;
+    }
+
+    public Boolean getEnSuspencion() {
+        return enSuspencion;
+    }
+
+    public void setEnSuspencion(Boolean enSuspencion) {
+        this.enSuspencion = enSuspencion;
+    }
+
+    public Boolean getEsAdmin() {
+        return esAdmin;
+    }
+
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public void setEmail(String email) {
@@ -93,5 +112,21 @@ public class UsuarioDTO {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", saldo=" + saldo +
+                ", contactos=" + contactos +
+                ", proyecto=" + proyecto +
+                ", esAdmin=" + esAdmin +
+                ", enSuspencion=" + enSuspencion +
+                '}';
     }
 }

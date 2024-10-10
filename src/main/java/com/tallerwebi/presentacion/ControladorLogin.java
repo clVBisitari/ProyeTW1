@@ -42,13 +42,13 @@ public class ControladorLogin {
         ModelMap model = new ModelMap();
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
+
         if (usuarioBuscado != null) {
             HttpSession session = request.getSession();
-
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setNombre(usuarioBuscado.getNombre());
             usuarioDTO.setEmail(usuarioBuscado.getEmail());
-
+            usuarioDTO.setEsAdmin(usuarioBuscado.getEsAdmin());
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("USUARIO", usuarioDTO);
 

@@ -55,31 +55,36 @@ public class ControladorUsuario {
         HttpSession session = request.getSession(false);
 
 
-        if (session != null && session.getAttribute("USUARIO") != null) {
-            UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
-
-            List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
-
-            ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
-
-            for (Usuario contacto : contactos) {
-                UsuarioDTO contactoDTO = new UsuarioDTO();
-                contactoDTO.setNombre(contacto.getNombre());
-                contactoDTO.setEmail(contacto.getEmail());
-                contactosDTO.add(contactoDTO);
-            }
-            usuarioDTO.setContactos(contactosDTO);
-
-            if (contactosDTO != null && !contactosDTO.isEmpty()) {
-                model.put("usuarioActual", session.getAttribute("USUARIO"));
-                model.put("contactos", contactosDTO);
-            }else if (contactosDTO == null || contactosDTO.isEmpty()) {
-                model.put("noHayContactos","No hay contactos en tu lista");
-            }
-            return new ModelAndView("contactos", model);
-
+        if (session == null && session.getAttribute("USUARIO") == null) {
+            return new ModelAndView("redirect:/login");
         }
-        return new ModelAndView("redirect:/login");
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
+
+        System.out.println("BUSCANDOOOOOOOOOOOOOO"+usuarioDTO);
+
+        List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
+
+        ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
+
+        for (Usuario contacto : contactos) {
+            UsuarioDTO contactoDTO = new UsuarioDTO();
+            contactoDTO.setNombre(contacto.getNombre());
+            contactoDTO.setEmail(contacto.getEmail());
+            contactoDTO.setEnSuspencion(contacto.getEnSuspencion());
+            contactosDTO.add(contactoDTO);
+        }
+        usuarioDTO.setContactos(contactosDTO);
+
+        if (contactosDTO != null && !contactosDTO.isEmpty()) {
+            model.put("usuarioActual", session.getAttribute("USUARIO"));
+            model.put("contactos", contactosDTO);
+        } else if (contactosDTO == null || contactosDTO.isEmpty()) {
+            model.put("noHayContactos", "No hay contactos en tu lista");
+        }
+        System.out.println("viendooooooooooooooooooooo contactos" + model.get("contactos"));
+        return new ModelAndView("contactos", model);
+
     }
 
 
