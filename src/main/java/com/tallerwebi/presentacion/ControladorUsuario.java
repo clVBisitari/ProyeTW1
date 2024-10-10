@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 @Transactional
 @Controller
 public class ControladorUsuario {
@@ -26,6 +27,7 @@ public class ControladorUsuario {
     public ControladorUsuario(ServicioUsuario servicioUsuario) {
         this.servicioUsuario = servicioUsuario;
     }
+
     @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
@@ -37,7 +39,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
 
-        Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
         model.put("usuario", usuario);
 
         return new ModelAndView("dashboard", model);
@@ -52,25 +54,38 @@ public class ControladorUsuario {
 
         HttpSession session = request.getSession(false);
 
+
         if (session != null && session.getAttribute("USUARIO") != null) {
-            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+            UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
 
-            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail());
-            if (contactos != null && !contactos.isEmpty()) {
-                model.put("usuarioActual", session.getAttribute("USUARIO"));
-                model.put("contactos", contactos);
+            List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
-            } else {
-                model.put("noHayContactos", "No hay contactos en tu lista");
+            ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
+
+            for (Usuario contacto : contactos) {
+                UsuarioDTO contactoDTO = new UsuarioDTO();
+                contactoDTO.setNombre(contacto.getNombre());
+                contactoDTO.setEmail(contacto.getEmail());
+                contactosDTO.add(contactoDTO);
             }
+            usuarioDTO.setContactos(contactosDTO);
+
+            if (contactosDTO != null && !contactosDTO.isEmpty()) {
+                model.put("usuarioActual", session.getAttribute("USUARIO"));
+                model.put("contactos", contactosDTO);
+            }else if (contactosDTO == null || contactosDTO.isEmpty()) {
+                model.put("noHayContactos","No hay contactos en tu lista");
+            }
+            return new ModelAndView("contactos", model);
 
         }
-        return new ModelAndView("contactos", model);
+        return new ModelAndView("redirect:/login");
     }
 
 
     @RequestMapping(path = "/suspender/usuario/{nombre}", method = RequestMethod.POST)
     public String suspenderUsuario(@PathVariable("nombre") String nombre, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
+
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
 
         servicioUsuario.suspenderUsuario(motivo, usuario.getId());
@@ -81,6 +96,16 @@ public class ControladorUsuario {
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
         }
+
+        return "redirect:/contactos";
+    }
+
+    @RequestMapping(path = "/revertir-suspencion/usuario/{nombre}", method = RequestMethod.POST)
+    public String revertirSuspencion(@PathVariable("nombre") String nombre) {
+
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        servicioUsuario.revertirSuspensionUsuario(usuario.getId());
 
         return "redirect:/contactos";
     }
