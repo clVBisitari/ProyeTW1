@@ -16,7 +16,7 @@ public class UsuarioDTO {
     private Double saldo;
     private List<UsuarioDTO> contactos; /// lo quiero mostrar?
     //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoDeInversion proyecto;
+    private ProyectoInversion proyecto;
     private Boolean esAdmin;
     private Boolean enSuspencion;
 
