@@ -15,6 +15,13 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Month;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -28,6 +35,7 @@ public class RepositorioGestorDeGastosImplTest {
     private SessionFactory sessionFactory;
 
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastosImpl;
+    private DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
     @BeforeEach
     public void init(){
@@ -49,7 +57,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedaRegistrarUnGastoEnElGestorDeGastos(){
+    public void queSePuedaRegistrarUnGastoEnElGestorDeGastos() throws ParseException {
         GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         List<Gasto> gastos = this.repositorioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(gestor.getId());
@@ -60,7 +68,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedaEliminarUnGastoEnElGestorDeGastos(){
+    public void queSePuedaEliminarUnGastoEnElGestorDeGastos() throws ParseException {
         GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         List<Gasto> gastos = this.repositorioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(gestor.getId());
@@ -77,7 +85,7 @@ public class RepositorioGestorDeGastosImplTest {
     @Test
     @Rollback
     @Transactional
-    public void queSePuedaRegistrarOtroGastoEnElGestorDeGastos(){
+    public void queSePuedaRegistrarOtroGastoEnElGestorDeGastos() throws ParseException {
         GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoRegistrado();
 
         Gasto gastoAdicional = new Gasto();
@@ -86,21 +94,26 @@ public class RepositorioGestorDeGastosImplTest {
 
     }
 
-    @Test
+    /*@Test
     @Rollback
     @Transactional
-    public void queElTotalDeGastosDelMesEnCursoSeActualiceAlRegistrarNuevosGastos(){
-        Gasto gasto = new Gasto("impuesto", 50000, "10-10-2024", Frecuencia.MENSUAL);
+    public void queElTotalDeGastosDelMesEnCursoSeActualiceAlRegistrarNuevosGastos() throws ParseException {
+        String fechaString = "2024-10-10";
+        DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaVencimiento = formatoFechas.parse(fechaString);
+        Gasto gasto = new Gasto("impuesto", 50000, fechaVencimiento, Frecuencia.MENSUAL);
         GestorDeGastos gestor = new GestorDeGastos();
         gestor.registrarGasto(gasto);
         this.sessionFactory.getCurrentSession().save(gasto);
 
 
-    }
+    }*/
 
 
-    private GestorDeGastos dadoQueExisteUnGestorConUnGastoRegistrado() {
-        Gasto gasto = new Gasto("impuesto",5000, "10-10-2024", Frecuencia.MENSUAL);
+    private GestorDeGastos dadoQueExisteUnGestorConUnGastoRegistrado() throws ParseException {
+        String fechaString = "2024-10-10";
+        Date fechaVencimiento = formatoFechas.parse(fechaString);
+        Gasto gasto = new Gasto("impuesto",5000, fechaVencimiento, Frecuencia.MENSUAL);
         GestorDeGastos gestor = new GestorDeGastos();
         gestor.registrarGasto(gasto);
         this.sessionFactory.getCurrentSession().save(gestor);

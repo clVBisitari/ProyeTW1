@@ -18,7 +18,6 @@ import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.format.DateTimeParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -33,6 +32,7 @@ public class RepositorioGastoImplTest {
     private SessionFactory sessionFactory;
 
     private RepositorioGastoImpl repositorioGastoImpl;
+    private DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
     @BeforeEach
     public void init(){
@@ -42,7 +42,7 @@ public class RepositorioGastoImplTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaGuardarUnGasto(){
+    public void queSePuedaGuardarUnGasto() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
@@ -53,7 +53,7 @@ public class RepositorioGastoImplTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaModificarElValorDeUnGastoExistente(){
+    public void queSePuedaModificarElValorDeUnGastoExistente() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
@@ -69,7 +69,7 @@ public class RepositorioGastoImplTest {
     @Test
     @Transactional
     @Rollback
-    public void queSePuedaEliminarUnGastoExistente(){
+    public void queSePuedaEliminarUnGastoExistente() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
@@ -84,7 +84,7 @@ public class RepositorioGastoImplTest {
     @Test
     @Transactional
     @Rollback
-    public void QueSePuedaBuscarUnGastoPorDescripcion(){
+    public void QueSePuedaBuscarUnGastoPorDescripcion() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.buscarGastoPorDescripcion("impuesto");
@@ -100,34 +100,38 @@ public class RepositorioGastoImplTest {
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
         Gasto gastoAModificar = gastos.get(0);
-        gastoAModificar.setFechaVencimiento("07-10-2024");
+        String fechaString = "2024-12-10";
+        Date nuevaFechaVencimiento = formatoFechas.parse(fechaString);
+        gastoAModificar.setFechaVencimiento(nuevaFechaVencimiento);
         this.repositorioGastoImpl.modificarFechaDeVencimientoDeUnGasto(gastoAModificar.getId(), gastoAModificar.getFechaVencimiento());
         Gasto gastoModificado = this.repositorioGastoImpl.buscarGastoPorId(gastoAModificar.getId());
-        String fechaEsperada = gastoModificado.getFechaVencimiento();
+        Date fechaObtenida = gastoModificado.getFechaVencimiento();
 
-        assertThat(fechaEsperada, equalTo("07-10-2024"));
+        assertThat(fechaObtenida, equalTo(nuevaFechaVencimiento));
     }
 
     @Test
     @Transactional
     @Rollback
-    public void QueSePuedaModificarLaFechaDeRecordatorioDeUnGasto(){
+    public void QueSePuedaModificarLaFechaDeRecordatorioDeUnGasto() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
         Gasto gastoAModificar = gastos.get(0);
-        gastoAModificar.setFechaRecordatorio("07-10-2024");
+        String fechaString = "2024-12-08";
+        Date nuevaFechaVencimiento = formatoFechas.parse(fechaString);
+        gastoAModificar.setFechaRecordatorio(nuevaFechaVencimiento);
         this.repositorioGastoImpl.modificarFechaDeRecordatorioDeUnGasto(gastoAModificar.getId(), gastoAModificar.getFechaRecordatorio());
         Gasto gastoModificado = this.repositorioGastoImpl.buscarGastoPorId(gastoAModificar.getId());
-        String fechaEsperada = gastoModificado.getFechaRecordatorio();
+        Date fechaObtenida = gastoModificado.getFechaRecordatorio();
 
-        assertThat(fechaEsperada, equalTo("07-10-2024"));
+        assertThat(fechaObtenida, equalTo(nuevaFechaVencimiento));
     }
 
     @Test
     @Transactional
     @Rollback
-    public void QueSePuedaModificarLaFrecuenciaDeUnGasto(){
+    public void QueSePuedaModificarLaFrecuenciaDeUnGasto() throws ParseException {
         dadoQueExisteUnGasto();
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
@@ -140,8 +144,11 @@ public class RepositorioGastoImplTest {
         assertThat(frecuenciaEsperada, equalTo(Frecuencia.SEMESTRAL));
     }
 
-    private void dadoQueExisteUnGasto() {
-        Gasto gasto = new Gasto("impuesto", 5000, "10-10-2024", Frecuencia.MENSUAL);
+
+    private void dadoQueExisteUnGasto() throws ParseException {
+        String fechaString = "2024-10-10";
+        Date fechaVencimiento = formatoFechas.parse(fechaString);
+        Gasto gasto = new Gasto("impuesto", 50000, fechaVencimiento, Frecuencia.MENSUAL);
         this.sessionFactory.getCurrentSession().save(gasto);
     }
 

@@ -34,6 +34,10 @@ public class RepositorioGestorDeGastosImpl {
         return query.getResultList();
     }
 
+    public void guardarGestor(GestorDeGastos gestorDeGastos) {
+        this.sessionFactory.getCurrentSession().save(gestorDeGastos);
+    }
+
 
     //Para comparar la fecha agendada con la fecha actual
         /*Date fechaActual = new Date();

@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -52,7 +53,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeVencimientoDeUnGasto(Long id, String fechaVencimiento) {
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, Date fechaVencimiento) {
         String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaVencimiento", fechaVencimiento);
@@ -61,7 +62,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeRecordatorioDeUnGasto(Long id, String fechaRecordatorio) {
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, Date fechaRecordatorio) {
         String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaRecordatorio", fechaRecordatorio);

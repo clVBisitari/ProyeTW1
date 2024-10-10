@@ -32,4 +32,7 @@ public class GestorDeGastos {
         gasto.setGestor(null);
     }
 
+    public List<Gasto> getGastos() {
+        return gastos;
+    }
 }

@@ -3,6 +3,8 @@ package com.tallerwebi.dominio;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 public class Gasto {
@@ -22,10 +24,10 @@ public class Gasto {
     private GestorDeGastos gestor;
 
     @Column(nullable = false)
-    private String fechaVencimiento;
+    private Date fechaVencimiento;
 
     @Column
-    private String fechaRecordatorio;
+    private Date fechaRecordatorio;
 
     @Column
     private Frecuencia frecuencia;
@@ -35,7 +37,7 @@ public class Gasto {
 
     public Gasto() {}
 
-    public Gasto(String descripcion, double valor, String fechaVencimiento, Frecuencia frecuencia) {
+    public Gasto(String descripcion, double valor, Date fechaVencimiento, Frecuencia frecuencia) {
         this.descripcion = descripcion;
         this.valor = valor;
         this.fechaVencimiento = fechaVencimiento;
@@ -65,19 +67,19 @@ public class Gasto {
         this.gestor = gestor;
     }
 
-    public void setFechaVencimiento(String fechaVencimiento) {
+    public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;
     }
 
-    public String getFechaVencimiento() {
+    public Date getFechaVencimiento() {
         return fechaVencimiento;
     }
 
-    public void setFechaRecordatorio(String fechaRecordatorio) {
+    public void setFechaRecordatorio(Date fechaRecordatorio) {
         this.fechaRecordatorio = fechaRecordatorio;
     }
 
-    public String getFechaRecordatorio() {
+    public Date getFechaRecordatorio() {
         return fechaRecordatorio;
     }
 
