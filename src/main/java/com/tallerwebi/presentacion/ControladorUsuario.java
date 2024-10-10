@@ -55,7 +55,7 @@ public class ControladorUsuario {
         HttpSession session = request.getSession(false);
 
 
-        if (session == null && session.getAttribute("USUARIO") == null) {
+        if (session == null || session.getAttribute("USUARIO") == null) {
             return new ModelAndView("redirect:/login");
         }
 

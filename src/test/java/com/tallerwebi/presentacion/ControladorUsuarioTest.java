@@ -86,7 +86,6 @@ public class ControladorUsuarioTest {
         ModelAndView modelAndView = controladorUsuario.irAContactos(requestMock);
 
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/login"));
-
     }
 
     @Test
