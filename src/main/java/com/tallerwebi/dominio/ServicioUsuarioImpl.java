@@ -35,7 +35,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public ProyectoDeInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
+    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
         return null;
     }
 
@@ -84,7 +84,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
         usuario.setEnSuspencion(true);
         repositorioUsuario.modificar(usuario);
-
     }
 
     @Override
@@ -95,12 +94,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
+
         return null;
     }
 
     @Override
-    public Boolean revertirSuspensionUsuario(int idUsuario) {
-        return null;
+    public void revertirSuspensionUsuario(int idUsuario) {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUsuario);
+        usuario.setEnSuspencion(false);
+        repositorioUsuario.modificar(usuario);
     }
 
     @Override

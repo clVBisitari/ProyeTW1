@@ -16,8 +16,8 @@ on:
     branches: [ "master" ]
 
 permissions:
-  dependencies: write   # Permiso necesario para interactuar con Dependency Graph
   contents: read        # Permiso necesario para acciones de checkout y otras operaciones de lectura
+  security-events: write     # Permiso necesario para interactuar con Dependency Graph y enviar eventos de seguridad
 
 jobs:
   build:

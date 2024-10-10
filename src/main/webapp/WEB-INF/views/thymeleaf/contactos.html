@@ -86,20 +86,28 @@
         <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
 
         <div th:each="usuario : ${contactos}">
-        <article class="contacts__article">
-            <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
-            <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
-            <p class="error" th:if="${usuario.enSuspencion}" th:text="${mensaje}"></p>
+            <article class="contacts__article">
+                <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
+                <p class="contacts__text" th:text="${usuario.nombre}">Usuario</p>
 
-            <div th:if="${usuarioActual.esAdmin}">
-                <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
-                    <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
+                <!-- Formulario para Suspender Usuario -->
+                <div th:if="${usuarioActual.esAdmin && !usuario.enSuspencion}">
+                    <form th:action="@{/suspender/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
+                        <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
+                        <button type="submit">Suspender Usuario</button>
+                    </form>
+                </div>
 
-                    <input type="submit">suspender usuario </input>
-                </form>
-            </div>
-        </article>
+                <!-- Formulario para DesSuspender Usuario -->
+                <div th:if="${usuarioActual.esAdmin && usuario.enSuspencion}">
+                    <!-- Mensaje de error o estado -->
+                    <p class="error" th:text="${mensaje}"></p>
+                    <form th:action="@{/revertir-suspencion/usuario/{nombre}(nombre=${usuario.nombre})}" method="post">
+                        <button type="submit">revertir suspencion</button>
+                    </form>
+                </div>
+            </article>
 
         </div>
 
