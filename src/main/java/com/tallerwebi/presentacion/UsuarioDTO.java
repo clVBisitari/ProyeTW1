@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion;
-
-import com.tallerwebi.dominio.ProyectoDeInversion;
+import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
 import java.util.ArrayList;
@@ -20,6 +19,7 @@ public class UsuarioDTO {
     private ProyectoDeInversion proyecto;
     private Boolean esAdmin;
     private Boolean enSuspencion;
+
 
     public Long getId() {
         return id;
@@ -93,11 +93,11 @@ public class UsuarioDTO {
         this.contactos = contactos;
     }
 
-    public ProyectoDeInversion getProyecto() {
+    public ProyectoInversion getProyecto() {
         return proyecto;
     }
 
-    public void setProyecto(ProyectoDeInversion proyecto) {
+    public void setProyecto(ProyectoInversion proyecto) {
         this.proyecto = proyecto;
     }
 

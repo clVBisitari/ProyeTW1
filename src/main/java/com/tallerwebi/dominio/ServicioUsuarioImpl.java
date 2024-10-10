@@ -35,7 +35,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public ProyectoDeInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
+    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
         return null;
     }
 
