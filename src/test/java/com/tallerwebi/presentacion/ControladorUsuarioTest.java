@@ -1,4 +1,5 @@
 package com.tallerwebi.presentacion;
+
 import com.tallerwebi.dominio.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.presentacion.ControladorUsuario;
@@ -27,53 +28,47 @@ public class ControladorUsuarioTest {
     private HttpSession sessionMock;
 
     @BeforeEach
-
-    public void init(){
-        servicioUsuarioMock = mock(ServicioUsuario.class);
-        controladorUsuario  = new ControladorUsuario(servicioUsuarioMock);
+    public void init() {
         usuarioMock = mock(Usuario.class);
         when(usuarioMock.getEmail()).thenReturn("test@unlam.edu.ar");
+
+        servicioUsuarioMock = mock(ServicioUsuario.class);
+        controladorUsuario = new ControladorUsuario(servicioUsuarioMock);
+
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
     }
-  @Test
-    public void dadoQueExisteUnUsuarioAlIrAcontactosYTenerPuedeVerLaListaDeUsuariosContacto(){
 
-      when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
-      when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
-      //    when(usuarioMock.getEmail()).thenReturn("test@unlam.edu.ar");
-      List<Usuario> contactos = new ArrayList<>();
-       contactos.add(new Usuario());
-       contactos.add(new Usuario());
-       contactos.add(new Usuario());
+    @Test
+    public void dadoQueExisteUnUsuarioAlIrAcontactosYTenerPuedeVerLaListaDeUsuariosContacto() {
 
-      when(servicioUsuarioMock.getContactos(usuarioMock.getEmail())).thenReturn(contactos);
+        when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
 
-      ModelAndView modelAndView = controladorUsuario.irAContactos(requestMock);
+        List<Usuario> contactos = new ArrayList<>();
+        contactos.add(new Usuario());
+        contactos.add(new Usuario());
+        contactos.add(new Usuario());
 
-      assertThat(modelAndView.getViewName(), equalToIgnoringCase("contactos"));
-      assertThat(modelAndView.getModel().get("contactos"), is(equalTo(contactos)));
-      assertThat(modelAndView.getModel().get("contactos"), is(notNullValue()));
+        when(servicioUsuarioMock.getContactos(usuarioMock.getEmail())).thenReturn(contactos);
+
+        ModelAndView modelAndView = controladorUsuario.irAContactos(requestMock);
+
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("contactos"));
+        assertThat(modelAndView.getModel().get("contactos"), is(equalTo(contactos)));
+        assertThat(modelAndView.getModel().get("contactos"), is(notNullValue()));
 
     }
 
+    @Test
+    public void dadoQueExisteUnUsuarioAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos() {
+        when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
 
-  @Test
-    public void dadoQueExisteUnUsuarioAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos(){
+        ModelAndView mav = controladorUsuario.irADashboard(requestMock);
 
-      when(requestMock.getSession(false)).thenReturn(sessionMock); // Configura el requestMock
-      when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioMock);
-
-        ModelAndView mav = cuandoVaADashBoard(requestMock);
-        entoncesSeRenderizaLaVistaConDatos(mav);
-    }
-    private void entoncesSeRenderizaLaVistaConDatos( ModelAndView mav) {
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioMock));
-    }
-
-    private ModelAndView cuandoVaADashBoard(HttpServletRequest request) {
-      return controladorUsuario.irADashboard(request);
     }
 
     /*
