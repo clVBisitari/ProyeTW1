@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+
 @Transactional
 @Controller
 public class ControladorUsuario {
@@ -26,6 +27,7 @@ public class ControladorUsuario {
     public ControladorUsuario(ServicioUsuario servicioUsuario) {
         this.servicioUsuario = servicioUsuario;
     }
+
     @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
@@ -60,11 +62,13 @@ public class ControladorUsuario {
             if (contactos != null && !contactos.isEmpty()) {
                 model.put("usuarioActual", session.getAttribute("USUARIO"));
                 model.put("contactos", contactos);
-            }else {
+            } else {
                 model.put("noHayContactos", "No hay contactos en tu lista");
-            }return new ModelAndView("contactos", model);
+            }
+            return new ModelAndView("contactos", model);
 
-        }       return new ModelAndView("redirect:/login");
+        }
+        return new ModelAndView("redirect:/login");
     }
 
 
@@ -83,8 +87,9 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
+
     @RequestMapping(path = "/revertir-suspencion/usuario/{nombre}", method = RequestMethod.POST)
-    public String revertirSuspencion(@PathVariable("nombre") String nombre, RedirectAttributes redirectAttributes) {
+    public String revertirSuspencion(@PathVariable("nombre") String nombre) {
 
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
 
@@ -92,7 +97,6 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
-
 
 
 }

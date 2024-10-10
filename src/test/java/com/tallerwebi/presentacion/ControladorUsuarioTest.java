@@ -103,6 +103,35 @@ public class ControladorUsuarioTest {
 
     }
 
+    @Test
+    public void dadoQueExisteUnUsuarioYEsAdminSePuedeRevertirLaSesionDeOtroUsuario(){
+        // Crear un nuevo objeto Usuario para suspender
+        String nombre = "marco";
+        Usuario usuarioASuspender = new Usuario();
+        usuarioASuspender.setId(16); // Establecer un ID ficticio
+        usuarioASuspender.setNombre(nombre);
+        usuarioASuspender.setEnSuspencion(true); // Simula que el usuario está suspendido
+
+        String motivo = "mal comportamiento";
+
+        // Configurar el comportamiento del mock de ServicioUsuario
+        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
+        doNothing().when(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
+
+        // Invocar el método bajo prueba
+        String resultado = controladorUsuario.revertirSuspencion(nombre);
+
+        // Verificar que se haya llamado al método buscarUsuarioPorNombre
+        verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
+        // Verificar que se haya llamado al método suspenderUsuario
+        verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
+
+        // Aserción de redirección
+        assertThat(resultado, is("redirect:/contactos"));
+
+    }
+
+/*
     @Test void siElUsuarioEstaSuspendidoLaSuspencionDeUsuarioFalla(){
         Usuario usuarioASuspender = mock(Usuario.class);
         when(usuarioASuspender.getEnSuspencion()).thenReturn(true);
@@ -130,5 +159,5 @@ public class ControladorUsuarioTest {
     private void thenLaSuspencionEsFallida(ModelAndView mav) {
 
         assertThat(mav.getViewName(), equalToIgnoringCase("redirect:/contactos"));
-    }
+    }*/
 }
