@@ -7,7 +7,7 @@ public interface ServicioUsuario {
     public Boolean cargarSaldo(int valor);
     public Boolean registrarIngresoMensual(int valor);
     public Boolean modificarIngresoMensual(int valor);
-    public ProyectoDeInversion publicarProyectoPropio(String descripción,int montoRequerido, Rubro rubro,int plazoParaInicio);
+    public ProyectoInversion publicarProyectoPropio(String descripción,int montoRequerido, Rubro rubro,int plazoParaInicio);
     public Boolean eliminarProyectoPropio(String motivo,int idProyecto); //
     public Usuario buscarUsuarioPorNombre(String nombreUsuario);
     public Boolean agregarUsuarioAContactos(Usuario usuarioAGuardar);

@@ -23,7 +23,7 @@ public class Usuario {
     private Boolean esAdmin;
     private Boolean enSuspencion;
    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoDeInversion proyecto;
+    private ProyectoInversion proyecto;
    ///private List<Inversion>
 
 
@@ -86,7 +86,6 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = password;
     }
@@ -107,11 +106,11 @@ public class Usuario {
         this.enSuspencion = enSuspencion;
     }
 
-    public ProyectoDeInversion getProyecto() {
+    public ProyectoInversion getProyecto() {
         return proyecto;
     }
 
-    public void setProyecto(ProyectoDeInversion proyecto) {
+    public void setProyecto(ProyectoInversion proyecto) {
         this.proyecto = proyecto;
     }
 
