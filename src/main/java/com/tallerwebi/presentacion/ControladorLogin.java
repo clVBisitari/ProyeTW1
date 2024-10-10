@@ -14,6 +14,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class ControladorLogin {
@@ -43,8 +45,12 @@ public class ControladorLogin {
         if (usuarioBuscado != null) {
             HttpSession session = request.getSession();
 
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(usuarioBuscado.getNombre());
+            usuarioDTO.setEmail(usuarioBuscado.getEmail());
+
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            session.setAttribute("USUARIO", usuarioBuscado);
+            session.setAttribute("USUARIO", usuarioDTO);
 
             return new ModelAndView("redirect:/dashboard");
 

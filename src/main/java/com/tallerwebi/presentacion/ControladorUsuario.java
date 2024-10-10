@@ -39,7 +39,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
 
-        Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
         model.put("usuario", usuario);
 
         return new ModelAndView("dashboard", model);
@@ -56,14 +56,25 @@ public class ControladorUsuario {
 
 
         if (session != null && session.getAttribute("USUARIO") != null) {
-            Usuario usuario = (Usuario) session.getAttribute("USUARIO");
+            UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
 
-            List<Usuario> contactos = servicioUsuario.getContactos(usuario.getEmail());
-            if (contactos != null && !contactos.isEmpty()) {
+            List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
+
+            ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
+
+            for (Usuario contacto : contactos) {
+                UsuarioDTO contactoDTO = new UsuarioDTO();
+                contactoDTO.setNombre(contacto.getNombre());
+                contactoDTO.setEmail(contacto.getEmail());
+                contactosDTO.add(contactoDTO);
+            }
+            usuarioDTO.setContactos(contactosDTO);
+
+            if (contactosDTO != null && !contactosDTO.isEmpty()) {
                 model.put("usuarioActual", session.getAttribute("USUARIO"));
-                model.put("contactos", contactos);
-            } else {
-                model.put("noHayContactos", "No hay contactos en tu lista");
+                model.put("contactos", contactosDTO);
+            }else if (contactosDTO == null || contactosDTO.isEmpty()) {
+                model.put("noHayContactos","No hay contactos en tu lista");
             }
             return new ModelAndView("contactos", model);
 
@@ -74,6 +85,7 @@ public class ControladorUsuario {
 
     @RequestMapping(path = "/suspender/usuario/{nombre}", method = RequestMethod.POST)
     public String suspenderUsuario(@PathVariable("nombre") String nombre, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
+
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(nombre);
 
         servicioUsuario.suspenderUsuario(motivo, usuario.getId());
