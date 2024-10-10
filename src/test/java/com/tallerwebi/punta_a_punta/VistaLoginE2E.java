@@ -47,7 +47,6 @@ public class VistaLoginE2E {
     @Test
     void deberiaDecirBienvenidoEnTitulo() {
         String texto = vistaLogin.obtenerTitulo();
-        System.out.println(texto);
         assertThat("Bienvenido a AssistPyme", equalToIgnoringCase(texto));
     }
 
@@ -62,8 +61,8 @@ public class VistaLoginE2E {
 
     @Test
     void deberiaNavegarAlHomeSiElUsuarioExiste() {
-        vistaLogin.escribirEmail("test@unlam.edu.ar");
-        vistaLogin.escribirClave("test");
+        vistaLogin.escribirEmail("admin@user.com");
+        vistaLogin.escribirClave("admin");
         vistaLogin.darClickEnIniciarSesion();
         String url = vistaLogin.obtenerURLActual();
         assertThat(url, containsStringIgnoringCase("/spring/dashboard"));
