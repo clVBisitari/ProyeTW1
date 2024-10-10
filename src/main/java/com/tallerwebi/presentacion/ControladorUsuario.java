@@ -60,9 +60,7 @@ public class ControladorUsuario {
         }
 
         UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
-
-        System.out.println("BUSCANDOOOOOOOOOOOOOO"+usuarioDTO);
-
+        
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
         ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
@@ -82,7 +80,6 @@ public class ControladorUsuario {
         } else if (contactosDTO == null || contactosDTO.isEmpty()) {
             model.put("noHayContactos", "No hay contactos en tu lista");
         }
-        System.out.println("viendooooooooooooooooooooo contactos" + model.get("contactos"));
         return new ModelAndView("contactos", model);
 
     }
