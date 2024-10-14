@@ -4,18 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service("servicioUsuario")
 @Transactional
 
-public class ServicioUsuarioImpl implements ServicioUsuario{
+public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario){
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
     }
 
@@ -50,8 +49,14 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public Boolean agregarUsuarioAContactos(Usuario usuarioAGuardar) {
-        return null;
+    public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
+        List<Usuario>contactos = usuarioQueGuarda.getContactos();
+        contactos.add(usuarioAGuardar);
+        usuarioQueGuarda.setContactos(contactos);
+        repositorioUsuario.modificar(usuarioQueGuarda);
+        System.out.println("usuarioooooooooooooooooooooo con contactos nuevos : "+ usuarioQueGuarda);
+
+        return true;
     }
 
     @Override
@@ -81,7 +86,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
 
     @Override
     public void suspenderUsuario(String motivo, int idUser) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
         usuario.setEnSuspencion(true);
         repositorioUsuario.modificar(usuario);
     }
@@ -100,7 +105,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
 
     @Override
     public void revertirSuspensionUsuario(int idUsuario) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUsuario);
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
         usuario.setEnSuspencion(false);
         repositorioUsuario.modificar(usuario);
     }
@@ -120,6 +125,30 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
 
         return repositorioUsuario.obtenerContactos(email);
 
+
+    }
+
+    @Override
+    public List<Usuario> getContactosSugeridos(String email) {
+
+        Usuario user = repositorioUsuario.buscar(email);
+        List<Usuario> contactos = repositorioUsuario.obtenerContactos(email);
+        List<Usuario> contactosSugeridos = new ArrayList<>();
+
+        Random random = new Random();
+
+        for (Usuario contacto : contactos) {
+            List<Usuario> contactosDeContacto = contacto.getContactos();
+
+            // Verifica si hay contactos sugeridos disponibles
+            if (!contactosDeContacto.isEmpty()) {
+                // Selecciona un contacto aleatorio
+                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
+                contactosSugeridos.add(contactoAleatorio);
+            }
+        }
+
+        return contactosSugeridos;
 
     }
 }

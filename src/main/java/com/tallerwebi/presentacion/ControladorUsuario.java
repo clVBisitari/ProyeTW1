@@ -60,7 +60,7 @@ public class ControladorUsuario {
         }
 
         UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
-        
+
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
         ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
@@ -71,12 +71,26 @@ public class ControladorUsuario {
             contactoDTO.setEmail(contacto.getEmail());
             contactoDTO.setEnSuspencion(contacto.getEnSuspencion());
             contactosDTO.add(contactoDTO);
+
         }
         usuarioDTO.setContactos(contactosDTO);
+
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
+        ArrayList<UsuarioDTO> contactosSugeridosDTO = new ArrayList<>();
+
+        for (Usuario contactoSugerido : contactosSugeridos) {
+            UsuarioDTO contactoSugeridoDTO = new UsuarioDTO();
+            contactoSugeridoDTO.setNombre(contactoSugerido.getNombre());
+            contactoSugeridoDTO.setEmail(contactoSugerido.getEmail());
+            contactoSugeridoDTO.setEnSuspencion(contactoSugerido.getEnSuspencion());
+            contactosSugeridosDTO.add(contactoSugeridoDTO);
+        }
 
         if (contactosDTO != null && !contactosDTO.isEmpty()) {
             model.put("usuarioActual", session.getAttribute("USUARIO"));
             model.put("contactos", contactosDTO);
+            model.put("contactosSugeridos", contactosSugeridosDTO);
+
         } else if (contactosDTO == null || contactosDTO.isEmpty()) {
             model.put("noHayContactos", "No hay contactos en tu lista");
         }
@@ -112,5 +126,25 @@ public class ControladorUsuario {
         return "redirect:/contactos";
     }
 
+
+    @RequestMapping(path = "/agregar/contacto/{nombre}", method = RequestMethod.POST)
+    public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
+
+        Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
+        System.out.println("ESTE ES EL Q VA A GUARDAR :   -----" +usuarioQueGuarda);
+
+        Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorNombre(nombre);
+System.out.println("ESTE ES EL Q VA A SER GUARDADO : --" + usuarioAGuardar);
+
+        servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+
+        System.out.println("resultado : ----"+ servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar));
+
+        return "redirect:/contactos";
+
+    }
 
 }

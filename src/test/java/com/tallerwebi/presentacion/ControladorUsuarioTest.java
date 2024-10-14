@@ -59,6 +59,14 @@ public class ControladorUsuarioTest {
         assertThat(modelAndView.getModel().get("contactos"), is(notNullValue()));
 
     }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoAlCargarSaldoCambiaElValor() {
+
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+
+
+    }
 
     @Test
     public void dadoQueExisteUnUsuarioLogueadoAlIrAcontactosYNoTenerPuedeVerUnMensajeDeAviso() {

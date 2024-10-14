@@ -117,27 +117,16 @@
         
     </section>
     <aside class="contacts__aside">
-        <h3 class="contacts__atitle">Sugeridos</h3>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
-        <article class="contacts__article">
-            <img class="contacts__img" src="../img/perfil.jpg" alt="" />
-            <p class="contacts__text">Usuario</p>
-        </article>
+        <h3 class="contacts__atitle" th:if="${contactosSugeridos != null} ">Sugeridos</h3>
+            <div th:each="contactoDeContacto : ${contactosSugeridos}">
+                <article class="contacts__article">
+                <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
+                <p class="contacts__text" th:text="${contactoDeContacto.nombre}">Usuario</p>
+                        <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoDeContacto.nombre})}" method="post">
+                            <button type="submit">Agregar Usuario</button>
+                        </form>
+                </article>>
+            </div>
     </aside>
 </main>
 </body>

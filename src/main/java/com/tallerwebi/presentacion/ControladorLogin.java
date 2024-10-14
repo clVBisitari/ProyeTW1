@@ -49,6 +49,7 @@ public class ControladorLogin {
             usuarioDTO.setNombre(usuarioBuscado.getNombre());
             usuarioDTO.setEmail(usuarioBuscado.getEmail());
             usuarioDTO.setEsAdmin(usuarioBuscado.getEsAdmin());
+            usuarioDTO.setSaldo(usuarioBuscado.getSaldo());
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("USUARIO", usuarioDTO);
 
