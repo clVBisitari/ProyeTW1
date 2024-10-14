@@ -66,7 +66,7 @@ public class ControladorLoginTest {
 		ModelAndView modelAndView = controladorLogin.validarLogin(datosLoginMock, requestMock);
 		
 		// validacion
-		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/dashboard"));
+		assertThat(modelAndView.getViewName(), equalToIgnoringCase("redirect:/dashboard?idUsuario=0"));
 		verify(sessionMock, times(1)).setAttribute("esAdmin", usuarioEncontradoMock.getEsAdmin());
 	}
 
