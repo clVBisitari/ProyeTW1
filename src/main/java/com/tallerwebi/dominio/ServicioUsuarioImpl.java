@@ -54,8 +54,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         contactos.add(usuarioAGuardar);
         usuarioQueGuarda.setContactos(contactos);
         repositorioUsuario.modificar(usuarioQueGuarda);
-        System.out.println("usuarioooooooooooooooooooooo con contactos nuevos : "+ usuarioQueGuarda);
-
         return true;
     }
 
@@ -140,11 +138,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         for (Usuario contacto : contactos) {
             List<Usuario> contactosDeContacto = contacto.getContactos();
 
-            // Verifica si hay contactos sugeridos disponibles
-            if (!contactosDeContacto.isEmpty()) {
-                // Selecciona un contacto aleatorio
+            if (!contactosDeContacto.isEmpty() ) {
                 Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                contactosSugeridos.add(contactoAleatorio);
+                if(contactoAleatorio!=user){contactosSugeridos.add(contactoAleatorio);}
             }
         }
 

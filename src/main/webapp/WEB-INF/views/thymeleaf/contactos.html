@@ -73,15 +73,34 @@
 </nav>
 <main class="contacts__main">
     <header class="contacts__search">
-        <form class="contacts__form" action="">
-            <input class="contacts__input" type="text" placeholder="Buscar contacto" />
+        <form class="contacts__form" th:action="@{/buscar/contacto}"  method="post">
+            <input class="contacts__input" type="text" placeholder="Buscar contacto" name = "nombre"/>
             <svg class="contacts__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
                 />
             </svg>
         </form>
+        <section>
+            <aside th:if="${mensaje}">
+                <h1>
+                    No se encontro ningun contacto con ese nombre
+                </h1>
+
+            </aside>
+            <aside class="contacts__aside" th:if="${contactoEncontrado != null} ">
+                <h3 class="contacts__atitle" >Contacto encontrado!!!!</h3>
+                <article class="contacts__article">
+                    <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
+                    <p class="contacts__text" th:text="${contactoEncontrado.nombre}">Usuario</p>
+                    <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoEncontrado.nombre})}" method="post">
+                        <button type="submit">Agregar Usuario</button>
+                    </form>
+                </article>
+            </aside>
+        </section>
     </header>
+
     <section class="contacts__section">
         <h2 class="contacts__title" th:if="${contactos != null} ">Mis contactos</h2>
 
@@ -125,7 +144,7 @@
                         <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoDeContacto.nombre})}" method="post">
                             <button type="submit">Agregar Usuario</button>
                         </form>
-                </article>>
+                </article>
             </div>
     </aside>
 </main>

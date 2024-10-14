@@ -131,17 +131,33 @@ public class ControladorUsuario {
     public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
 
         HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            return "redirect:/login";
+        }
         UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
 
         Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
-        System.out.println("ESTE ES EL Q VA A GUARDAR :   -----" +usuarioQueGuarda);
 
         Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorNombre(nombre);
-System.out.println("ESTE ES EL Q VA A SER GUARDADO : --" + usuarioAGuardar);
 
         servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 
-        System.out.println("resultado : ----"+ servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar));
+        return "redirect:/contactos";
+
+    }
+
+    @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
+    public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes) {
+
+
+        Usuario contactoEncontrado = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        if (contactoEncontrado != null) {
+            redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
+        } else {
+            redirectAttributes.addFlashAttribute("mensaje", "No se encontro nungun contacto con ese nombre");
+        }
 
         return "redirect:/contactos";
 
