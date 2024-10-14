@@ -5,10 +5,7 @@ import com.tallerwebi.dominio.ServicioProyectoInversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -23,12 +20,12 @@ public class ControladorProyeInversion {
         this.servicioProyectoInversion = proyectoInversion;
     }
 
-    @RequestMapping(path= "/proyectosPorUsuario", method = RequestMethod.GET)
-    public ModelAndView getListaProyectosPorUsuario(@RequestParam Integer idUsuario){
+    @RequestMapping(path= "/proyectosPorUsuario/{idUsuario}", method = RequestMethod.GET)
+    public ModelAndView getListaProyectosPorUsuario(@PathVariable("idUsuario") Integer idUsuario){
         ModelMap model = new ModelMap();
         List<ProyectoInversion> proyectosResult = this.servicioProyectoInversion.getProyectosUsuario(idUsuario);
         model.put("proyectos", proyectosResult);
-        return new ModelAndView("proyectosPorUsuario", model);
+        return new ModelAndView("inversiones", model);
     }
 
     @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
