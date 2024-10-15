@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AssistPyme - Contactos</title>
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
@@ -11,7 +11,7 @@
 <body class="body">
 <nav class="nav">
     <div>
-        <a class="nav__link"th:href="@{/dashboard} ">
+        <a class="nav__link" th:href="@{/dashboard} ">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Inicio</title>
                 <path
@@ -27,7 +27,7 @@
                 <path
                         d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5M.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5m15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5"
                 />
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
             </svg>
         </a>
     </div>
@@ -56,7 +56,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link"  th:href="@{/cerrarSesion}">
+        <a class="nav__link" th:href="@{/cerrarSesion}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Salir</title>
                 <path
@@ -73,31 +73,54 @@
 </nav>
 <main class="contacts__main">
     <header class="contacts__search">
-        <form class="contacts__form" th:action="@{/buscar/contacto}"  method="post">
-            <input class="contacts__input" type="text" placeholder="Buscar contacto" name = "nombre"/>
+
+        <form class="contacts__form" th:action="@{/buscar/contacto}" method="post">
+            <input class="contacts__input" type="text" placeholder="Buscar contacto" name="nombre"/>
             <svg class="contacts__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
                 />
             </svg>
         </form>
+
+
         <section>
-            <aside th:if="${mensaje}">
+            <aside th:if="${mensajeContactoNoEncontrado}">
                 <h1>
                     No se encontro ningun contacto con ese nombre
                 </h1>
 
             </aside>
+
             <aside class="contacts__aside" th:if="${contactoEncontrado != null} ">
-                <h3 class="contacts__atitle" >Contacto encontrado!!!!</h3>
+                <h3 class="contacts__atitle">Contacto encontrado!!!!</h3>
                 <article class="contacts__article">
                     <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
                     <p class="contacts__text" th:text="${contactoEncontrado.nombre}">Usuario</p>
-                    <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoEncontrado.nombre})}" method="post">
+
+
+                    <form th:if="${mensajeContactoNuevo!=null}"
+                          th:action="@{/agregar/contacto/{nombre}(nombre=${contactoEncontrado.nombre})}"
+                          method="post">
                         <button type="submit">Agregar Usuario</button>
                     </form>
+
+                    <form th:if="${usuarioActual.esAdmin && mensajeContactoEnLista!=null && !contactoEncontrado.enSuspencion}"
+                          th:action="@{/suspender/usuario/{nombre}(nombre=${contactoEncontrado.nombre})}" method="post">
+                        <textarea name="motivo" placeholder="Escriba el motivo de la suspensión"></textarea>
+                        <button type="submit">Suspender Usuario</button>
+                    </form>
+                    <p class="error" th:text="${mensaje}"></p>
+                    <form th:if="${usuarioActual.esAdmin && mensajeContactoEnLista!=null && contactoEncontrado.enSuspencion}"
+                          th:action="@{/revertir-suspencion/usuario/{nombre}(nombre=${contactoEncontrado.nombre})}"
+                          method="post">
+
+                        <button type="submit">revertir suspencion</button>
+                    </form>
+
                 </article>
             </aside>
+
         </section>
     </header>
 
@@ -131,21 +154,21 @@
         </div>
 
         <div th:else="${contactos == null}">
-            <p  th:text="${noHayContactos}">No hay contactos en tu lista.</p>
+            <p th:text="${noHayContactos}">No hay contactos en tu lista.</p>
         </div>
-        
+
     </section>
     <aside class="contacts__aside">
         <h3 class="contacts__atitle" th:if="${contactosSugeridos != null} ">Sugeridos</h3>
-            <div th:each="contactoDeContacto : ${contactosSugeridos}">
-                <article class="contacts__article">
+        <div th:each="contactoDeContacto : ${contactosSugeridos}">
+            <article class="contacts__article">
                 <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
                 <p class="contacts__text" th:text="${contactoDeContacto.nombre}">Usuario</p>
-                        <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoDeContacto.nombre})}" method="post">
-                            <button type="submit">Agregar Usuario</button>
-                        </form>
-                </article>
-            </div>
+                <form th:action="@{/agregar/contacto/{nombre}(nombre=${contactoDeContacto.nombre})}" method="post">
+                    <button type="submit">Agregar Usuario</button>
+                </form>
+            </article>
+        </div>
     </aside>
 </main>
 </body>

@@ -148,16 +148,30 @@ public class ControladorUsuario {
     }
 
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
-    public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes) {
+    public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
+
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
 
         Usuario contactoEncontrado = servicioUsuario.buscarUsuarioPorNombre(nombre);
 
+        for (Usuario contacto : usuario.getContactos()) {
+            if (contactoEncontrado != null && contacto == contactoEncontrado) {
+                redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
+                redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "ya son amigos");
+                return "redirect:/contactos";
+            }
+        }
         if (contactoEncontrado != null) {
             redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
+            redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavia no son amigos");
+
         } else {
-            redirectAttributes.addFlashAttribute("mensaje", "No se encontro nungun contacto con ese nombre");
+            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "Contacto no econtrado con ese nombre");
         }
+
 
         return "redirect:/contactos";
 
