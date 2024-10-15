@@ -78,7 +78,7 @@
             <h2 class="dashboard__usertext" th:text="${usuario.email}">Juan Carlos</h2>
         </div>
         <div class="dashboard__right">
-            <a class="dashboard__link" href="">Ir a Inversiones -></a>
+            <a class="dashboard__link" th:href="@{/proyectosPorUsuario/{idUsuario}(idUsuario=${idUsuario})}">Ir a Inversiones -></a>
         </div>
     </nav>
     <header class="dashboard__header">

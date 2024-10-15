@@ -17,7 +17,7 @@ public class Usuario {
     private Double saldo;
     @OneToMany
     @JoinColumn(name = "usuario_id")
-    private List<Usuario> contactos;
+    private List<Usuario>contactos;
     private String password;
     private Boolean esAdmin;
     private Boolean enSuspencion;

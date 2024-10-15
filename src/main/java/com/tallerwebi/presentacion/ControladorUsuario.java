@@ -30,7 +30,7 @@ public class ControladorUsuario {
 
     @Transactional
     @RequestMapping("/dashboard")
-    public ModelAndView irADashboard(HttpServletRequest request) {
+    public ModelAndView irADashboard(@RequestParam("idUsuario") Integer idUsuario, HttpServletRequest request) {
         ModelMap model = new ModelMap();
 
         HttpSession session = request.getSession(false);
@@ -41,7 +41,7 @@ public class ControladorUsuario {
 
         UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
         model.put("usuario", usuario);
-
+        model.addAttribute("idUsuario", idUsuario);
         return new ModelAndView("dashboard", model);
     }
 
