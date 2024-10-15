@@ -31,15 +31,13 @@ public class ControladorUsuario {
     @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(@RequestParam("idUsuario") Integer idUsuario, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
 
-        HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("USUARIO") == null) {
+        if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-
-        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
+        ModelMap model = new ModelMap();
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         model.put("usuario", usuario);
         model.addAttribute("idUsuario", idUsuario);
         return new ModelAndView("dashboard", model);
@@ -50,52 +48,29 @@ public class ControladorUsuario {
 
     public ModelAndView irAContactos(HttpServletRequest request) {
 
-        ModelMap model = new ModelMap();
-
-        HttpSession session = request.getSession(false);
-
-
-        if (session == null || session.getAttribute("USUARIO") == null) {
+        if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-
-        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
+        ModelMap model = new ModelMap();
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
-        ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
-
-        for (Usuario contacto : contactos) {
-            UsuarioDTO contactoDTO = new UsuarioDTO();
-            contactoDTO.setNombre(contacto.getNombre());
-            contactoDTO.setEmail(contacto.getEmail());
-            contactoDTO.setEnSuspencion(contacto.getEnSuspencion());
-            contactosDTO.add(contactoDTO);
-
-        }
+        List<UsuarioDTO> contactosDTO = mapToUsuarioDTOList(contactos);
         usuarioDTO.setContactos(contactosDTO);
 
         List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
-        ArrayList<UsuarioDTO> contactosSugeridosDTO = new ArrayList<>();
+        List<UsuarioDTO> contactosSugeridosDTO = mapToUsuarioDTOList(contactosSugeridos);
 
-        for (Usuario contactoSugerido : contactosSugeridos) {
-            UsuarioDTO contactoSugeridoDTO = new UsuarioDTO();
-            contactoSugeridoDTO.setNombre(contactoSugerido.getNombre());
-            contactoSugeridoDTO.setEmail(contactoSugerido.getEmail());
-            contactoSugeridoDTO.setEnSuspencion(contactoSugerido.getEnSuspencion());
-            contactosSugeridosDTO.add(contactoSugeridoDTO);
-        }
+        model.put("usuarioActual", usuarioDTO);
+        model.put("contactos", contactosDTO);
+        model.put("contactosSugeridos", contactosSugeridosDTO);
 
-        if (contactosDTO != null && !contactosDTO.isEmpty()) {
-            model.put("usuarioActual", session.getAttribute("USUARIO"));
-            model.put("contactos", contactosDTO);
-            model.put("contactosSugeridos", contactosSugeridosDTO);
-
-        } else if (contactosDTO == null || contactosDTO.isEmpty()) {
+        if (contactosDTO.isEmpty()) {
             model.put("noHayContactos", "No hay contactos en tu lista");
         }
-        return new ModelAndView("contactos", model);
 
+        return new ModelAndView("contactos", model);
     }
 
 
@@ -130,12 +105,10 @@ public class ControladorUsuario {
     @RequestMapping(path = "/agregar/contacto/{nombre}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-
-        if (session == null) {
+        if (!isUserLoggedIn(request)) {
             return "redirect:/login";
         }
-        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
         Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
 
@@ -150,11 +123,11 @@ public class ControladorUsuario {
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
     public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {
 
-        HttpSession session = request.getSession(false);
-        UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
-
+        if (!isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
-
         Usuario contactoEncontrado = servicioUsuario.buscarUsuarioPorNombre(nombre);
 
         for (Usuario contacto : usuario.getContactos()) {
@@ -164,7 +137,7 @@ public class ControladorUsuario {
                 return "redirect:/contactos";
             }
         }
-        if (contactoEncontrado != null) {
+        if (contactoEncontrado != null && contactoEncontrado!=usuario) {
             redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
             redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavia no son amigos");
 
@@ -177,4 +150,20 @@ public class ControladorUsuario {
 
     }
 
+    private List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setEnSuspencion(usuario.getEnSuspencion());
+            usuariosDTO.add(usuarioDTO);
+        }
+        return usuariosDTO;
+    }
+
+    private boolean isUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return session != null && session.getAttribute("USUARIO") != null;
+    }
 }
