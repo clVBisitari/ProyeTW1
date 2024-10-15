@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -12,12 +14,12 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ControladorGestorDeGastos {
 
-    private ServicioGestorDeGastosImpl servicioGestorDeGastosImpl;
-/*
+    private ServicioGestorGastos servicioGestorDeGastos;
+
     @Autowired
-    public ControladorGestorDeGastos(ServicioGestorDeGastosImpl servicioGestorDeGastosImpl) {
-        this.servicioGestorDeGastosImpl = servicioGestorDeGastosImpl;
-    }*/
+    public ControladorGestorDeGastos(ServicioGestorGastos servicioGestorDeGastos) {
+        this.servicioGestorDeGastos = servicioGestorDeGastos;
+    }
     @RequestMapping("/dashboardGastos")
     public ModelAndView irADashboard(HttpServletRequest request) {
         ModelMap model = new ModelMap();
@@ -30,7 +32,7 @@ public class ControladorGestorDeGastos {
             model.put("totalGastosDelMes", 22);
 
     //    }
-        return new ModelAndView("redirect:/dashboard", model);
+        return new ModelAndView("gasto", model);
 
     }
 

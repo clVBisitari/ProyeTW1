@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.ServicioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,6 +44,7 @@ public class ControladorUsuarioTest {
     public void dadoQueExisteUnUsuarioLogueadoAlIrAcontactosYTenerPuedeVerLaListaDeUsuariosContacto() {
 
         when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
 
         List<Usuario> contactos = new ArrayList<>();
@@ -72,6 +73,7 @@ public class ControladorUsuarioTest {
     public void dadoQueExisteUnUsuarioLogueadoAlIrAcontactosYNoTenerPuedeVerUnMensajeDeAviso() {
 
         when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
 
         List<Usuario> contactos = new ArrayList<>();
@@ -99,9 +101,10 @@ public class ControladorUsuarioTest {
     @Test
     public void dadoQueExisteUnUsuarioLogueadoAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos() {
         when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
 
-        ModelAndView mav = controladorUsuario.irADashboard(1234, requestMock);
+        ModelAndView mav = controladorUsuario.irADashboard(requestMock);
 
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));

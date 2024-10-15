@@ -1,7 +1,8 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
-import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
+import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
+import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

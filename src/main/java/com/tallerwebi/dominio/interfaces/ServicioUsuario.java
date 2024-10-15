@@ -1,6 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
 
-import java.util.ArrayList;
+import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Rubro;
+import com.tallerwebi.dominio.Usuario;
+
 import java.util.List;
 
 public interface ServicioUsuario {
