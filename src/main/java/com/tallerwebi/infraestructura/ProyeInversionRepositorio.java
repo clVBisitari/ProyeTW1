@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.RepositorioProyeInversion;
+import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

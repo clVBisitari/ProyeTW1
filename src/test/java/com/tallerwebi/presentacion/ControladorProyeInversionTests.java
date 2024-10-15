@@ -1,6 +1,6 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.ServicioProyectoInversion;
+import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;

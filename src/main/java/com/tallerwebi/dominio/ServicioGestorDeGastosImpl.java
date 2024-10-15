@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service("servicioGestorDeGastos")
-public class ServicioGestorDeGastosImpl {
+public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
 
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastos;
     @Autowired

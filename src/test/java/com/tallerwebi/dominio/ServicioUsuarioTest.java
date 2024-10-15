@@ -1,6 +1,6 @@
 package com.tallerwebi.dominio;
 
-import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -13,14 +13,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Optional.empty;
 import static net.bytebuddy.matcher.ElementMatchers.is;
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.thymeleaf.util.ArrayUtils.isEmpty;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestConfig.class})

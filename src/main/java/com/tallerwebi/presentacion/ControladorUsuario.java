@@ -1,9 +1,7 @@
 package com.tallerwebi.presentacion;
 
-import com.tallerwebi.dominio.ServicioLogin;
-import com.tallerwebi.dominio.ServicioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -30,16 +28,16 @@ public class ControladorUsuario {
 
     @Transactional
     @RequestMapping("/dashboard")
-    public ModelAndView irADashboard(@RequestParam("idUsuario") Integer idUsuario, HttpServletRequest request) {
-
+    public ModelAndView irADashboard(HttpServletRequest request) {
 
         if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
         ModelMap model = new ModelMap();
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        Integer idUser = (Integer) request.getSession().getAttribute("idUsuario");
         model.put("usuario", usuario);
-        model.addAttribute("idUsuario", idUsuario);
+        model.addAttribute("idUsuario", idUser);
         return new ModelAndView("dashboard", model);
     }
 
