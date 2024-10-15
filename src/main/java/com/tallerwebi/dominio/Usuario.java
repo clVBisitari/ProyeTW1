@@ -21,10 +21,10 @@ public class Usuario {
     private String password;
     private Boolean esAdmin;
     private Boolean enSuspencion;
-   @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
+    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
-   ///private List<Inversion>
-
+    @OneToOne
+    private GestorDeGastos gestorDeGastos;
 
     public Integer getId() {
         return id;
@@ -32,6 +32,14 @@ public class Usuario {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public GestorDeGastos getGestorDeGastos() {
+        return gestorDeGastos;
+    }
+
+    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
+        this.gestorDeGastos = gestorDeGastos;
     }
 
     public String getEmail() {
@@ -85,6 +93,7 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }

@@ -31,15 +31,13 @@ public class ControladorUsuario {
     @Transactional
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(@RequestParam("idUsuario") Integer idUsuario, HttpServletRequest request) {
-        ModelMap model = new ModelMap();
 
-        HttpSession session = request.getSession(false);
 
-        if (session == null || session.getAttribute("USUARIO") == null) {
+        if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-
-        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
+        ModelMap model = new ModelMap();
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         model.put("usuario", usuario);
         model.addAttribute("idUsuario", idUsuario);
         return new ModelAndView("dashboard", model);
@@ -50,36 +48,29 @@ public class ControladorUsuario {
 
     public ModelAndView irAContactos(HttpServletRequest request) {
 
-        ModelMap model = new ModelMap();
-
-        HttpSession session = request.getSession(false);
-
-
-        if (session != null && session.getAttribute("USUARIO") != null) {
-            UsuarioDTO usuarioDTO = (UsuarioDTO) session.getAttribute("USUARIO");
-
-            List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
-
-            ArrayList<UsuarioDTO> contactosDTO = new ArrayList<>();
-
-            for (Usuario contacto : contactos) {
-                UsuarioDTO contactoDTO = new UsuarioDTO();
-                contactoDTO.setNombre(contacto.getNombre());
-                contactoDTO.setEmail(contacto.getEmail());
-                contactosDTO.add(contactoDTO);
-            }
-            usuarioDTO.setContactos(contactosDTO);
-
-            if (contactosDTO != null && !contactosDTO.isEmpty()) {
-                model.put("usuarioActual", session.getAttribute("USUARIO"));
-                model.put("contactos", contactosDTO);
-            }else if (contactosDTO == null || contactosDTO.isEmpty()) {
-                model.put("noHayContactos","No hay contactos en tu lista");
-            }
-            return new ModelAndView("contactos", model);
-
+        if (!isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
         }
-        return new ModelAndView("redirect:/login");
+        ModelMap model = new ModelMap();
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
+
+        List<UsuarioDTO> contactosDTO = mapToUsuarioDTOList(contactos);
+        usuarioDTO.setContactos(contactosDTO);
+
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
+        List<UsuarioDTO> contactosSugeridosDTO = mapToUsuarioDTOList(contactosSugeridos);
+
+        model.put("usuarioActual", usuarioDTO);
+        model.put("contactos", contactosDTO);
+        model.put("contactosSugeridos", contactosSugeridosDTO);
+
+        if (contactosDTO.isEmpty()) {
+            model.put("noHayContactos", "No hay contactos en tu lista");
+        }
+
+        return new ModelAndView("contactos", model);
     }
 
 
@@ -111,4 +102,68 @@ public class ControladorUsuario {
     }
 
 
+    @RequestMapping(path = "/agregar/contacto/{nombre}", method = RequestMethod.POST)
+    public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
+
+        if (!isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
+
+        Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+
+        return "redirect:/contactos";
+
+    }
+
+    @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
+    public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {
+
+        if (!isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
+        Usuario contactoEncontrado = servicioUsuario.buscarUsuarioPorNombre(nombre);
+
+        for (Usuario contacto : usuario.getContactos()) {
+            if (contactoEncontrado != null && contacto == contactoEncontrado) {
+                redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
+                redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "ya son amigos");
+                return "redirect:/contactos";
+            }
+        }
+        if (contactoEncontrado != null && contactoEncontrado!=usuario) {
+            redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
+            redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavia no son amigos");
+
+        } else {
+            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "Contacto no econtrado con ese nombre");
+        }
+
+
+        return "redirect:/contactos";
+
+    }
+
+    private List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setEnSuspencion(usuario.getEnSuspencion());
+            usuariosDTO.add(usuarioDTO);
+        }
+        return usuariosDTO;
+    }
+
+    private boolean isUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        return session != null && session.getAttribute("USUARIO") != null;
+    }
 }
