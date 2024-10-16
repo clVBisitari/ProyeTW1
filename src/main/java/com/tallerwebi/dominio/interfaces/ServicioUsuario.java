@@ -1,6 +1,9 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
 
-import java.util.ArrayList;
+import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Rubro;
+import com.tallerwebi.dominio.Usuario;
+
 import java.util.List;
 
 public interface ServicioUsuario {
@@ -29,6 +32,8 @@ public interface ServicioUsuario {
     Boolean suspenderPublicacion(String motivo, int proyect);
 
     void suspenderUsuario(String motivo, int idUser);
+
+    List<Usuario> buscarUsuario(Usuario nombreUsuario); /// dev una lista y selecciona con el nombre -- de la mando de agregar user a contactos
 
     Boolean revertirSuspensionProyecto(int idProyectoInversion); // en el obj proyect inversion, modificar el boolean en suspencion
 

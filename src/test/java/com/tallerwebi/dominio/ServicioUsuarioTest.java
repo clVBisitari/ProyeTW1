@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.presentacion.UsuarioDTO;

@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -116,6 +118,28 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     public List<Usuario> getContactos(String email) {
 
         return repositorioUsuario.obtenerContactos(email);
+    }
+
+    @Override
+    public List<Usuario> getContactosSugeridos(String email) {
+
+        Usuario user = repositorioUsuario.buscar(email);
+        List<Usuario> contactos = repositorioUsuario.obtenerContactos(email);
+        List<Usuario> contactosSugeridos = new ArrayList<>();
+
+        Random random = new Random();
+
+        for (Usuario contacto : contactos) {
+            List<Usuario> contactosDeContacto = contacto.getContactos();
+
+            if (!contactosDeContacto.isEmpty() ) {
+                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
+                if(contactoAleatorio!=user){contactosSugeridos.add(contactoAleatorio);}
+            }
+        }
+
+        return contactosSugeridos;
+
     }
 
     @Override

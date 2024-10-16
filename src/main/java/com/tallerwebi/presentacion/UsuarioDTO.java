@@ -8,7 +8,7 @@ import java.util.Objects;
 
 public class UsuarioDTO {
 
-    private Long id;
+    private Integer id;
     private String email;
     private String nombre;
     private String apellido;
@@ -21,11 +21,11 @@ public class UsuarioDTO {
     private Boolean enSuspencion;
 
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
