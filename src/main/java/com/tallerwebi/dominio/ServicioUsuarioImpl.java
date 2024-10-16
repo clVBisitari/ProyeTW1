@@ -90,6 +90,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         usuario.setEnSuspencion(true);
         repositorioUsuario.modificar(usuario);
     }
+    
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
@@ -142,25 +143,4 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
     }
 
-    @Override
-    public List<Usuario> getContactosSugeridos(String email) {
-
-        Usuario user = repositorioUsuario.buscar(email);
-        List<Usuario> contactos = repositorioUsuario.obtenerContactos(email);
-        List<Usuario> contactosSugeridos = new ArrayList<>();
-
-        Random random = new Random();
-
-        for (Usuario contacto : contactos) {
-            List<Usuario> contactosDeContacto = contacto.getContactos();
-
-            if (!contactosDeContacto.isEmpty() ) {
-                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if(contactoAleatorio!=user){contactosSugeridos.add(contactoAleatorio);}
-            }
-        }
-
-        return contactosSugeridos;
-
-    }
 }

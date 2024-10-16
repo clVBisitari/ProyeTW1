@@ -104,7 +104,7 @@ public class ControladorUsuarioTest {
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
 
-        ModelAndView mav = controladorUsuario.irADashboard(requestMock);
+        ModelAndView mav = controladorUsuario.irADashboard(usuarioDTOMock.getId(),requestMock);
 
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));

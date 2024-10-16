@@ -99,6 +99,7 @@ public class ControladorLogin {
 
     private UsuarioDTO mapToUsuarioDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
         usuarioDTO.setNombre(usuario.getNombre());
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
