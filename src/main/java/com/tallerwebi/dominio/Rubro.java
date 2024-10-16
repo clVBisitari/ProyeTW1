@@ -1,4 +1,6 @@
 package com.tallerwebi.dominio;
 
-public class Rubro {
+public enum Rubro {
+TECNOLOGIA,
+    SALUD
 }

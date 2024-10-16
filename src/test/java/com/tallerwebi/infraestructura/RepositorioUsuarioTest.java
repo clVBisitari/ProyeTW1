@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestConfig.class})
@@ -77,4 +78,26 @@ public class RepositorioUsuarioTest{
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioYElUsuarioQuiereCargarSaldoElSaldoSeActualiza(){
+
+        Usuario usuario = new Usuario();
+        usuario.setSaldo(100.00);
+        this.repositorioUsuario.guardar(usuario);
+        Double saldoAAgregar = 251.00;
+        usuario.setSaldo(usuario.getSaldo()+saldoAAgregar);
+        this.repositorioUsuario.modificar(usuario);
+
+        String hql = "SELECT u FROM Usuario u WHERE u.saldo = :saldo";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("saldo", 351.00);
+
+        Usuario usuarioBD = (Usuario) query.getSingleResult();
+
+        assertThat(usuarioBD.getSaldo(), equalTo(351.00));
+        assertThat(usuarioBD, equalTo(usuario));
+
+    }
 }

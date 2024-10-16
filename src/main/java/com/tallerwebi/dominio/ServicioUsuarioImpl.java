@@ -90,7 +90,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         usuario.setEnSuspencion(true);
         repositorioUsuario.modificar(usuario);
     }
-    
+
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
