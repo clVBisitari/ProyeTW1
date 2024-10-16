@@ -47,9 +47,27 @@ public class ServicioUsuarioTest {
 
     @Test
     public void dadoQueHayUnUsuarioSuspendidoSiSeRevierteLaSuspecionElUsuarioAfectadoCambiaDeEstado() {
-        when(usuarioDTOMock.getId()).thenReturn(15);
         Usuario usuarioSuspendido = dadoQueHayUnUsuarioSuspendido();
         puedoRevertirSuspencion(usuarioSuspendido);
+    }
+
+    @Test
+    public void dadoQueHayUnUsuarioNoSuspendidoSiSeSuspendeElUsuarioAfectadoCambiaDeEstado() {
+        Usuario usuarioNoSuspendido = dadoQueHayUnUsuarioNoSuspendido();
+        puedoSuspenderlo(usuarioNoSuspendido);
+    }
+
+    private void puedoSuspenderlo(Usuario usuarioNoSuspendido) {
+        usuarioNoSuspendido.setEnSuspencion(true);
+        repositorioUsuarioMock.modificar(usuarioNoSuspendido);
+        assertThat(usuarioNoSuspendido.getEnSuspencion(), equalTo(true));
+    }
+
+    private Usuario dadoQueHayUnUsuarioNoSuspendido() {
+        Usuario userNoSuspendido = new Usuario();
+        userNoSuspendido.setEnSuspencion(false);
+        when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userNoSuspendido);
+        return userNoSuspendido;
     }
 
     private void puedoRevertirSuspencion(Usuario usuarioSuspendido) {
