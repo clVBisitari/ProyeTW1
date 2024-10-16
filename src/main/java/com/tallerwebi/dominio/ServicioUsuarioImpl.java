@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.ContactoExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,13 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
     @Override
     public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
-        List<Usuario>contactos = usuarioQueGuarda.getContactos();
+        List<Usuario> contactos = usuarioQueGuarda.getContactos();
+
+        for (Usuario contacto : contactos) {
+            if (contacto == usuarioAGuardar) {
+                throw new ContactoExistente("este contacto ya esta en tu lista");
+            }
+        }
         contactos.add(usuarioAGuardar);
         usuarioQueGuarda.setContactos(contactos);
         repositorioUsuario.modificar(usuarioQueGuarda);
@@ -133,9 +140,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         for (Usuario contacto : contactos) {
             List<Usuario> contactosDeContacto = contacto.getContactos();
 
-            if (!contactosDeContacto.isEmpty() ) {
+            if (!contactosDeContacto.isEmpty()) {
                 Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if(contactoAleatorio!=user){contactosSugeridos.add(contactoAleatorio);}
+                if (contactoAleatorio != user) {
+                    contactosSugeridos.add(contactoAleatorio);
+                }
             }
         }
 
