@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+
 import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.text.IsEqualIgnoringCase.equalToIgnoringCase;
@@ -60,6 +61,7 @@ public class ControladorUsuarioTest {
         assertThat(modelAndView.getModel().get("contactos"), is(notNullValue()));
 
     }
+
     @Test
     public void dadoQueExisteUnUsuarioLogueadoAlCargarSaldoCambiaElValor() {
 
@@ -104,14 +106,14 @@ public class ControladorUsuarioTest {
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
 
-        ModelAndView mav = controladorUsuario.irADashboard(usuarioDTOMock.getId(),requestMock);
+        ModelAndView mav = controladorUsuario.irADashboard(usuarioDTOMock.getId(), requestMock);
 
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro(){
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro() {
 
         String nombre = "marco";
         Usuario usuarioASuspender = new Usuario();
@@ -136,7 +138,7 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeRevertirLaSesionDeOtroUsuario(){
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeRevertirLaSuspensionDeOtroUsuario() {
         String nombre = "marco";
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
@@ -155,5 +157,25 @@ public class ControladorUsuarioTest {
 
     }
 
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() {
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        Usuario usuarioQueGuarda = new Usuario();
+        usuarioQueGuarda.setEmail("userMock@hotmail.com");
+        Usuario usuarioAGuardar = new Usuario();
 
-}
+        when(servicioUsuarioMock.buscarUsuarioPorNombre(usuarioDTOMock.getNombre())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuarioMock.buscarUsuarioPorNombre("nombre")).thenReturn(usuarioAGuardar);
+
+        String vistaRedirigida = controladorUsuario.agregarContacto("nombre", requestMock);
+
+        verify(servicioUsuarioMock).buscarUsuarioPorNombre(usuarioDTOMock.getNombre());
+        verify(servicioUsuarioMock).buscarUsuarioPorNombre("nombre");
+        verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+
+        assertThat(vistaRedirigida, equalToIgnoringCase("redirect:/contactos"));
+
+    }
+    }
