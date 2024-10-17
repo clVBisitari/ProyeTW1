@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,17 +30,40 @@ public class ServicioGestorDeGastosImplTest {
 
     private ServicioGestorDeGastosImpl servicioGestorDeGastos;
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastosMock;
+    private RepositorioGastoImpl repositorioGastoMock;
 
     @BeforeEach
     public void init(){
         repositorioGestorDeGastosMock = mock(RepositorioGestorDeGastosImpl.class);
-        this.servicioGestorDeGastos = new ServicioGestorDeGastosImpl(repositorioGestorDeGastosMock);
+        repositorioGastoMock = mock(RepositorioGastoImpl.class);
+        this.servicioGestorDeGastos = new ServicioGestorDeGastosImpl(repositorioGestorDeGastosMock, repositorioGastoMock);
     }
 
     @Test
     @Transactional
     @Rollback
     public void queElSaldoComprometidoEnGastosDelMesSeGenereCorrrectamente() throws ParseException {
+        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos();
+        when(repositorioGestorDeGastosMock.obtenerTodosLosGastosDeUnGestor(1L)).thenReturn(gestor.getGastos());
+
+        Double totalGastosDelMes = servicioGestorDeGastos.actualizarTotalGastosDelMesEnCursoPorId(1L);
+
+        assertThat(totalGastosDelMes, equalTo(50000.0));
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void queLaCantidadDeGastosPorVencerDelMesEnCursoSeGenereCorrrectamente() throws ParseException {
+        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos();
+        when(repositorioGestorDeGastosMock.obtenerTodosLosGastosDeUnGestor(gestor.getId())).thenReturn(gestor.getGastos());
+
+        int cantidadGastosPorVencer = servicioGestorDeGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestor.getId());
+
+        assertThat(cantidadGastosPorVencer, equalTo(1));
+    }
+
+    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
         DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
         Gasto primerGasto = new Gasto("impuesto", 50000, new Date(), Frecuencia.MENSUAL);
@@ -56,10 +80,6 @@ public class ServicioGestorDeGastosImplTest {
         gestor.registrarGasto(primerGasto);
         gestor.registrarGasto(segundoGasto);
         gestor.registrarGasto(tercerGasto);
-        when(repositorioGestorDeGastosMock.obtenerTodosLosGastosDeUnGestor(1L)).thenReturn(gestor.getGastos());
-
-        Double totalGastosDelMes = servicioGestorDeGastos.actualizarTotalGastosDelMesEnCursoPorId(1L);
-
-        assertThat(totalGastosDelMes, equalTo(50000.0));
+        return gestor;
     }
 }
