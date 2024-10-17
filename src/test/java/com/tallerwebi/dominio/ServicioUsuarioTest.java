@@ -43,10 +43,10 @@ public class ServicioUsuarioTest {
 
     @Test
     public void siHayContactosDeberiaDevolverUnaLista() {
-        when(usuarioDTOMock.getEmail()).thenReturn("test@unlam.edu.ar");
+        when(usuarioDTOMock.getEmail()).thenReturn("user@example.com");
         dadoQueHayContactos();
         List<Usuario> contactos = cuandoConsultoLosContactos(usuarioDTOMock.getEmail());
-        obtengoUnaListaVacia(contactos);
+        obtengoUnaListaDeContactos(contactos);
     }
 
     @Test
@@ -55,7 +55,7 @@ public class ServicioUsuarioTest {
         user.setEmail("user@example.com");
         Usuario subContacto1 = new Usuario();
         Usuario subContacto2 = new Usuario();
-        List<Usuario> contactos = crearListaDeContactos(user,subContacto1,subContacto2);
+        List<Usuario> contactos = crearListaDeContactos(user, subContacto1, subContacto2);
 
         when(repositorioUsuarioMock.buscar("user@example.com")).thenReturn(user);
         when(repositorioUsuarioMock.obtenerContactos("user@example.com"))
@@ -74,7 +74,7 @@ public class ServicioUsuarioTest {
         when(usuarioDTOMock.getEmail()).thenReturn("test@unlam.edu.ar");
         dadoQueNoHayContactos();
         List<Usuario> contactos = cuandoConsultoLosContactos(usuarioDTOMock.getEmail());
-        obtengoUnaListaDeContactos(contactos);
+        obtengoUnaListaVacia(contactos);
     }
 
     @Test
@@ -106,10 +106,13 @@ public class ServicioUsuarioTest {
     }
 
     @Test
-    public void siBuscoUnUsuarioPorNombreYEstaEnLaBdDebeDevolverElUsuario() {
-
+    public void siBuscoUnUsuarioPorNombreDebeDevolverElUsuario() {
+        Usuario userBuscado = new Usuario();
+        userBuscado.setNombre("Diego");
+        when(repositorioUsuarioMock.buscarUsuarioPorNombre(userBuscado.getNombre())).thenReturn(userBuscado);
+       Usuario userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
+        assertThat(userEncontrado, equalTo(userBuscado));
     }
-
 
     private void obtengoUnaListaDeContactos(List<Usuario> contactos) {
         assertThat(contactos.size(), equalTo(2));
@@ -121,12 +124,12 @@ public class ServicioUsuarioTest {
         contactos.add(cont1);
         Usuario cont2 = new Usuario();
         contactos.add(cont2);
-        when(repositorioUsuarioMock.obtenerContactos("test@example.com")).thenReturn(contactos);
+        when(repositorioUsuarioMock.obtenerContactos("user@example.com")).thenReturn(contactos);
     }
 
 
-    private List<Usuario> crearListaDeContactos(Usuario user,Usuario subContacto1, Usuario subContacto2) {
-        List<Usuario>contactos=new ArrayList<>();
+    private List<Usuario> crearListaDeContactos(Usuario user, Usuario subContacto1, Usuario subContacto2) {
+        List<Usuario> contactos = new ArrayList<>();
         Usuario contacto1 = new Usuario();
         contacto1.setEmail("contact1@example.com");
         List<Usuario> contactosContacto1 = new ArrayList<>();
