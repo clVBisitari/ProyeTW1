@@ -41,7 +41,7 @@ public class RepositorioUsuarioTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioYPidoLosContactosDelUsuarioLaBaseDeDatosMeLosDevuelve(){
+    public void dadoQueExisteUnRepositorioUsuarioYPidoLosContactosDelUsuarioLaBaseDeDatosLosDevuelve(){
 
         Usuario usuario = new Usuario();
 
@@ -68,10 +68,8 @@ public class RepositorioUsuarioTest{
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("idUsuario", idUsuario);
 
-        // Ejecutar la consulta y obtener los contactos
         List<Usuario> contactosRecuperados = query.getResultList();
 
-        // Afirmaciones para comprobar que los contactos fueron recuperados correctamente
         assertThat(contactosRecuperados, is(notNullValue()));
         assertThat(contactosRecuperados.size(), is(3));
         assertThat(contactosRecuperados, containsInAnyOrder(contacto1, contacto2, contacto3));
@@ -81,7 +79,7 @@ public class RepositorioUsuarioTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioYElUsuarioQuiereCargarSaldoElSaldoSeActualiza(){
+    public void dadoQueExisteUnRepositorioUsuarioYElUsuarioCargaSaldoElSaldoSeActualizaEnLaBaseDeDatos(){
 
         Usuario usuario = new Usuario();
         usuario.setSaldo(100.00);
@@ -100,4 +98,51 @@ public class RepositorioUsuarioTest{
         assertThat(usuarioBD, equalTo(usuario));
 
     }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosPorEmailYPasswordDevuelveElUsuarioBuscado(){
+
+        Usuario userBuscado = new Usuario();
+        userBuscado.setEmail("diego@hotmail.com");
+        userBuscado.setPassword("123456");
+        this.repositorioUsuario.guardar(userBuscado);
+
+        String hql = "SELECT u FROM Usuario u WHERE u.email = :emailUsuario AND u.password = :passwordUsuario";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("emailUsuario", "diego@hotmail.com");
+        query.setParameter("passwordUsuario", "123456");
+
+        Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
+        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuario("diego@hotmail.com","123456");
+
+        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
+        assertThat(usuarioEncontradoPorRepo.getEmail(), equalTo("diego@hotmail.com"));
+        assertThat(usuarioEncontradoPorRepo.getPassword(), equalTo("123456"));
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosSoloPorEmailDevuelveElUsuarioBuscado(){
+
+        Usuario userBuscado = new Usuario();
+        userBuscado.setEmail("diego@hotmail.com");
+        this.repositorioUsuario.guardar(userBuscado);
+
+        String hql = "SELECT u FROM Usuario u WHERE u.email = :emailUsuario";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("emailUsuario", "diego@hotmail.com");
+
+        Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
+        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscar("diego@hotmail.com");
+
+        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
+        assertThat(usuarioEncontradoPorRepo.getEmail(), equalTo("diego@hotmail.com"));
+
+    }
+
+
 }

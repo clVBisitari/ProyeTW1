@@ -98,6 +98,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         repositorioUsuario.modificar(usuario);
     }
 
+    @Override
+    public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
+        return List.of();
+    }
+
 
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {

@@ -28,7 +28,7 @@ public class ControladorUsuario {
 
     @Transactional
     @RequestMapping("/dashboard")
-    public ModelAndView irADashboard(@RequestParam("idUsuario") Integer idUsuario, HttpServletRequest request) {
+    public ModelAndView irADashboard(HttpServletRequest request) {
 
 
         if (!isUserLoggedIn(request)) {
