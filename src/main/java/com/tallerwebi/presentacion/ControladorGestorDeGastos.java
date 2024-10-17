@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -13,11 +14,44 @@ import javax.servlet.http.HttpSession;
 public class ControladorGestorDeGastos {
 
     private ServicioGestorDeGastosImpl servicioGestorDeGastosImpl;
-/*
+
     @Autowired
-    public ControladorGestorDeGastos(ServicioGestorDeGastosImpl servicioGestorDeGastosImpl) {
-        this.servicioGestorDeGastosImpl = servicioGestorDeGastosImpl;
-    }*/
+    public ControladorGestorDeGastos(ServicioGestorDeGastosImpl servicioGestorDeGastos) {
+        this.servicioGestorDeGastosImpl = servicioGestorDeGastos;
+    }
+
+    @RequestMapping(path = "/gasto", method = RequestMethod.GET)
+    public ModelAndView registrarGasto() {
+
+        ModelMap modelo = new ModelMap();
+        modelo.put("gasto", new Gasto());
+        return new ModelAndView("gasto", modelo);
+    }
+
+    @RequestMapping(path = "/registrarGasto", method = RequestMethod.POST)
+    public ModelAndView registrarGasto(@ModelAttribute("gasto") Gasto gasto, HttpServletRequest request) {
+
+        ModelMap model = new ModelMap();
+        HttpSession session = request.getSession();
+        Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
+        GestorDeGastos gestorConectado = usuarioConectado.getGestor();
+        gestorConectado.registrarGasto(gasto);
+        this.servicioGestorDeGastosImpl.guardarGestor(gestorConectado);
+        return new ModelAndView("redirect:/dashboard");
+    }
+
+    @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
+    public ModelAndView actualizarGastosDelMesEnCurso(HttpServletRequest request) {
+
+        HttpSession session = request.getSession();
+        Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
+        GestorDeGastos gestorConectado = usuarioConectado.getGestor();
+        Double totalGastosMesEnCurso = servicioGestorDeGastosImpl.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
+        ModelMap modelo = new ModelMap();
+        modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
+        return new ModelAndView("dashboard", modelo);
+    }
+
     @RequestMapping("/dashboardGastos")
     public ModelAndView irADashboard(HttpServletRequest request) {
         ModelMap model = new ModelMap();
@@ -33,6 +67,5 @@ public class ControladorGestorDeGastos {
         return new ModelAndView("redirect:/dashboard", model);
 
     }
-
 
 }

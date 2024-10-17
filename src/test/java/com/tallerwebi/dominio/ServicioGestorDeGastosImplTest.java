@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,11 +30,13 @@ public class ServicioGestorDeGastosImplTest {
 
     private ServicioGestorDeGastosImpl servicioGestorDeGastos;
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastosMock;
+    private RepositorioGastoImpl repositorioGastoMock;
 
     @BeforeEach
     public void init(){
         repositorioGestorDeGastosMock = mock(RepositorioGestorDeGastosImpl.class);
-        this.servicioGestorDeGastos = new ServicioGestorDeGastosImpl(repositorioGestorDeGastosMock);
+        repositorioGastoMock = mock(RepositorioGastoImpl.class);
+        this.servicioGestorDeGastos = new ServicioGestorDeGastosImpl(repositorioGestorDeGastosMock, repositorioGastoMock);
     }
 
     @Test

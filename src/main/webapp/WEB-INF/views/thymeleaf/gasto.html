@@ -77,29 +77,35 @@
             <button class="button__secondary">Volver</button>
         </a>
     </div>
-    <form class="spent__form" action="">
+    <form class="spent__form" action="#" th:action="@{/registrarGasto}" method="POST" th:object="${gasto}">
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="descripcion">Descripción:</label>
-            <input class="spent__input" id="descripcion" name="descripcion" type="text" min="3" max="15" required placeholder='Comida' />
+            <input class="spent__input" th:field="*{descripcion}" id="descripcion" name="descripcion" type="text" min="3" max="15" required placeholder='Comida' />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="valor">Valor:</label>
-            <input class="spent__input" id="valor" name="valor" type="number" min="3" max="15" required placeholder='97' />
+            <input class="spent__input" th:field="*{valor}" id="valor" name="valor" type="number" min="3" max="15" required placeholder='97' />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="vencimiento">Fecha de vencimiento: (opcional)</label>
-            <input class="spent__input" id="vencimiento" name="vencimiento" type="date" />
+            <input class="spent__input" th:field="*{fechaVencimiento}" id="vencimiento" name="vencimiento" type="date" required />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="recordatorio">Fecha de recordatorio: (opcional)</label>
-            <input class="spent__input" id="recordatorio" name="recordatorio" type="date" />
+            <input class="spent__input" th:field="*{fechaRecordatorio}" id="recordatorio" name="recordatorio" type="date" />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="frecuencia">Frecuencia: (opcional)</label>
-            <input class="spent__input" id="frecuencia" name="frecuencia" type="date" />
+            <label class="spent__label" for="frecuencia">Frecuencia: </label>
+            <select class="spent__input" th:field="*{frecuencia}" id="frecuencia" name="frecuencia" required >
+                <option value="UNICO">Unico</option>
+                <option value="MENSUAL">Mensual</option>
+                <option value="BIMESTRAL">Bimestral</option>
+                <option value="SEMESTRAL">Semestral</option>
+                <option value="ANUAL">Anual</option>
+            </select>
         </fieldset>
         <div class='spent__button'>
-            <button class='button__primary'>Agregar gasto</button>
+            <button class='button__primary' type="submit">Agregar gasto</button>
         </div>
     </form>
 </main>

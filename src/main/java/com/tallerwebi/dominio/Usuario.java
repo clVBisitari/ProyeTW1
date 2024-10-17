@@ -24,7 +24,9 @@ public class Usuario {
     private Boolean enSuspencion;
    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoDeInversion proyecto;
-   ///private List<Inversion>
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
+    private GestorDeGastos gestorDeGastos;
+    ///private List<Inversion>
 
 
     public Integer getId() {
@@ -140,8 +142,16 @@ public class Usuario {
                 ", contactos=" + contactos +
                 ", password='" + password + '\'' +
                 ", esAdmin=" + esAdmin +
-                ", enSuspencion=" + enSuspencion +
+                ", enSuspension=" + enSuspencion +
                 ", proyecto=" + proyecto +
                 '}';
+    }
+
+    public GestorDeGastos getGestor() {
+        return this.gestorDeGastos;
+    }
+
+    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
+        this.gestorDeGastos = gestorDeGastos;
     }
 }

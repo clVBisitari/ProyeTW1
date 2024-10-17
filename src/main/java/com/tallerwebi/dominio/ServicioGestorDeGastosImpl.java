@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,13 +13,19 @@ import java.util.List;
 public class ServicioGestorDeGastosImpl {
 
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastos;
+    private RepositorioGastoImpl repositorioGasto;
     @Autowired
-    public ServicioGestorDeGastosImpl(RepositorioGestorDeGastosImpl repositorioGestorDeGastos){
+    public ServicioGestorDeGastosImpl(RepositorioGestorDeGastosImpl repositorioGestorDeGastos, RepositorioGastoImpl repositorioGasto){
         this.repositorioGestorDeGastos = repositorioGestorDeGastos;
+        this.repositorioGasto = repositorioGasto;
     }
 
     public void guardarGestor(GestorDeGastos gestorDeGastos){
          repositorioGestorDeGastos.guardarGestor(gestorDeGastos);
+    }
+
+    public void guardarGasto(Gasto gasto){
+        repositorioGasto.guardarGasto(gasto);
     }
 
     public Double actualizarTotalGastosDelMesEnCursoPorId(Long gestorId) {
