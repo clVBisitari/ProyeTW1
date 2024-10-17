@@ -81,7 +81,7 @@ public class ControladorUsuario {
         servicioUsuario.suspenderUsuario(motivo, usuario.getId());
 
 
-        if (usuario.getEnSuspencion()) {
+        if (usuario.getEnSuspension()) {
             redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
@@ -99,7 +99,6 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
-
 
     @RequestMapping(path = "/agregar/contacto/{nombre}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
@@ -155,7 +154,7 @@ public class ControladorUsuario {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
-            usuarioDTO.setEnSuspencion(usuario.getEnSuspencion());
+            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
             usuariosDTO.add(usuarioDTO);
         }
         return usuariosDTO;

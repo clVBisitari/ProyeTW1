@@ -19,12 +19,21 @@ public class Usuario {
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
     private String password;
-    private Boolean esAdmin;
-    private Boolean enSuspencion;
+    private Boolean esAdmin = false;
+    private Boolean enSuspension = false;
     @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
     @OneToOne
     private GestorDeGastos gestorDeGastos;
+
+    public Usuario(){}
+    public Usuario(String email, String password, String nombre, String apellido, Integer dni) {
+        this.email = email;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+    }
 
     public Integer getId() {
         return id;
@@ -106,12 +115,12 @@ public class Usuario {
         this.esAdmin = esAdmin;
     }
 
-    public Boolean getEnSuspencion() {
-        return enSuspencion;
+    public Boolean getEnSuspension() {
+        return enSuspension;
     }
 
-    public void setEnSuspencion(Boolean enSuspencion) {
-        this.enSuspencion = enSuspencion;
+    public void setEnSuspension(Boolean enSuspencion) {
+        this.enSuspension = enSuspencion;
     }
 
     public ProyectoInversion getProyecto() {
@@ -127,12 +136,12 @@ public class Usuario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspencion, usuario.enSuspencion) && Objects.equals(proyecto, usuario.proyecto);
+        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspension, usuario.enSuspension) && Objects.equals(proyecto, usuario.proyecto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspencion, proyecto);
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspension, proyecto);
     }
 
     @Override
@@ -147,7 +156,7 @@ public class Usuario {
                 ", contactos=" + contactos +
                 ", password='" + password + '\'' +
                 ", esAdmin=" + esAdmin +
-                ", enSuspencion=" + enSuspencion +
+                ", enSuspencion=" + enSuspension +
                 ", proyecto=" + proyecto +
                 '}';
     }

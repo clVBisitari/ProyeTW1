@@ -43,8 +43,10 @@ public class ControladorLogin {
             UsuarioDTO usuarioDTO = mapToUsuarioDTO(usuarioBuscado);
             HttpSession session = request.getSession();
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
+            session.setAttribute("saldo", usuarioBuscado.getSaldo());
             session.setAttribute("USUARIO", usuarioDTO);
             model.addAttribute("idUsuario", usuarioBuscado.getId());
+            model.addAttribute("usuario", usuarioDTO);
             return new ModelAndView("redirect:/dashboard");
 
         } else {
@@ -53,9 +55,8 @@ public class ControladorLogin {
 }
 
 
-
 @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") UsuarioDTO usuario) {
         ModelMap model = new ModelMap();
         try {
             servicioLogin.registrar(usuario);
@@ -69,11 +70,11 @@ public class ControladorLogin {
         return new ModelAndView("redirect:/login");
     }
 
-    @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
+    @RequestMapping(path = "/registro", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
         ModelMap model = new ModelMap();
         model.put("usuario", new Usuario());
-        return new ModelAndView("nuevo-usuario", model);
+        return new ModelAndView("registro", model);
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
