@@ -19,8 +19,8 @@ public class Usuario {
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
     private String password;
-    private Boolean esAdmin;
-    private Boolean enSuspension;
+    private Boolean esAdmin = false;
+    private Boolean enSuspension = false;
     @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
     @OneToOne
