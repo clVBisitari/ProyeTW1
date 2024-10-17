@@ -8,126 +8,79 @@ import java.util.List;
 import java.util.Objects;
 
 public class UsuarioDTO {
-
     private Integer id;
     private String email;
+    private String password;
     private String nombre;
     private String apellido;
     private Integer dni;
+    private boolean enSuspension;
+    private boolean esAdmin;
+    private List<UsuarioDTO> contactos;
     private Double saldo;
-    private List<UsuarioDTO> contactos; /// lo quiero mostrar?
-    //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoInversion proyecto;
-    private Boolean esAdmin;
-    private Boolean enSuspencion;
 
+    public UsuarioDTO() {
 
-    public Integer getId() {
-        return id;
     }
+    public Integer getId() {return id;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    public void setId(Integer id) {this.id = id;}
 
-    public String getEmail() {
-        return email;
-    }
+    public String getEmail() {return email;}
 
-    public Boolean getEnSuspencion() {
-        return enSuspencion;
-    }
+    public void setEmail(String email) {this.email = email;}
 
-    public void setEnSuspencion(Boolean enSuspencion) {
-        this.enSuspencion = enSuspencion;
-    }
+    public String getPassword() {return password;}
 
-    public Boolean getEsAdmin() {
-        return esAdmin;
-    }
+    public void setPassword(String password) {this.password = password;}
 
-    public void setEsAdmin(Boolean esAdmin) {
-        this.esAdmin = esAdmin;
-    }
+    public String getNombre() {return nombre;}
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+    public void setNombre(String nombre) {this.nombre = nombre;}
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getApellido() {return apellido;}
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public void setApellido(String apellido) {this.apellido = apellido;}
 
-    public String getApellido() {
-        return apellido;
-    }
+    public Integer getDni() {return dni;}
 
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
+    public void setDni(Integer dni) {this.dni = dni;}
 
-    public Integer getDni() {
-        return dni;
-    }
+    public void setEnSuspension(boolean enSuspension) {this.enSuspension = enSuspension;}
 
-    public void setDni(Integer dni) {
-        this.dni = dni;
-    }
+    public void setContactos(List<UsuarioDTO> contactosDTO) {this.contactos = contactosDTO;}
 
-    public Double getSaldo() {
-        return saldo;
-    }
+    public boolean isEnSuspension() {return enSuspension;}
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
+    public List<UsuarioDTO> getContactos() {return contactos;}
 
-    public List<UsuarioDTO> getContactos() {
-        return contactos;
-    }
+    public boolean isEsAdmin() {return esAdmin;}
 
-    public void setContactos(List<UsuarioDTO> contactos) {
-        this.contactos = contactos;
-    }
+    public void setEsAdmin(boolean esAdmin) {this.esAdmin = esAdmin;}
 
-    public ProyectoInversion getProyecto() {
-        return proyecto;
-    }
+    public Double getSaldo() {return saldo;}
 
-    public void setProyecto(ProyectoInversion proyecto) {
-        this.proyecto = proyecto;
-    }
+    public void setSaldo(Double saldo) {this.saldo = saldo;}
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UsuarioDTO that = (UsuarioDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni) && Objects.equals(saldo, that.saldo) && Objects.equals(contactos, that.contactos) && Objects.equals(proyecto, that.proyecto);
+        return Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
+        return Objects.hash(email, nombre, apellido, dni);
     }
 
     @Override
     public String toString() {
         return "UsuarioDTO{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
+                "email='" + email + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
-                ", dni=" + dni +
-                ", saldo=" + saldo +
-                ", contactos=" + contactos +
-                ", proyecto=" + proyecto +
-                ", esAdmin=" + esAdmin +
-                ", enSuspencion=" + enSuspencion +
                 '}';
     }
 }

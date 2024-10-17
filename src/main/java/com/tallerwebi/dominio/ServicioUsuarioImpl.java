@@ -94,7 +94,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public void suspenderUsuario(String motivo, int idUser) {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
-        usuario.setEnSuspencion(true);
+        usuario.setEnSuspension(true);
         repositorioUsuario.modificar(usuario);
     }
 
@@ -113,7 +113,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public void revertirSuspensionUsuario(int idUsuario) {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
-        usuario.setEnSuspencion(false);
+        usuario.setEnSuspension(false);
         repositorioUsuario.modificar(usuario);
     }
 
