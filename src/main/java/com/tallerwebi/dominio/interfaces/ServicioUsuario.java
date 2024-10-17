@@ -15,15 +15,14 @@ public interface ServicioUsuario {
 
     ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio);
 
-    Boolean eliminarProyectoPropio(String motivo, int idProyecto); //
-
+    Boolean eliminarProyectoPropio(String motivo, int idProyecto);
     Usuario buscarUsuarioPorNombre(String nombreUsuario);
 
     Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar);
 
-    Boolean invertirEnProyecto(int valor, int idProyecto); // ---
+    Boolean invertirEnProyecto(int valor, int idProyecto);
 
-    void activarRecomendacionesAutomaticas(Double valor, int idUser);//buscarObjetoUSer ... // ver si sacamos parametro o no por cuestion de tiempo
+    void activarRecomendacionesAutomaticas(Double valor, int idUser);
 
     Boolean reportarProyectoSospechoso(String motivo, int idProyect, int idUser2, int idUserQueReporta); // int denuncias acumm en user
 
@@ -33,11 +32,11 @@ public interface ServicioUsuario {
 
     void suspenderUsuario(String motivo, int idUser);
 
-    List<Usuario> buscarUsuario(Usuario nombreUsuario); /// dev una lista y selecciona con el nombre -- de la mando de agregar user a contactos
+    List<Usuario> buscarUsuario(Usuario nombreUsuario);
 
-    Boolean revertirSuspensionProyecto(int idProyectoInversion); // en el obj proyect inversion, modificar el boolean en suspencion
+    Boolean revertirSuspensionProyecto(int idProyectoInversion);
 
-    void revertirSuspensionUsuario(int idUsuario); // en el obj proyect inversion, modificar el boolean en suspencion
+    void revertirSuspensionUsuario(int idUsuario);
 
     public Boolean eliminarPublicacion(int idProyectoInver);
 
