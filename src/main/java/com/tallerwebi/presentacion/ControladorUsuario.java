@@ -100,7 +100,6 @@ public class ControladorUsuario {
         return "redirect:/contactos";
     }
 
-
     @RequestMapping(path = "/agregar/contacto/{nombre}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("nombre") String nombre, HttpServletRequest request) {
 
