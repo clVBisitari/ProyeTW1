@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestConfig.class})
-public class RepositorioUsuarioTest{
+public class RepositorioUsuarioTest {
 
     @Autowired
     private SessionFactory sessionFactory;
@@ -34,18 +34,18 @@ public class RepositorioUsuarioTest{
     private DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
     @BeforeEach
-    public void init(){
+    public void init() {
         this.repositorioUsuario = new RepositorioUsuarioImpl(sessionFactory);
     }
 
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioYPidoLosContactosDelUsuarioLaBaseDeDatosLosDevuelve(){
+    public void dadoQueExisteUnRepositorioUsuarioYPidoLosContactosDelUsuarioLaBaseDeDatosLosDevuelve() {
 
         Usuario usuario = new Usuario();
 
-        List<Usuario>contactos = new ArrayList<>();
+        List<Usuario> contactos = new ArrayList<>();
         Usuario contacto1 = new Usuario();
         this.repositorioUsuario.guardar(contacto1);
 
@@ -79,13 +79,13 @@ public class RepositorioUsuarioTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioYElUsuarioCargaSaldoElSaldoSeActualizaEnLaBaseDeDatos(){
+    public void dadoQueExisteUnRepositorioUsuarioYElUsuarioCargaSaldoElSaldoSeActualizaEnLaBaseDeDatos() {
 
         Usuario usuario = new Usuario();
         usuario.setSaldo(100.00);
         this.repositorioUsuario.guardar(usuario);
         Double saldoAAgregar = 251.00;
-        usuario.setSaldo(usuario.getSaldo()+saldoAAgregar);
+        usuario.setSaldo(usuario.getSaldo() + saldoAAgregar);
         this.repositorioUsuario.modificar(usuario);
 
         String hql = "SELECT u FROM Usuario u WHERE u.saldo = :saldo";
@@ -102,7 +102,7 @@ public class RepositorioUsuarioTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosPorEmailYPasswordDevuelveElUsuarioBuscado(){
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosPorEmailYPasswordDevuelveElUsuarioBuscado() {
 
         Usuario userBuscado = new Usuario();
         userBuscado.setEmail("diego@hotmail.com");
@@ -115,7 +115,7 @@ public class RepositorioUsuarioTest{
         query.setParameter("passwordUsuario", "123456");
 
         Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
-        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuario("diego@hotmail.com","123456");
+        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuario("diego@hotmail.com", "123456");
 
         assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
         assertThat(usuarioEncontradoPorRepo.getEmail(), equalTo("diego@hotmail.com"));
@@ -126,7 +126,7 @@ public class RepositorioUsuarioTest{
     @Test
     @Transactional
     @Rollback
-    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosSoloPorEmailDevuelveElUsuarioBuscado(){
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioEnLaBaseDeDatosSoloPorEmailDevuelveElUsuarioBuscado() {
 
         Usuario userBuscado = new Usuario();
         userBuscado.setEmail("diego@hotmail.com");
@@ -144,5 +144,52 @@ public class RepositorioUsuarioTest{
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioPorIdEnLaBaseDeDatosYLoEncuentraRetornaElUsuario() {
+        Usuario userBuscado = new Usuario();
+        userBuscado.setId(1);
+        userBuscado.setEmail("diego@hotmail.com");
+
+        this.repositorioUsuario.guardar(userBuscado);
+
+        Usuario userBuscado1 = new Usuario();
+        userBuscado1.setEmail("diego1@hotmail.com");
+        userBuscado1.setId(2);
+        this.repositorioUsuario.guardar(userBuscado1);
+
+        String hql = "SELECT u FROM Usuario u WHERE u.id = :idUsuario";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("idUsuario", 2);
+
+        Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
+        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuarioPorId(userBuscado1.getId());
+
+        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
+        assertThat(usuarioEncontradoPorRepo.getEmail(), equalTo("diego1@hotmail.com"));
+        assertThat(usuarioEncontradoPorRepo.getId(), equalTo(2));
+    }
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioCuandoBuscoUnUsuarioPorNombreEnLaBaseDeDatosYLoEncuentraRetornaElUsuario() {
+        Usuario userBuscado = new Usuario();
+        userBuscado.setNombre("diego");
+        this.repositorioUsuario.guardar(userBuscado);
+
+        String hql = "SELECT u FROM Usuario u WHERE u.nombre = :nombreUsuario";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("nombreUsuario", "diego");
+
+        Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
+        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuarioPorNombre("diego");
+
+        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
+        assertThat(usuarioEncontradoPorRepo.getNombre(), equalTo("diego"));
+    }
+
+
 
 }
+
