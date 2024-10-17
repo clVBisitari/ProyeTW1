@@ -18,8 +18,20 @@
         </h2>
         <form id="userForm" class="login__form" action="#" th:action="@{/registrarme}" method="post">
             <fieldset class="login__fieldset">
+                <label class="login__label" for="repeat">Nombre</label>
+                <input class="login__input" type="text" id="nombre" name="nombre" minlength="2" maxlength="50" required><br><br>
+            </fieldset>
+            <fieldset class="login__fieldset"></fieldset>
+                <label class="login__label" for="repeat">Apellido</label>
+                <input class="login__input" type="text" id="apellido" name="apellido" minlength="2" maxlength="50" required><br><br>
+            </fieldset>
+            <fieldset class="login__fieldset"></fieldset>
+                <label class="login__label" for="repeat">Dni</label>
+                <input class="login__input" type="text" id="dni" name="dni" minlength="8" maxlength="8" required><br><br>
+            </fieldset>
+            <fieldset class="login__fieldset">
                 <label class="login__label" for="username">Usuario:</label>
-                <input class="login__input" id="username" name="username" type="email" minlength="3" required />
+                <input class="login__input" id="username" name="email" type="email" minlength="6" required />
             </fieldset>
             <fieldset class="login__fieldset">
                 <label class="login__label" for="password">Contraseña:</label>

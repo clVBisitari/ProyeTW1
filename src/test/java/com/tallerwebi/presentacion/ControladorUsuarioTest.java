@@ -117,7 +117,7 @@ public class ControladorUsuarioTest {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         usuarioASuspender.setNombre(nombre);
-        usuarioASuspender.setEnSuspencion(true);
+        usuarioASuspender.setEnSuspension(true);
 
         String motivo = "mal comportamiento";
 
@@ -141,7 +141,7 @@ public class ControladorUsuarioTest {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         usuarioASuspender.setNombre(nombre);
-        usuarioASuspender.setEnSuspencion(true);
+        usuarioASuspender.setEnSuspension(true);
 
         when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
         doNothing().when(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
