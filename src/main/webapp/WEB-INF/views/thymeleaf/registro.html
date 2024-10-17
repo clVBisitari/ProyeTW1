@@ -16,25 +16,46 @@
         <h2 class="login__h2">
             Crea una cuenta para gestionar tus finanzas, colaborar en proyectos y hacer crecer tus inversiones
         </h2>
-        <form class="login__form">
+        <form id="userForm" class="login__form" action="#" th:action="@{/registrarme}" method="post">
             <fieldset class="login__fieldset">
                 <label class="login__label" for="username">Usuario:</label>
-                <input class="login__input" id="username" name="username" type="text" min="3" max="15" required />
+                <input class="login__input" id="username" name="username" type="email" minlength="3" required />
             </fieldset>
             <fieldset class="login__fieldset">
                 <label class="login__label" for="password">Contraseña:</label>
-                <input class="login__input" id="password" name="password" type="password" min="3" max="15" required />
+                <input class="login__input" id="password" name="password" type="password" minlength="3" maxlength="15" required />
             </fieldset>
             <fieldset class="login__fieldset">
                 <label class="login__label" for="repeat">Repetir contraseña:</label>
-                <input class="login__input" id="repeat" name="repeat" type="password" min="3" max="15" required />
+                <input class="login__input" type="password" id="repeat" name="repeat" minlength="3" maxlength="15" required><br><br>
             </fieldset>
-            <button class="button__primary">Crear cuenta</button>
+        
+            <button class="button__primary" type="submit">Crear cuenta</button>
         </form>
+
         <aside class="login__register">
-            <p class="login__text">¿Ya tienes una cuenta? <a class="login__link" href="">Iniciar sesión</a></p>
+            <p class="login__text">¿Ya tienes una cuenta? <a class="login__link" th:href="@{/}">Iniciar sesión</a></p>
         </aside>
     </div>
 </main>
+<script>
+    document.getElementById('userForm').addEventListener('submit', function(event) {
+        var password = document.getElementById('password').value;
+        var confirmPassword = document.getElementById('repeat').value;
+
+        // Validación de longitud del password
+        if (password.length < 3 || password.length > 15) {
+            alert('El password debe tener entre 3 y 15 caracteres.');
+            event.preventDefault();  // Evita el envío del formulario
+            return;
+        }
+
+        // Validación de que ambas contraseñas coincidan
+        if (password !== confirmPassword) {
+            alert('Las contraseñas no coinciden.');
+            event.preventDefault();  // Evita el envío del formulario
+        }
+    });
+</script>
 </body>
 </html>

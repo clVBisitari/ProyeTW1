@@ -8,6 +8,7 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Repository("repositorioUsuario")
@@ -31,8 +32,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public void guardar(Usuario usuario) {
-        sessionFactory.getCurrentSession().save(usuario);
+    public boolean guardar(Usuario usuario) {
+
+        Serializable user = sessionFactory.getCurrentSession().save(usuario);
+        if(user != null){
+            return true;
+        }
+        return false;
     }
 
     @Override

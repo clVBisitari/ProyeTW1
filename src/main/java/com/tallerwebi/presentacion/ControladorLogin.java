@@ -53,8 +53,6 @@ public class ControladorLogin {
         }
 }
 
-
-
 @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
     public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
@@ -70,11 +68,11 @@ public class ControladorLogin {
         return new ModelAndView("redirect:/login");
     }
 
-    @RequestMapping(path = "/nuevo-usuario", method = RequestMethod.GET)
+    @RequestMapping(path = "/registro", method = RequestMethod.GET)
     public ModelAndView nuevoUsuario() {
         ModelMap model = new ModelMap();
         model.put("usuario", new Usuario());
-        return new ModelAndView("nuevo-usuario", model);
+        return new ModelAndView("registro", model);
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)
