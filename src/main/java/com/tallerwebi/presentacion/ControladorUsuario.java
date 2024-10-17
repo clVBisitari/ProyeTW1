@@ -30,6 +30,7 @@ public class ControladorUsuario {
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
 
+
         if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }

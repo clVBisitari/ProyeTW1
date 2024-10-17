@@ -42,7 +42,6 @@ public class ControladorLogin {
         if (usuarioBuscado != null) {
             UsuarioDTO usuarioDTO = mapToUsuarioDTO(usuarioBuscado);
             HttpSession session = request.getSession();
-            session.setAttribute("idUsuario", usuarioBuscado.getId());
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("saldo", usuarioBuscado.getSaldo());
             session.setAttribute("USUARIO", usuarioDTO);
@@ -101,6 +100,7 @@ public class ControladorLogin {
 
     private UsuarioDTO mapToUsuarioDTO(Usuario usuario) {
         UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(usuario.getId());
         usuarioDTO.setNombre(usuario.getNombre());
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
