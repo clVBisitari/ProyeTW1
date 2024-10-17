@@ -45,7 +45,7 @@ public class ControladorLogin {
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("USUARIO", usuarioDTO);
             model.addAttribute("idUsuario", usuarioBuscado.getId());
-            return new ModelAndView("redirect:/dashboard?idUsuario=" + usuarioBuscado.getId());
+            return new ModelAndView("redirect:/dashboard");
 
         } else {
        return new ModelAndView("login", new ModelMap("error", "Usuario o clave incorrecta"));
