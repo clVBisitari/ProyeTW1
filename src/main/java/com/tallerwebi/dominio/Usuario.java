@@ -22,7 +22,7 @@ public class Usuario {
     private Boolean esAdmin;
     private Boolean enSuspencion;
    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoDeInversion proyecto;
+    private ProyectoInversion proyecto;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
     private GestorDeGastos gestorDeGastos;
     ///private List<Inversion>
