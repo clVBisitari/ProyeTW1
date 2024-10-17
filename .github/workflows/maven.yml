@@ -16,8 +16,8 @@ on:
     branches: [ "master" ]
 
 permissions:
-  dependencies: write   # Permiso necesario para interactuar con Dependency Graph
-  contents: read        # Permiso necesario para acciones de checkout y otras operaciones de lectura
+  contents: write        # Permiso necesario para acciones de checkout y otras operaciones de lectura
+  security-events: write     # Permiso necesario para interactuar con Dependency Graph y enviar eventos de seguridad
 
 jobs:
   build:
@@ -45,9 +45,3 @@ jobs:
 
       - name: resultado
         run: echo "🍏 El estado de la tarea es ${{ job.status }}."
-
-      # Actualizar Dependency Graph
-      - name: Update dependency graph
-        uses: advanced-security/maven-dependency-submission-action@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

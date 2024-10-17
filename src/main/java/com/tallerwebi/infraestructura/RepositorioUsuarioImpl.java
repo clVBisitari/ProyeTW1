@@ -1,6 +1,6 @@
 package com.tallerwebi.infraestructura;
 
-import com.tallerwebi.dominio.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -51,7 +51,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public List<Usuario> obtenerContactos(String email) {
         Usuario usuario = buscar(email);
         if (usuario != null) {
-            return usuario.getContactos(); // Asegúrate de que getContactos() devuelve una List<Usuario>
+            return usuario.getContactos();
         }
         return null;
     }

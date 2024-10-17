@@ -1,6 +1,5 @@
 package com.tallerwebi.presentacion;
-
-import com.tallerwebi.dominio.ProyectoDeInversion;
+import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.Objects;
 
 public class UsuarioDTO {
 
-    private Long id;
+    private Integer id;
     private String email;
     private String nombre;
     private String apellido;
@@ -17,17 +16,37 @@ public class UsuarioDTO {
     private Double saldo;
     private List<UsuarioDTO> contactos; /// lo quiero mostrar?
     //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoDeInversion proyecto;
-    public Long getId() {
+    private ProyectoInversion proyecto;
+    private Boolean esAdmin;
+    private Boolean enSuspencion;
+
+
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public Boolean getEnSuspencion() {
+        return enSuspencion;
+    }
+
+    public void setEnSuspencion(Boolean enSuspencion) {
+        this.enSuspencion = enSuspencion;
+    }
+
+    public Boolean getEsAdmin() {
+        return esAdmin;
+    }
+
+    public void setEsAdmin(Boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public void setEmail(String email) {
@@ -74,11 +93,11 @@ public class UsuarioDTO {
         this.contactos = contactos;
     }
 
-    public ProyectoDeInversion getProyecto() {
+    public ProyectoInversion getProyecto() {
         return proyecto;
     }
 
-    public void setProyecto(ProyectoDeInversion proyecto) {
+    public void setProyecto(ProyectoInversion proyecto) {
         this.proyecto = proyecto;
     }
 
@@ -93,5 +112,21 @@ public class UsuarioDTO {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", saldo=" + saldo +
+                ", contactos=" + contactos +
+                ", proyecto=" + proyecto +
+                ", esAdmin=" + esAdmin +
+                ", enSuspencion=" + enSuspencion +
+                '}';
     }
 }

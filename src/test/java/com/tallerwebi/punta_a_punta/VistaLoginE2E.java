@@ -35,6 +35,7 @@ public class VistaLoginE2E {
     void crearContextoYPagina() {
         context = browser.newContext();
         Page page = context.newPage();
+//        page.navigate("http://localhost:8100");
         vistaLogin = new VistaLogin(page);
     }
 

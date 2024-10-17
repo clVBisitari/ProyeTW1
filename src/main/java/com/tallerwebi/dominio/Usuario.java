@@ -17,7 +17,6 @@ public class Usuario {
     private Double saldo;
     @OneToMany
     @JoinColumn(name = "usuario_id")
-
     private List<Usuario>contactos;
     private String password;
     private Boolean esAdmin;
@@ -109,11 +108,11 @@ public class Usuario {
         this.enSuspencion = enSuspencion;
     }
 
-    public ProyectoDeInversion getProyecto() {
+    public ProyectoInversion getProyecto() {
         return proyecto;
     }
 
-    public void setProyecto(ProyectoDeInversion proyecto) {
+    public void setProyecto(ProyectoInversion proyecto) {
         this.proyecto = proyecto;
     }
 

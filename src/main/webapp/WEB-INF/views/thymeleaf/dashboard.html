@@ -11,7 +11,7 @@
 <body class="body">
 <nav class="nav">
     <div>
-        <a class="nav__link"th:href="@{/dashboard} ">
+        <a class="nav__link" th:href="@{/dashboard}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Inicio</title>
                 <path
@@ -32,7 +32,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" th:href="@{/contactos}">
+        <a class="nav__link" th:href="@{/inversiones}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Inversiones</title>
                 <path
@@ -42,7 +42,7 @@
         </a>
     </div>
     <div>
-        <a class="nav__link" href="">
+        <a class="nav__link" th:href="@{/dashboardGastos}">
             <svg xmlns="http://www.w3.org/2000/svg" class="nav__icon" viewBox="0 0 16 16">
                 <title>Gastos</title>
 
@@ -78,7 +78,7 @@
             <h2 class="dashboard__usertext" th:text="${usuario.email}">Juan Carlos</h2>
         </div>
         <div class="dashboard__right">
-            <a class="dashboard__link" href="">Ir a Inversiones -></a>
+            <a class="dashboard__link" th:href="@{/inversiones}">Ir a Inversiones -></a>
         </div>
     </nav>
     <header class="dashboard__header">
@@ -91,7 +91,7 @@
                     />
                 </svg>
             </div>
-            <p class="box__number">$45,231.89</p>
+            <p class="box__number" th:text="${usuario.saldo}">$45,231.89</p>
         </div>
         <div class="box">
             <div class="box__top">
@@ -174,7 +174,7 @@
                     <h4 class="content__title">Proyectos nuevos:</h4>
                 </div>
                 <div class="content__div">
-                    <a class="content__link" href="">
+                    <a class="content__link" href="@{/crearProyeInversion}">
                         <button class="button__secondary">Nuevo Proyecto</button>
                     </a>
                 </div>
