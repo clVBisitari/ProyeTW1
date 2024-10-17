@@ -38,6 +38,39 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         }
         return gastoTotal;
     }
+    
+    public int actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId){
+        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
+        int cantidad = 0;
+        for(int i=0; i<gastos.size(); i++ ){
+            if((!esGastoVencido(gastos.get(i).getFechaVencimiento())) && esGastoDelMesEnCurso(gastos.get(i).getFechaVencimiento())){
+                cantidad++;
+            }
+        }
+        return cantidad;
+    }
+
+    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Long id){
+        return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
+    }
+
+    private boolean esGastoVencido(Date fechaVencimiento) {
+        Calendar fechaActualSinHora = Calendar.getInstance();
+        fechaActualSinHora.set(Calendar.HOUR_OF_DAY, 0);
+        fechaActualSinHora.set(Calendar.MINUTE, 0);
+        fechaActualSinHora.set(Calendar.SECOND, 0);
+        fechaActualSinHora.set(Calendar.MILLISECOND, 0);
+
+        // Configurar la fecha a comparar sin horas
+        Calendar fechaVencimientoSinHora = Calendar.getInstance();
+        fechaVencimientoSinHora.setTime(fechaVencimiento);
+        fechaVencimientoSinHora.set(Calendar.HOUR_OF_DAY, 0);
+        fechaVencimientoSinHora.set(Calendar.MINUTE, 0);
+        fechaVencimientoSinHora.set(Calendar.SECOND, 0);
+        fechaVencimientoSinHora.set(Calendar.MILLISECOND, 0);
+
+        return fechaVencimientoSinHora.before(fechaActualSinHora.getTime());
+    }
 
     private boolean esGastoDelMesEnCurso(Date fechaAComparar){
         Date fechaActual = new Date();
