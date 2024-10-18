@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
+import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -13,11 +14,11 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class ControladorGestorDeGastos {
 
-    private ServicioGestorDeGastosImpl servicioGestorDeGastosImpl;
+    private ServicioGestorGastos servicioGestorGastos;
 
     @Autowired
-    public ControladorGestorDeGastos(ServicioGestorDeGastosImpl servicioGestorDeGastos) {
-        this.servicioGestorDeGastosImpl = servicioGestorDeGastos;
+    public ControladorGestorDeGastos(ServicioGestorGastos servicioGestorDeGastos) {
+        this.servicioGestorGastos = servicioGestorDeGastos;
     }
 
     @RequestMapping(path = "/gasto", method = RequestMethod.GET)
@@ -34,9 +35,9 @@ public class ControladorGestorDeGastos {
         ModelMap model = new ModelMap();
         HttpSession session = request.getSession();
         Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
-        GestorDeGastos gestorConectado = usuarioConectado.getGestor();
+        GestorDeGastos gestorConectado = usuarioConectado.getGestorDeGastos();
         gestorConectado.registrarGasto(gasto);
-        this.servicioGestorDeGastosImpl.guardarGestor(gestorConectado);
+        this.servicioGestorGastos.guardarGestor(gestorConectado);
         return new ModelAndView("redirect:/dashboard");
     }
 
@@ -46,11 +47,11 @@ public class ControladorGestorDeGastos {
         HttpSession session = request.getSession();
         UsuarioDTO usuarioConectado = (UsuarioDTO) session.getAttribute("USUARIO");
         Long usuarioConectadoId = (usuarioConectado.getId().longValue());
-        if(servicioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(usuarioConectadoId)!=null){
+        if(servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(usuarioConectadoId)!=null){
             GestorDeGastos gestorConectado = new GestorDeGastos();
-            gestorConectado.setGastos(servicioGestorDeGastosImpl.obtenerTodosLosGastosDeUnGestor(usuarioConectadoId));
-            Double totalGastosMesEnCurso = servicioGestorDeGastosImpl.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
-            int cantidadGastosPorVencer = servicioGestorDeGastosImpl.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
+            gestorConectado.setGastos(servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(usuarioConectadoId));
+            Double totalGastosMesEnCurso = servicioGestorGastos.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
+            int cantidadGastosPorVencer = servicioGestorGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
             ModelMap modelo = new ModelMap();
             modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
             modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);

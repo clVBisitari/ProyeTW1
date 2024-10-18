@@ -6,15 +6,18 @@ import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 @Service("servicioGestorDeGastos")
+@Transactional
 public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
 
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastos;
     private RepositorioGastoImpl repositorioGasto;
+
     @Autowired
     public ServicioGestorDeGastosImpl(RepositorioGestorDeGastosImpl repositorioGestorDeGastos, RepositorioGastoImpl repositorioGasto){
         this.repositorioGestorDeGastos = repositorioGestorDeGastos;
@@ -38,8 +41,8 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         }
         return gastoTotal;
     }
-    
-    public int actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId){
+
+    public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId){
         List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
         int cantidad = 0;
         for(int i=0; i<gastos.size(); i++ ){
@@ -54,7 +57,7 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
     }
 
-    private boolean esGastoVencido(Date fechaVencimiento) {
+    public Boolean esGastoVencido(Date fechaVencimiento) {
         Calendar fechaActualSinHora = Calendar.getInstance();
         fechaActualSinHora.set(Calendar.HOUR_OF_DAY, 0);
         fechaActualSinHora.set(Calendar.MINUTE, 0);
@@ -72,7 +75,7 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return fechaVencimientoSinHora.before(fechaActualSinHora.getTime());
     }
 
-    private boolean esGastoDelMesEnCurso(Date fechaAComparar){
+    public Boolean esGastoDelMesEnCurso(Date fechaAComparar){
         Date fechaActual = new Date();
 
         Calendar calendar = Calendar.getInstance();
