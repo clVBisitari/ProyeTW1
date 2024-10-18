@@ -87,4 +87,8 @@ public class RepositorioGastoImpl {
 
         query.executeUpdate();
     }
+
+    public void guardarGasto(Gasto gasto) {
+        this.sessionFactory.getCurrentSession().save(gasto);
+    }
 }

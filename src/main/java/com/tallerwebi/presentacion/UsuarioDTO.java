@@ -1,4 +1,5 @@
 package com.tallerwebi.presentacion;
+import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
