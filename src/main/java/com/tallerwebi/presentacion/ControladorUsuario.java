@@ -30,26 +30,30 @@ public class ControladorUsuario {
     @RequestMapping("/dashboard")
     public ModelAndView irADashboard(HttpServletRequest request) {
 
-
         if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
+
         ModelMap model = new ModelMap();
+
         UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
         Integer idUser = (Integer) request.getSession().getAttribute("idUsuario");
+
         model.put("usuario", usuario);
         model.addAttribute("idUsuario", idUser);
+
         return new ModelAndView("dashboard", model);
     }
 
     @Transactional
     @RequestMapping(path = "/contactos", method = RequestMethod.GET)
-
     public ModelAndView irAContactos(HttpServletRequest request) {
 
         if (!isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
+
         ModelMap model = new ModelMap();
         UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
@@ -162,6 +166,11 @@ public class ControladorUsuario {
 
     private boolean isUserLoggedIn(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        return session != null && session.getAttribute("USUARIO") != null;
+
+        return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
+    }
+
+    private Boolean isAttributeNotNull(HttpSession session, String attributeName){
+        return session.getAttribute(attributeName) != null;
     }
 }

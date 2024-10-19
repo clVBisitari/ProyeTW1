@@ -1,4 +1,5 @@
-INSERT INTO Usuario(id, email,nombre, apellido, dni, saldo, password, esAdmin, enSuspension) VALUES(null, 'test@unlam.edu.ar','Juan','Perez',38498777,10500.0, 'test', true,false);
+INSERT INTO Usuario(id, email,nombre, apellido, dni, saldo, password, esAdmin, enSuspension)
+VALUES(null, 'test@unlam.edu.ar','Juan','Perez',38498777,10500.0, 'test', true,false);
 
 INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspension)
 VALUES (null, 'contacto1@unlam.edu.ar', 'Diego', 'Uno', 23456789, 500.0, 'password1', false, false);

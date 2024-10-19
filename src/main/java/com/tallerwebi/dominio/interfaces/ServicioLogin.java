@@ -7,6 +7,6 @@ import com.tallerwebi.presentacion.UsuarioDTO;
 public interface ServicioLogin {
 
     Usuario consultarUsuario(String email, String password);
-    void registrar(UsuarioDTO usuario) throws UsuarioExistente;
+    void registrar(Usuario usuario) throws UsuarioExistente;
 
 }
