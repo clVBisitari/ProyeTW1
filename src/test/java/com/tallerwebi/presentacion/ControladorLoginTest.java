@@ -20,7 +20,7 @@ public class ControladorLoginTest {
 
 	private ServicioLogin servicioLoginMock;
 
-	private UsuarioDTO usuarioMock;
+	private Usuario usuarioMock;
 	private DatosLogin datosLoginMock;
 
 	private HttpServletRequest requestMock;
@@ -32,7 +32,7 @@ public class ControladorLoginTest {
 		controladorLogin = new ControladorLogin(servicioLoginMock);
 
 		datosLoginMock = new DatosLogin("usuario@prueba.com", "123");
-		usuarioMock = mock(UsuarioDTO.class);
+		usuarioMock = mock(Usuario.class);
 		when(usuarioMock.getEmail()).thenReturn("usuario@prueba.com");
 
 		requestMock = mock(HttpServletRequest.class);

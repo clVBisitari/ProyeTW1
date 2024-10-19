@@ -19,7 +19,6 @@ public class GestorDeGastos {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "gestor", orphanRemoval = true)
     private List<Gasto> gastos = new ArrayList<Gasto>();
 
-
     public void setId(Long id) {
         this.id = id;
     }

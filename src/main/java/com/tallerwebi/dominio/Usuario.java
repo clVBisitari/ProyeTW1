@@ -27,8 +27,8 @@ public class Usuario {
     private GestorDeGastos gestorDeGastos;
     ///private List<Inversion>
 
-
     public Usuario(){}
+
     public Usuario(String email, String password, String nombre, String apellido, Integer dni) {
         this.email = email;
         this.password = password;

@@ -40,23 +40,28 @@ public class ControladorLogin {
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 
         if (usuarioBuscado != null) {
-            UsuarioDTO usuarioDTO = mapToUsuarioDTO(usuarioBuscado);
+
+            UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO(usuarioBuscado);
+
             HttpSession session = request.getSession();
+
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("saldo", usuarioBuscado.getSaldo());
-            session.setAttribute("USUARIO", usuarioDTO);
+            session.setAttribute("USUARIO", usuarioBuscado);
+
             model.addAttribute("idUsuario", usuarioBuscado.getId());
             model.addAttribute("usuario", usuarioDTO);
+
             return new ModelAndView("redirect:/dashboard");
 
         } else {
-       return new ModelAndView("login", new ModelMap("error", "Usuario o clave incorrecta"));
+            return new ModelAndView("login", new ModelMap("error", "Usuario o clave incorrecta"));
         }
 }
 
 
 @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") UsuarioDTO usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
         try {
             servicioLogin.registrar(usuario);
@@ -96,16 +101,6 @@ public class ControladorLogin {
             session.invalidate();
         }
         return new ModelAndView("redirect:/login");
-    }
-
-    private UsuarioDTO mapToUsuarioDTO(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNombre(usuario.getNombre());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setEsAdmin(usuario.getEsAdmin());
-        usuarioDTO.setSaldo(usuario.getSaldo());
-        return usuarioDTO;
     }
 }
 
