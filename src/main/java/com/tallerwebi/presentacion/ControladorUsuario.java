@@ -77,11 +77,12 @@ public class ControladorUsuario {
     @RequestMapping(path = "/suspender/usuario/{id}", method = RequestMethod.POST)
     public String suspenderUsuario(@PathVariable("id") Integer id, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
 
+
         Usuario usuario = servicioUsuario.buscarUsuarioPorId(id);
 
-        servicioUsuario.suspenderUsuario(motivo, id);
+        boolean suspension = servicioUsuario.suspenderUsuario(motivo, id);
 
-        if (usuario.getEnSuspencion()) {
+        if (suspension) {
             redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
@@ -91,9 +92,15 @@ public class ControladorUsuario {
     }
 
     @RequestMapping(path = "/revertir-suspencion/usuario/{id}", method = RequestMethod.POST)
-    public String revertirSuspencion(@PathVariable("id") Integer id) {
+    public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
 
-        servicioUsuario.revertirSuspensionUsuario(id);
+        boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
+
+        if (suspension) {
+            redirectAttributes.addFlashAttribute("mensaje", "Suspensión revertida");
+        } else {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al revertir suspencion");
+        }
 
         return "redirect:/contactos";
     }
@@ -102,20 +109,25 @@ public class ControladorUsuario {
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
 
-        if (!isUserLoggedIn(request)) {
-            return "redirect:/login";
+            UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+            if (usuarioDTO == null) {
+                throw new IllegalArgumentException("El usuario no está autenticado");
+            }
+
+            Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorId(usuarioDTO.getId());
+            if (usuarioQueGuarda == null) {
+                throw new IllegalArgumentException("El usuario que intenta guardar no existe");
+            }
+
+            Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorId(id);
+            if (usuarioAGuardar == null) {
+                throw new IllegalArgumentException("El usuario a agregar no puede ser null");
+            }
+
+            servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+            return "redirect:/contactos";
         }
-        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-
-        Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorId(usuarioDTO.getId());
-
-        Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorId(id);
-
-        servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
-
-        return "redirect:/contactos";
-
-    }
 
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
     public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {

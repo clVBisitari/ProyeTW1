@@ -112,70 +112,57 @@ public class ControladorUsuarioTest {
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));
     }
 
-   /* @Test
+    @Test
     public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro() {
-
-        String nombre = "marco";
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
-        usuarioASuspender.setNombre(nombre);
-        usuarioASuspender.setEnSuspencion(true);
+        usuarioASuspender.setNombre("Alexi");
+        usuarioASuspender.setEnSuspencion(false);
 
-        String motivo = "mal comportamiento";
+        when(servicioUsuarioMock.buscarUsuarioPorId(16)).thenReturn(usuarioASuspender);
+        when(servicioUsuarioMock.suspenderUsuario(eq("mal comportamiento"), eq(16))).thenReturn(true);
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
-        doNothing().when(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
+        String resultado = controladorUsuario.suspenderUsuario(16, "mal comportamiento", redirectAttributesMock);
 
-        String resultado = controladorUsuario.suspenderUsuario(nombre, motivo, redirectAttributesMock);
-
-        verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
-        verify(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
+        verify(servicioUsuarioMock).suspenderUsuario(eq("mal comportamiento"), eq(usuarioASuspender.getId()));
         verify(redirectAttributesMock).addFlashAttribute("mensaje", "Usuario suspendido");
-
-
         assertThat(resultado, is("redirect:/contactos"));
-
     }
 
+
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeRevertirLaSuspensionDeOtroUsuario() {
-        String nombre = "marco";
-        Usuario usuarioASuspender = new Usuario();
-        usuarioASuspender.setId(16);
-        usuarioASuspender.setNombre(nombre);
-        usuarioASuspender.setEnSuspencion(true);
+    public void dadoQueSeRevierteLaSuspensionSeMuestraMensajeExitoso() {
+        int usuarioId = 16;
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
-        doNothing().when(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
+        when(servicioUsuarioMock.revertirSuspensionUsuario(usuarioId)).thenReturn(true);
 
-        String resultado = controladorUsuario.revertirSuspencion(nombre);
+        String resultado = controladorUsuario.revertirSuspencion(usuarioId, redirectAttributesMock);
 
-        verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
-        verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
+        verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioId);
+
+        verify(redirectAttributesMock).addFlashAttribute("mensaje", "Suspensión revertida");
 
         assertThat(resultado, is("redirect:/contactos"));
-
     }
 
     @Test
     public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() {
-        when(requestMock.getSession(false)).thenReturn(sessionMock);
+
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
         Usuario usuarioQueGuarda = new Usuario();
-        usuarioQueGuarda.setEmail("userMock@hotmail.com");
+        usuarioQueGuarda.setId(1);
+
         Usuario usuarioAGuardar = new Usuario();
+        usuarioAGuardar.setId(2);
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(usuarioDTOMock.getNombre())).thenReturn(usuarioQueGuarda);
-        when(servicioUsuarioMock.buscarUsuarioPorNombre("nombre")).thenReturn(usuarioAGuardar);
+        when(servicioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuarioMock.buscarUsuarioPorId(2)).thenReturn(usuarioAGuardar);
+        when(servicioUsuarioMock.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar)).thenReturn(true);
 
-        String vistaRedirigida = controladorUsuario.agregarContacto("nombre", requestMock);
+        String vistaRedirigida = controladorUsuario.agregarContacto(2, requestMock);
 
-        verify(servicioUsuarioMock).buscarUsuarioPorNombre(usuarioDTOMock.getNombre());
-        verify(servicioUsuarioMock).buscarUsuarioPorNombre("nombre");
+        assertThat(vistaRedirigida, equalTo("redirect:/contactos"));
         verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
-
-        assertThat(vistaRedirigida, equalToIgnoringCase("redirect:/contactos"));
-
-    }*/
     }
+}

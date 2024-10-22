@@ -92,12 +92,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public void suspenderUsuario(String motivo, int idUser) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
-        usuario.setEnSuspencion(true);
-        repositorioUsuario.modificar(usuario);
+    public Boolean suspenderUsuario(String motivo, int idUser) {
+         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
+        if (usuario != null) {
+            usuario.setEnSuspencion(true);
+            repositorioUsuario.modificar(usuario);
+            return true;
+        }
+        return false;
     }
-
     @Override
     public List<Usuario> buscarUsuario(String nombreUsuario) {
         return repositorioUsuario.buscarUsuariosPorNombre(nombreUsuario);
@@ -111,11 +114,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public void revertirSuspensionUsuario(int idUsuario) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
-        usuario.setEnSuspencion(false);
-        repositorioUsuario.modificar(usuario);
-    }
+    public Boolean revertirSuspensionUsuario(int idUsuario) {
+            Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+            if (usuario != null) {
+                usuario.setEnSuspencion(false);
+                repositorioUsuario.modificar(usuario);
+                return true;
+            }
+            return false;
+        }
 
     @Override
     public Boolean eliminarPublicacion(int idProyectoInver) {

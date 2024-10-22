@@ -30,13 +30,13 @@ public interface ServicioUsuario {
 
     Boolean suspenderPublicacion(String motivo, int proyect);
 
-    void suspenderUsuario(String motivo, int idUser);
+    Boolean suspenderUsuario(String motivo, int idUser);
 
     List<Usuario> buscarUsuario(String nombreUsuario);
 
     Boolean revertirSuspensionProyecto(int idProyectoInversion);
 
-    void revertirSuspensionUsuario(int idUsuario);
+    Boolean revertirSuspensionUsuario(int idUsuario);
 
     public Boolean eliminarPublicacion(int idProyectoInver);
 
