@@ -32,7 +32,7 @@ public interface ServicioUsuario {
 
     void suspenderUsuario(String motivo, int idUser);
 
-    List<Usuario> buscarUsuario(Usuario nombreUsuario);
+    List<Usuario> buscarUsuario(String nombreUsuario);
 
     Boolean revertirSuspensionProyecto(int idProyectoInversion);
 
@@ -45,4 +45,6 @@ public interface ServicioUsuario {
     List<Usuario> getContactos(String email);
 
     List<Usuario> getContactosSugeridos(String email);
+
+    Usuario buscarUsuarioPorId(Integer id);
 }

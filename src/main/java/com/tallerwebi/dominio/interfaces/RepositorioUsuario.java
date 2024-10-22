@@ -14,6 +14,8 @@ public interface RepositorioUsuario {
     List<Usuario> obtenerContactos(String email);
 
     Usuario buscarUsuarioPorNombre(String nombre);
+
+    List<Usuario> buscarUsuariosPorNombre(String nombreUsuario);
 }
 
 

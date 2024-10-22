@@ -99,8 +99,8 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
-        return List.of();
+    public List<Usuario> buscarUsuario(String nombreUsuario) {
+        return repositorioUsuario.buscarUsuariosPorNombre(nombreUsuario);
     }
 
 
@@ -155,6 +155,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         return contactosSugeridos;
 
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorId(Integer id) {
+        return repositorioUsuario.buscarUsuarioPorId(id);
     }
 
 }

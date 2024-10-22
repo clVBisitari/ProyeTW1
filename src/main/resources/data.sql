@@ -7,13 +7,13 @@ INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin,
 VALUES (null, 'contacto2@unlam.edu.ar', 'Mariano', 'Dos', 34567890, 700.0, 'password2', false, false);
 
 INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'contacto3@unlam.edu.ar', 'Marcos', 'tres', 16558244, 8000.0, 'password3', false, false);
+VALUES (null, 'contacto3@unlam.edu.ar', 'Pedro', 'tres', 16558244, 8000.0, 'password3', false, false);
 
 INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'contacto4@unlam.edu.ar', 'Pedro', 'cuatro', 38498798, 9888.0, 'password4', false, false);
+VALUES (null, 'contacto4@unlam.edu.ar', 'Pedrito', 'cuatro', 38498798, 9888.0, 'password4', false, false);
 
 INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'contacto5@unlam.edu.ar', 'Alejandro', 'cinco', 2345644, 745.0, 'password5', false, false);
+VALUES (null, 'contacto5@unlam.edu.ar', 'Pedro', 'cinco', 2345644, 745.0, 'password5', false, false);
 
 INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
 VALUES (null, 'contacto6@unlam.edu.ar', 'Ivan', 'seis', 34567666, 7888.0, 'password6', false, false);

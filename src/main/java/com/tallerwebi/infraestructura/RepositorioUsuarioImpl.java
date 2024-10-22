@@ -72,4 +72,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
 
+    @Override
+    public List<Usuario> buscarUsuariosPorNombre(String nombreUsuario) {
+        final Session session = sessionFactory.getCurrentSession();
+        return (List<Usuario>) session.createCriteria(Usuario.class)
+                .add(Restrictions.like("nombre", "%" + nombreUsuario + "%"))
+                .list();
+    }
 }

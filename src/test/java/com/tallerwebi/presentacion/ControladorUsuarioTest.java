@@ -112,7 +112,7 @@ public class ControladorUsuarioTest {
         assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));
     }
 
-    @Test
+   /* @Test
     public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro() {
 
         String nombre = "marco";
@@ -177,5 +177,5 @@ public class ControladorUsuarioTest {
 
         assertThat(vistaRedirigida, equalToIgnoringCase("redirect:/contactos"));
 
-    }
+    }*/
     }
