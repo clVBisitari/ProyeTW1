@@ -173,7 +173,7 @@ public class ControladorUsuario {
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
-            usuarioDTO.setEnSuspencion(usuario.getEnSuspencion());
+            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
             usuariosDTO.add(usuarioDTO);
         }
         return usuariosDTO;

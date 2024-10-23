@@ -152,27 +152,27 @@ public class ServicioUsuarioTest {
     }
 
     private void puedoSuspenderlo(Usuario usuarioNoSuspendido) {
-        usuarioNoSuspendido.setEnSuspencion(true);
+        usuarioNoSuspendido.setEnSuspension(true);
         repositorioUsuarioMock.modificar(usuarioNoSuspendido);
-        assertThat(usuarioNoSuspendido.getEnSuspencion(), equalTo(true));
+        assertThat(usuarioNoSuspendido.getEnSuspension(), equalTo(true));
     }
 
     private Usuario dadoQueHayUnUsuarioNoSuspendido() {
         Usuario userNoSuspendido = new Usuario();
-        userNoSuspendido.setEnSuspencion(false);
+        userNoSuspendido.setEnSuspension(false);
         when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userNoSuspendido);
         return userNoSuspendido;
     }
 
     private void puedoRevertirSuspencion(Usuario usuarioSuspendido) {
-        usuarioSuspendido.setEnSuspencion(false);
+        usuarioSuspendido.setEnSuspension(false);
         repositorioUsuarioMock.modificar(usuarioSuspendido);
-        assertThat(usuarioSuspendido.getEnSuspencion(), equalTo(false));
+        assertThat(usuarioSuspendido.getEnSuspension(), equalTo(false));
     }
 
     private Usuario dadoQueHayUnUsuarioSuspendido() {
         Usuario userSuspendido = new Usuario();
-        userSuspendido.setEnSuspencion(true);
+        userSuspendido.setEnSuspension(true);
         when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userSuspendido);
         return userSuspendido;
     }
