@@ -91,7 +91,7 @@ public class ControladorUsuario {
         return "redirect:/contactos";
     }
 
-    @RequestMapping(path = "/revertir-suspencion/usuario/{id}", method = RequestMethod.POST)
+    @RequestMapping(path = "/revertir-suspension/usuario/{id}", method = RequestMethod.POST)
     public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
 
         boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
