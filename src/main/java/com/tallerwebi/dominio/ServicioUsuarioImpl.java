@@ -95,7 +95,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     public Boolean suspenderUsuario(String motivo, int idUser) {
          Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
         if (usuario != null) {
-            usuario.setEnSuspencion(true);
+            usuario.setEnSuspension(true);
             repositorioUsuario.modificar(usuario);
             return true;
         }
@@ -117,7 +117,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     public Boolean revertirSuspensionUsuario(int idUsuario) {
             Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
             if (usuario != null) {
-                usuario.setEnSuspencion(false);
+                usuario.setEnSuspension(false);
                 repositorioUsuario.modificar(usuario);
                 return true;
             }

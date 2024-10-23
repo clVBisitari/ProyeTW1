@@ -88,16 +88,16 @@
 
         <div th:if="${usuarioActual != null}">
             <div th:if="${usuarioActual.esAdmin}"> <!-- Verificar si el usuario actual es admin -->
-                <div th:if="${contactoEncontrado?.enSuspencion == false}">
+                <div th:if="${contactoEncontrado?.enSuspension == false}">
                     <form th:action="@{/suspender/usuario/{id}(id=${contactoEncontrado.id})}" method="post">
-                        <textarea name="motivo" id="contactoEcontrado" cols="30" rows="10" placeholder="motivo de suspencion"></textarea>
+                        <textarea name="motivo" id="contactoEcontrado" cols="30" rows="10" placeholder="motivo de suspension"></textarea>
                         <button type="submit">Suspender Usuario</button>
                     </form>
                 </div>
-                <div th:if="${contactoEncontrado?.enSuspencion == true}">
-                    <form th:action="@{/revertir-suspencion/usuario/{id}(id=${contactoEncontrado.id})}" method="post">
+                <div th:if="${contactoEncontrado?.enSuspension == true}">
+                    <form th:action="@{/revertir-suspension/usuario/{id}(id=${contactoEncontrado.id})}" method="post">
                         <button type="submit">Revertir Suspensión</button>
-                        <p class="error" th:if="${contactoEncontrado.enSuspencion}" th:text="${mensaje}"></p>
+                        <p class="error" th:if="${contactoEncontrado.enSuspension}" th:text="${mensaje}"></p>
                     </form>
                 </div>
                 <div th:if="${contactoEncontrado != null && mensajeContactoEnLista == null}">
@@ -134,16 +134,16 @@
                     <p class="contacts__text" th:text="${contacto.nombre}">Usuario</p>
                 </article>
 
-                <div th:if="${usuarioActual.esAdmin && !contacto.enSuspencion}">
+                <div th:if="${usuarioActual.esAdmin && !contacto.enSuspension}">
                     <form th:action="@{/suspender/usuario/{id}(id=${contacto.id})}" method="post">
-                        <textarea name="motivo" id="" cols="30" rows="10" placeholder="motivo de suspencion"></textarea>
+                        <textarea name="motivo" id="" cols="30" rows="10" placeholder="motivo de suspension"></textarea>
                         <button type="submit">Suspender Usuario</button>
                     </form>
                 </div>
-                <div th:if="${usuarioActual.esAdmin && contacto.enSuspencion}">
-                    <form th:action="@{/revertir-suspencion/usuario/{id}(id=${contacto.id})}" method="post">
+                <div th:if="${usuarioActual.esAdmin && contacto.enSuspension}">
+                    <form th:action="@{/revertir-suspension/usuario/{id}(id=${contacto.id})}" method="post">
                         <button type="submit">Revertir Suspensión</button>
-                        <p class="error" th:if="${contacto.enSuspencion}" th:text="${mensaje}"></p>
+                        <p class="error" th:if="${contacto.enSuspension}" th:text="${mensaje}"></p>
                     </form>
                 </div>
             </div>
@@ -162,16 +162,16 @@
                     </form>
                 </article>
 
-                <div th:if="${usuarioActual.esAdmin && !contactoSugerido.enSuspencion}">
+                <div th:if="${usuarioActual.esAdmin && !contactoSugerido.enSuspension}">
                     <form th:action="@{/suspender/usuario/{id}(id=${contactoSugerido.id})}" method="post">
-                        <textarea name="motivo" cols="30" rows="10" placeholder="motivo de suspencion"></textarea>
+                        <textarea name="motivo" cols="30" rows="10" placeholder="motivo de suspension"></textarea>
                         <button type="submit">Suspender Usuario</button>
                     </form>
                 </div>
-                <div th:if="${usuarioActual.esAdmin && contactoSugerido.enSuspencion}">
-                    <form th:action="@{/revertir-suspencion/usuario/{id}(id=${contactoSugerido.id})}" method="post">
+                <div th:if="${usuarioActual.esAdmin && contactoSugerido.enSuspension}">
+                    <form th:action="@{/revertir-suspension/usuario/{id}(id=${contactoSugerido.id})}" method="post">
                         <button type="submit">Revertir Suspensión</button>
-                        <p class="error" th:if="${contactoSugerido.enSuspencion}" th:text="${mensaje}"></p>
+                        <p class="error" th:if="${contactoSugerido.enSuspension}" th:text="${mensaje}"></p>
                     </form>
                 </div>
 

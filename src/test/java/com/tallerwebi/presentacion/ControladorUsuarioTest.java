@@ -117,7 +117,7 @@ public class ControladorUsuarioTest {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         usuarioASuspender.setNombre("Alexi");
-        usuarioASuspender.setEnSuspencion(false);
+        usuarioASuspender.setEnSuspension(false);
 
         when(servicioUsuarioMock.buscarUsuarioPorId(16)).thenReturn(usuarioASuspender);
         when(servicioUsuarioMock.suspenderUsuario(eq("mal comportamiento"), eq(16))).thenReturn(true);
