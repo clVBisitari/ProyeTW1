@@ -47,7 +47,6 @@ public class VistaLoginE2E {
     @Test
     void deberiaDecirBienvenidoEnTitulo() {
         String texto = vistaLogin.obtenerTitulo();
-        System.out.println(texto);
         assertThat("Bienvenido a AssistPyme", equalToIgnoringCase(texto));
     }
 
