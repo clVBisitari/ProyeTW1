@@ -8,6 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Enumeration;
@@ -31,9 +32,14 @@ public class ControladorGestorDeGastos {
         return new ModelAndView("gasto", modelo);
     }
 
+    @RequestMapping(path = "/crearGasto", method = RequestMethod.GET)
+    public ModelAndView crearGasto(HttpServletRequest request) {
+        ModelMap model = new ModelMap();
+        return new ModelAndView("creacionGastos");
+    }
+
     @RequestMapping(path = "/registrarGasto", method = RequestMethod.POST)
     public ModelAndView registrarGasto(@ModelAttribute("gasto") Gasto gasto, HttpServletRequest request) {
-
         ModelMap model = new ModelMap();
         HttpSession session = request.getSession();
         Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
@@ -43,62 +49,21 @@ public class ControladorGestorDeGastos {
         return new ModelAndView("redirect:/dashboard");
     }
 
-    @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
-    public ModelAndView actualizarGastosDelMesEnCursoYCantidadDeGastosPorVencer(HttpServletRequest request) {
-
-        if (!isUserLoggedIn(request)) {
-            return new ModelAndView("redirect:/login");
-        }
-
-        Usuario usuario = (Usuario) request.getSession().getAttribute("USUARIO");
-
-        Long idUsuario = Long.valueOf(usuario.getId());
-
-        List<Gasto> gastoList = servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuario));
-
-        GestorDeGastos gestorConectado = new GestorDeGastos();
-
-        gestorConectado.setGastos(gastoList);
-
-        Double totalGastosMesEnCurso = servicioGestorGastos.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
-
-        Integer cantidadGastosPorVencer = servicioGestorGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
-
-        ModelMap modelo = new ModelMap();
-
-        modelo.put("usuario", usuario);
-        modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
-        modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
-
-        return new ModelAndView("dashboard", modelo);
-
-    }
-
-
-    @RequestMapping("/dashboardGastos")
-    public ModelAndView irADashboard(HttpServletRequest request) {
+    @RequestMapping(path = "/dashboardGastos", method = RequestMethod.GET)
+    public ModelAndView getDashboardGastos(HttpServletRequest request) {
         ModelMap model = new ModelMap();
-
         HttpSession session = request.getSession(false);
 
      //   if (session != null && session.getAttribute("id") != null) {
     //        Long id = (Long) session.getAttribute("id");
           //  Double totalGastosDelMes = servicioGestorDeGastosImpl.actualizarTotalGastosDelMesEnCurso(id);
             model.put("totalGastosDelMes", 22);
-
     //    }
-        return new ModelAndView("redirect:/dashboard", model);
-
+        return new ModelAndView("gastos", model);
     }
 
-    private boolean isUserLoggedIn(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-
-        return session != null && isAttributeNotNull(session, "USUARIO");
+    @RequestMapping(path = "/vencimientos", method = RequestMethod.GET)
+    public ModelAndView getVencimientos(HttpServletRequest request){
+        return new ModelAndView("servicios");
     }
-
-    private Boolean isAttributeNotNull(HttpSession session, String attributeName){
-        return session.getAttribute(attributeName) != null;
-    }
-
 }

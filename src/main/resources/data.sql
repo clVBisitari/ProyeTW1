@@ -1,5 +1,5 @@
 -- Insertar usuarios sin especificar el campo 'id' para permitir autogeneración
-INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password, esAdmin, enSuspension) 
+INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password, esAdmin, enSuspension)
 VALUES ('test@unlam.edu.ar', 'Juan', 'Perez', 38498777, 10500.0, 'test', true, false);
 
 INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password, esAdmin, enSuspension)

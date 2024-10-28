@@ -107,11 +107,12 @@ public class ServicioUsuarioTest {
 
     @Test
     public void siBuscoUnUsuarioPorNombreDebeDevolverElUsuario() {
-        Usuario userBuscado = new Usuario();
-        userBuscado.setNombre("Diego");
-        when(repositorioUsuarioMock.buscarUsuarioPorNombre(userBuscado.getNombre())).thenReturn(userBuscado);
-       Usuario userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
-        assertThat(userEncontrado, equalTo(userBuscado));
+        List<Usuario> usersBuscado = new ArrayList<Usuario>();
+        usersBuscado.add(new Usuario());
+        usersBuscado.get(0).setNombre("Diego");
+        when(repositorioUsuarioMock.buscarUsuarioPorNombre(usersBuscado.get(0).getNombre())).thenReturn(usersBuscado);
+       List<Usuario> userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
+        assertThat(userEncontrado, equalTo(usersBuscado));
     }
 
     private void obtengoUnaListaDeContactos(List<Usuario> contactos) {

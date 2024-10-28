@@ -1,5 +1,7 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
+import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +24,8 @@ import static org.mockito.Mockito.*;
 public class ControladorUsuarioTest {
 
     private ServicioUsuario servicioUsuarioMock;
+    private ServicioGestorGastos servicioGestorGastosMock;
+    private ServicioProyectoInversion servicioProyectionInversionMock;
     private UsuarioDTO usuarioDTOMock;
     private ControladorUsuario controladorUsuario;
     private HttpServletRequest requestMock;
@@ -35,7 +39,9 @@ public class ControladorUsuarioTest {
         when(usuarioDTOMock.getEmail()).thenReturn("test@unlam.edu.ar");
 
         servicioUsuarioMock = mock(ServicioUsuario.class);
-        controladorUsuario = new ControladorUsuario(servicioUsuarioMock);
+        servicioGestorGastosMock = mock(ServicioGestorGastos.class);
+        servicioProyectionInversionMock = mock(ServicioProyectoInversion.class);
+        controladorUsuario = new ControladorUsuario(servicioUsuarioMock, servicioGestorGastosMock, servicioProyectionInversionMock);
 
         requestMock = mock(HttpServletRequest.class);
         sessionMock = mock(HttpSession.class);
@@ -123,10 +129,10 @@ public class ControladorUsuarioTest {
 
         String motivo = "mal comportamiento";
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
         doNothing().when(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
 
-        String resultado = controladorUsuario.suspenderUsuario(nombre, motivo, redirectAttributesMock);
+        String resultado = controladorUsuario.suspenderUsuario(usuarioASuspender.getId(), motivo, redirectAttributesMock);
 
         verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
         verify(servicioUsuarioMock).suspenderUsuario(motivo, usuarioASuspender.getId());
@@ -145,10 +151,10 @@ public class ControladorUsuarioTest {
         usuarioASuspender.setNombre(nombre);
         usuarioASuspender.setEnSuspension(true);
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(nombre)).thenReturn(usuarioASuspender);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
         doNothing().when(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
 
-        String resultado = controladorUsuario.revertirSuspencion(nombre);
+        String resultado = controladorUsuario.revertirSuspencion(usuarioASuspender.getId());
 
         verify(servicioUsuarioMock).buscarUsuarioPorNombre(nombre);
         verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
@@ -166,10 +172,10 @@ public class ControladorUsuarioTest {
         usuarioQueGuarda.setEmail("userMock@hotmail.com");
         Usuario usuarioAGuardar = new Usuario();
 
-        when(servicioUsuarioMock.buscarUsuarioPorNombre(usuarioDTOMock.getNombre())).thenReturn(usuarioQueGuarda);
-        when(servicioUsuarioMock.buscarUsuarioPorNombre("nombre")).thenReturn(usuarioAGuardar);
+        when(servicioUsuarioMock.getUsuarioById(usuarioDTOMock.getId())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioAGuardar);
 
-        String vistaRedirigida = controladorUsuario.agregarContacto("nombre", requestMock);
+        String vistaRedirigida = controladorUsuario.agregarContacto(16, requestMock);
 
         verify(servicioUsuarioMock).buscarUsuarioPorNombre(usuarioDTOMock.getNombre());
         verify(servicioUsuarioMock).buscarUsuarioPorNombre("nombre");

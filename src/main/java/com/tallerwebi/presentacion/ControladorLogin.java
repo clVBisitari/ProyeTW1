@@ -41,17 +41,14 @@ public class ControladorLogin {
 
         if (usuarioBuscado != null) {
 
-            UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO(usuarioBuscado);
-
             HttpSession session = request.getSession();
-
-            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            session.setAttribute("saldo", usuarioBuscado.getSaldo());
+            UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO(usuarioBuscado);
             session.setAttribute("USUARIO", usuarioBuscado);
-
+            session.setAttribute("idUsuario", usuarioBuscado.getId());
             model.addAttribute("idUsuario", usuarioBuscado.getId());
             model.addAttribute("usuario", usuarioDTO);
-
+            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
+            session.setAttribute("saldo", usuarioBuscado.getSaldo());
             return new ModelAndView("redirect:/dashboard");
 
         } else {
@@ -65,6 +62,7 @@ public class ControladorLogin {
         ModelMap model = new ModelMap();
         try {
             servicioLogin.registrar(usuario);
+
         } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);

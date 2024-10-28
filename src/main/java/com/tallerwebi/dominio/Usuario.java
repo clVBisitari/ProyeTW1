@@ -1,6 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.UsuarioDTO;
+
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -161,5 +166,26 @@ public class Usuario {
                 ", enSuspencion=" + enSuspension +
                 ", proyecto=" + proyecto +
                 '}';
+    }
+    public static boolean isUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
+    }
+
+    public static Boolean isAttributeNotNull(HttpSession session, String attributeName){
+        return session.getAttribute(attributeName) != null;
+    }
+
+    public static List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+            usuariosDTO.add(usuarioDTO);
+        }
+        return usuariosDTO;
     }
 }
