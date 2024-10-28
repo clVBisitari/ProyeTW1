@@ -1,15 +1,13 @@
 package com.tallerwebi.presentacion;
-import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class UsuarioDTO {
+
     private Integer id;
     private String email;
-    private String password;
     private String nombre;
     private String apellido;
     private Integer dni;
@@ -21,45 +19,110 @@ public class UsuarioDTO {
     public UsuarioDTO() {
 
     }
-    public Integer getId() {return id;}
 
-    public void setId(Integer id) {this.id = id;}
+    public static Usuario convertDTOToUsuario(UsuarioDTO usuarioDTO){
 
-    public String getEmail() {return email;}
+        Usuario usuario = new Usuario();
 
-    public void setEmail(String email) {this.email = email;}
+        usuario.setId(usuarioDTO.getId());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setDni(usuarioDTO.getDni());
+        usuario.setEnSuspension(usuarioDTO.getEnSuspension());
+        usuario.setEsAdmin(usuarioDTO.getEsAdmin());
+        usuario.setSaldo(usuarioDTO.getSaldo());
 
-    public String getPassword() {return password;}
+        return usuario;
+    }
 
-    public void setPassword(String password) {this.password = password;}
+    public static UsuarioDTO convertUsuarioToDTO(Usuario usuario){
 
-    public String getNombre() {return nombre;}
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
 
-    public void setNombre(String nombre) {this.nombre = nombre;}
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setNombre(usuario.getNombre());
+        usuarioDTO.setApellido(usuario.getApellido());
+        usuarioDTO.setDni(usuario.getDni());
+        usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+        usuarioDTO.setEsAdmin(usuario.getEsAdmin());
+        usuarioDTO.setSaldo(usuario.getSaldo());
 
-    public String getApellido() {return apellido;}
+        return usuarioDTO;
+    }
 
-    public void setApellido(String apellido) {this.apellido = apellido;}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-    public Integer getDni() {return dni;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public void setDni(Integer dni) {this.dni = dni;}
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
 
-    public void setEnSuspension(boolean enSuspension) {this.enSuspension = enSuspension;}
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
 
-    public void setContactos(List<UsuarioDTO> contactosDTO) {this.contactos = contactosDTO;}
+    public void setDni(Integer dni) {
+        this.dni = dni;
+    }
 
-    public boolean isEnSuspension() {return enSuspension;}
+    public void setEnSuspension(boolean enSuspension) {
+        this.enSuspension = enSuspension;
+    }
 
-    public List<UsuarioDTO> getContactos() {return contactos;}
+    public void setEsAdmin(boolean esAdmin) {
+        this.esAdmin = esAdmin;
+    }
 
-    public boolean isEsAdmin() {return esAdmin;}
+    public void setContactos(List<UsuarioDTO> contactos) {
+        this.contactos = contactos;
+    }
 
-    public void setEsAdmin(boolean esAdmin) {this.esAdmin = esAdmin;}
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
+    }
 
-    public Double getSaldo() {return saldo;}
+    public Integer getId() {
+        return id;
+    }
 
-    public void setSaldo(Double saldo) {this.saldo = saldo;}
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public Integer getDni() {
+        return dni;
+    }
+
+    public boolean getEnSuspension() {
+        return enSuspension;
+    }
+
+    public boolean getEsAdmin() {
+        return esAdmin;
+    }
+
+    public List<UsuarioDTO> getContactos() {
+        return contactos;
+    }
+
+    public Double getSaldo() {
+        return saldo;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -77,9 +140,15 @@ public class UsuarioDTO {
     @Override
     public String toString() {
         return "UsuarioDTO{" +
-                "email='" + email + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", enSuspension=" + enSuspension +
+                ", esAdmin=" + esAdmin +
+                ", contactos=" + contactos +
+                ", saldo=" + saldo +
                 '}';
     }
 }

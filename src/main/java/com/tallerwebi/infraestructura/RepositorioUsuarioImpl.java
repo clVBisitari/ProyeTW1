@@ -87,11 +87,11 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .uniqueResult();
     }
     @Override
-    public Usuario buscarUsuarioPorNombre(String nombre){
+    public List<Usuario> buscarUsuarioPorNombre(String nombre){
         final Session session = sessionFactory.getCurrentSession();
-        return (Usuario) session.createCriteria(Usuario.class)
+        return (List<Usuario>) session.createCriteria(Usuario.class)
                 .add(Restrictions.eq("nombre", nombre))
-                .uniqueResult();
+                .list();
     }
 
     @Override

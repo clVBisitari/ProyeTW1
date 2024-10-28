@@ -1,5 +1,9 @@
 package com.tallerwebi.presentacion;
 
+import com.tallerwebi.dominio.Gasto;
+import com.tallerwebi.dominio.GestorDeGastos;
+import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
+import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,49 +24,67 @@ import java.util.List;
 public class ControladorUsuario {
 
     private ServicioUsuario servicioUsuario;
+    private ServicioGestorGastos servicioGastos;
+    private ServicioProyectoInversion servicioProyectoInversion;
 
     @Autowired
-    public ControladorUsuario(ServicioUsuario servicioUsuario) {
+    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioGestorGastos servicioGastos, ServicioProyectoInversion servicioProyeInversion) {
         this.servicioUsuario = servicioUsuario;
+        this.servicioGastos = servicioGastos;
+        this.servicioProyectoInversion = servicioProyectoInversion;
     }
 
     @Transactional
-    @RequestMapping("/dashboard")
+    @RequestMapping(path ="/dashboard", method = RequestMethod.GET)
     public ModelAndView irADashboard(HttpServletRequest request) {
 
-
-        if (!isUserLoggedIn(request)) {
+        if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-        ModelMap model = new ModelMap();
-        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-        Integer idUser = (Integer) request.getSession().getAttribute("idUsuario");
-        model.put("usuario", usuario);
-        model.addAttribute("idUsuario", idUser);
-        return new ModelAndView("dashboard", model);
+
+        Usuario usuario = (Usuario) request.getSession().getAttribute("USUARIO");
+
+        Long idUsuario = Long.valueOf(usuario.getId());
+
+        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuario));
+
+        GestorDeGastos gestorConectado = new GestorDeGastos();
+
+        gestorConectado.setGastos(gastoList);
+
+        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
+
+        Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
+
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuario", usuario);
+        modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
+        modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
+
+        return new ModelAndView("dashboard", modelo);
     }
 
     @Transactional
     @RequestMapping(path = "/contactos", method = RequestMethod.GET)
+
     public ModelAndView irAContactos(HttpServletRequest request) {
-        if (!isUserLoggedIn(request)) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-
         ModelMap model = new ModelMap();
-        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
 
-        // Obtener contactos actuales del usuario
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
-        List<UsuarioDTO> contactosDTO = mapToUsuarioDTOList(contactos);
+
+        List<UsuarioDTO> contactosDTO = Usuario.mapToUsuarioDTOList(contactos);
         usuarioDTO.setContactos(contactosDTO);
 
-        // Obtener contactos sugeridos
         List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
-        List<UsuarioDTO> contactosSugeridosDTO = mapToUsuarioDTOList(contactosSugeridos);
+        List<UsuarioDTO> contactosSugeridosDTO = Usuario.mapToUsuarioDTOList(contactosSugeridos);
 
         model.put("usuarioActual", usuarioDTO);
-
         model.put("contactos", contactosDTO);
         model.put("contactosSugeridos", contactosSugeridosDTO);
 
@@ -77,8 +99,8 @@ public class ControladorUsuario {
     @RequestMapping(path = "/suspender/usuario/{id}", method = RequestMethod.POST)
     public String suspenderUsuario(@PathVariable("id") Integer id, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
 
+        Usuario usuario = servicioUsuario.getUsuarioById(id);
 
-        Usuario usuario = servicioUsuario.buscarUsuarioPorId(id);
 
         boolean suspension = servicioUsuario.suspenderUsuario(motivo, id);
 
@@ -94,6 +116,7 @@ public class ControladorUsuario {
     @RequestMapping(path = "/revertir-suspension/usuario/{id}", method = RequestMethod.POST)
     public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
 
+        Usuario usuario = servicioUsuario.getUsuarioById(id);
         boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
 
         if (suspension) {
@@ -101,86 +124,60 @@ public class ControladorUsuario {
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al revertir suspencion");
         }
-
         return "redirect:/contactos";
     }
-
 
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
 
-            UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-            if (usuarioDTO == null) {
-                throw new IllegalArgumentException("El usuario no está autenticado");
-            }
-
-            Usuario usuarioQueGuarda = servicioUsuario.buscarUsuarioPorId(usuarioDTO.getId());
-            if (usuarioQueGuarda == null) {
-                throw new IllegalArgumentException("El usuario que intenta guardar no existe");
-            }
-
-            Usuario usuarioAGuardar = servicioUsuario.buscarUsuarioPorId(id);
-            if (usuarioAGuardar == null) {
-                throw new IllegalArgumentException("El usuario a agregar no puede ser null");
-            }
-
-            servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
-            return "redirect:/contactos";
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
         }
+        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
+        Usuario usuarioQueGuarda = servicioUsuario.getUsuarioById(usuarioDTO.getId());
+        Usuario usuarioAGuardar = servicioUsuario.getUsuarioById(id);
+        servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+
+        return "redirect:/contactos";
+    }
 
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
     public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {
-        if (!isUserLoggedIn(request)) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
         }
 
-        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-
-        // Verifica que el nombre que se busca no sea el mismo que el del usuario logueado
-        if (nombre.equals(usuarioDTO.getNombre())) {
-            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "No puedes buscar tu propio contacto.");
-            return "redirect:/contactos";
-        }
-
+        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
+        Usuario usuario = servicioUsuario.getUsuarioById(usuarioDTO.getId());
         List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuario(nombre);
-        List<UsuarioDTO>contactosEncontradosDTO = mapToUsuarioDTOList(contactosEncontrados);
+        List<UsuarioDTO>contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
 
         if (contactosEncontradosDTO.isEmpty()) {
-            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "Contacto no encontrado con ese nombre");
+            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "contactos no encontrados con ese nombre");
         } else {
             redirectAttributes.addFlashAttribute("contactosEncontrados", contactosEncontradosDTO);
-            Usuario usuario = servicioUsuario.buscarUsuarioPorNombre(usuarioDTO.getNombre());
 
-            if (usuario != null && usuario.getContactos() != null) {
-                List<Usuario> contactosActuales = usuario.getContactos();
-                for (Usuario contactoEncontrado : contactosEncontrados) {
+                List<UsuarioDTO> contactosActuales = usuarioDTO.getContactos();
+                for (UsuarioDTO contactoEncontrado : contactosEncontradosDTO) {
                     if (contactosActuales.contains(contactoEncontrado)) {
                         redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "Ya son amigos");
                     } else {
                         redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavía no son amigos");
                     }
                 }
-            }
-        }
 
+        }
         return "redirect:/contactos";
-    }
-    private List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
-        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
-        for (Usuario usuario : usuarios) {
-            UsuarioDTO usuarioDTO = new UsuarioDTO();
-            usuarioDTO.setId(usuario.getId());
-            usuarioDTO.setNombre(usuario.getNombre());
-            usuarioDTO.setEmail(usuario.getEmail());
-            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
-            usuariosDTO.add(usuarioDTO);
-        }
-        return usuariosDTO;
+
+
     }
 
-    private boolean isUserLoggedIn(HttpServletRequest request) {
-        HttpSession session = request.getSession(false);
-        return session != null && session.getAttribute("USUARIO") != null;
+    @Transactional
+    @RequestMapping(path = "/saldo", method = RequestMethod.GET)
+    public ModelAndView getSaldo(HttpServletRequest request) {
+
+        return new ModelAndView("saldo");
     }
 }

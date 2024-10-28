@@ -22,6 +22,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
+    public Usuario getUsuarioById(Integer id){
+        return this.repositorioUsuario.buscarUsuarioPorId(id);
+    }
+
+    @Override
     public Boolean cargarSaldo(int valor) {
         return null;
     }
@@ -47,7 +52,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
+    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
         return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 

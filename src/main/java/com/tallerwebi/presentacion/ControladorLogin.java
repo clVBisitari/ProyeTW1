@@ -40,26 +40,29 @@ public class ControladorLogin {
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
 
         if (usuarioBuscado != null) {
-            UsuarioDTO usuarioDTO = mapToUsuarioDTO(usuarioBuscado);
+
             HttpSession session = request.getSession();
-            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
-            session.setAttribute("saldo", usuarioBuscado.getSaldo());
-            session.setAttribute("USUARIO", usuarioDTO);
+            UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO(usuarioBuscado);
+            session.setAttribute("USUARIO", usuarioBuscado);
+            session.setAttribute("idUsuario", usuarioBuscado.getId());
             model.addAttribute("idUsuario", usuarioBuscado.getId());
             model.addAttribute("usuario", usuarioDTO);
+            session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
+            session.setAttribute("saldo", usuarioBuscado.getSaldo());
             return new ModelAndView("redirect:/dashboard");
 
         } else {
-       return new ModelAndView("login", new ModelMap("error", "Usuario o clave incorrecta"));
+            return new ModelAndView("login", new ModelMap("error", "Usuario o clave incorrecta"));
         }
 }
 
 
 @RequestMapping(path = "/registrarme", method = RequestMethod.POST)
-    public ModelAndView registrarme(@ModelAttribute("usuario") UsuarioDTO usuario) {
+    public ModelAndView registrarme(@ModelAttribute("usuario") Usuario usuario) {
         ModelMap model = new ModelMap();
         try {
             servicioLogin.registrar(usuario);
+
         } catch (UsuarioExistente e) {
             model.put("error", "El usuario ya existe");
             return new ModelAndView("nuevo-usuario", model);
@@ -96,16 +99,6 @@ public class ControladorLogin {
             session.invalidate();
         }
         return new ModelAndView("redirect:/login");
-    }
-
-    private UsuarioDTO mapToUsuarioDTO(Usuario usuario) {
-        UsuarioDTO usuarioDTO = new UsuarioDTO();
-        usuarioDTO.setId(usuario.getId());
-        usuarioDTO.setNombre(usuario.getNombre());
-        usuarioDTO.setEmail(usuario.getEmail());
-        usuarioDTO.setEsAdmin(usuario.getEsAdmin());
-        usuarioDTO.setSaldo(usuario.getSaldo());
-        return usuarioDTO;
     }
 }
 
