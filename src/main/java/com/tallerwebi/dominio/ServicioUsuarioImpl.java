@@ -108,7 +108,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
     @Override
     public List<Usuario> buscarUsuario(String nombreUsuario) {
-        return repositorioUsuario.buscarUsuariosPorNombre(nombreUsuario);
+        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
 

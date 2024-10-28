@@ -136,12 +136,14 @@ public class ControladorUsuarioTest {
 
     @Test
     public void dadoQueSeRevierteLaSuspensionSeMuestraMensajeExitoso() {
+        Usuario usuarioASuspender = new Usuario();
+        usuarioASuspender.setId(16);
         when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
-        when(servicioUsuarioMock.revertirSuspensionUsuario(usuarioASuspender.getId)).thenReturn(true);
+        when(servicioUsuarioMock.revertirSuspensionUsuario(usuarioASuspender.getId())).thenReturn(true);
 
-        String resultado = controladorUsuario.revertirSuspencion(usuarioASuspender.getId());
+        String resultado = controladorUsuario.revertirSuspencion(usuarioASuspender.getId(),redirectAttributesMock);
 
-        verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioId);
+        verify(servicioUsuarioMock).revertirSuspensionUsuario(usuarioASuspender.getId());
 
         verify(redirectAttributesMock).addFlashAttribute("mensaje", "Suspensión revertida");
 
