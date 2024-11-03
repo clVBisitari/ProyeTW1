@@ -21,12 +21,13 @@ public interface ServicioUsuario {
     Boolean reportarProyectoSospechoso(String motivo, int idProyect, int idUser2, int idUserQueReporta); // int denuncias acumm en user
     Boolean reportarUsuarioSospechoso(String motivo, int idUserReportado, int idUserQueReporta);
     Boolean suspenderPublicacion(String motivo, int proyect);
-    void suspenderUsuario(String motivo, int idUser);
-    List<Usuario> buscarUsuario(Usuario nombreUsuario);
+    Boolean suspenderUsuario(String motivo, int idUser);
     Boolean revertirSuspensionProyecto(int idProyectoInversion);
-    void revertirSuspensionUsuario(int idUsuario);
+    Boolean revertirSuspensionUsuario(int idUsuario);
     public Boolean eliminarPublicacion(int idProyectoInver);
     public Boolean eliminarUsuario(int idUser);
     List<Usuario> getContactos(String email);
-    List<Usuario> getContactosSugeridos(String email);
+    List<Usuario> getContactosSugeridos(Integer id);
+
+    Usuario buscarUsuarioPorId(Integer id);
 }

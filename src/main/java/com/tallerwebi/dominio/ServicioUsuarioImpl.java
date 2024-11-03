@@ -51,10 +51,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return null;
     }
 
-    @Override
-    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
-        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
-    }
 
     @Override
     public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
@@ -97,15 +93,19 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public void suspenderUsuario(String motivo, int idUser) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
-        usuario.setEnSuspension(true);
-        repositorioUsuario.modificar(usuario);
+    public Boolean suspenderUsuario(String motivo, int idUser) {
+         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
+        if (usuario != null) {
+            usuario.setEnSuspension(true);
+            repositorioUsuario.modificar(usuario);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
-        return List.of();
+    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
+        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
 
@@ -116,11 +116,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public void revertirSuspensionUsuario(int idUsuario) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
-        usuario.setEnSuspension(false);
-        repositorioUsuario.modificar(usuario);
-    }
+    public Boolean revertirSuspensionUsuario(int idUsuario) {
+            Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+            if (usuario != null) {
+                usuario.setEnSuspension(false);
+                repositorioUsuario.modificar(usuario);
+                return true;
+            }
+            return false;
+        }
 
     @Override
     public Boolean eliminarPublicacion(int idProyectoInver) {
@@ -139,27 +143,31 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public List<Usuario> getContactosSugeridos(String email) {
-
-        Usuario user = repositorioUsuario.buscar(email);
-        List<Usuario> contactos = repositorioUsuario.obtenerContactos(email);
+    public List<Usuario> getContactosSugeridos(Integer id) {
+        List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
         List<Usuario> contactosSugeridos = new ArrayList<>();
 
-        Random random = new Random();
+     /*   Random random = new Random();
 
         for (Usuario contacto : contactos) {
             List<Usuario> contactosDeContacto = contacto.getContactos();
 
             if (!contactosDeContacto.isEmpty()) {
                 Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if (contactoAleatorio != user) {
+                if (contactoAleatorio.getId() != id) {
                     contactosSugeridos.add(contactoAleatorio);
                 }
             }
         }
 
         return contactosSugeridos;
+*/
+        return contactos;
+    }
 
+    @Override
+    public Usuario buscarUsuarioPorId(Integer id) {
+        return repositorioUsuario.buscarUsuarioPorId(id);
     }
 
 }

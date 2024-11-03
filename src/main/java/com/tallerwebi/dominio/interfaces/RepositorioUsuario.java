@@ -12,7 +12,8 @@ public interface RepositorioUsuario {
     void modificar(Usuario usuario);
     Usuario buscarUsuarioPorId(int id);
     List<Usuario> obtenerContactos(String email);
-    List<Usuario> buscarUsuarioPorNombre(String nombre);
+    List<Usuario>getContactosSugeridos(Integer id);
+    List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
 }
 
 

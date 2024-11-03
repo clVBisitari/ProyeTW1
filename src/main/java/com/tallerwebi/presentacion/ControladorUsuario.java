@@ -67,12 +67,12 @@ public class ControladorUsuario {
 
     @Transactional
     @RequestMapping(path = "/contactos", method = RequestMethod.GET)
+
     public ModelAndView irAContactos(HttpServletRequest request) {
 
         if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
-
         ModelMap model = new ModelMap();
         UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
 
@@ -81,7 +81,7 @@ public class ControladorUsuario {
         List<UsuarioDTO> contactosDTO = Usuario.mapToUsuarioDTOList(contactos);
         usuarioDTO.setContactos(contactosDTO);
 
-        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getId());
         List<UsuarioDTO> contactosSugeridosDTO = Usuario.mapToUsuarioDTOList(contactosSugeridos);
 
         model.put("usuarioActual", usuarioDTO);
@@ -91,7 +91,6 @@ public class ControladorUsuario {
         if (contactosDTO.isEmpty()) {
             model.put("noHayContactos", "No hay contactos en tu lista");
         }
-
         return new ModelAndView("contactos", model);
     }
 
@@ -101,10 +100,9 @@ public class ControladorUsuario {
 
         Usuario usuario = servicioUsuario.getUsuarioById(id);
 
-        servicioUsuario.suspenderUsuario(motivo, usuario.getId());
+        boolean suspension = servicioUsuario.suspenderUsuario(motivo, id);
 
-
-        if (usuario.getEnSuspension()) {
+        if (suspension) {
             redirectAttributes.addFlashAttribute("mensaje", "Usuario suspendido");
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al suspender el usuario");
@@ -113,25 +111,30 @@ public class ControladorUsuario {
         return "redirect:/contactos";
     }
 
-    @RequestMapping(path = "/revertir-suspencion/usuario/{id}", method = RequestMethod.POST)
-    public String revertirSuspencion(@PathVariable("id") Integer id) {
+    @RequestMapping(path = "/revertir-suspension/usuario/{id}", method = RequestMethod.POST)
+    public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
 
         Usuario usuario = servicioUsuario.getUsuarioById(id);
+        boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
 
-        servicioUsuario.revertirSuspensionUsuario(usuario.getId());
-
+        if (suspension) {
+            redirectAttributes.addFlashAttribute("mensaje", "Suspensión revertida");
+        } else {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al revertir suspencion");
+        }
         return "redirect:/contactos";
     }
 
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
-    public String agregarContacto(@PathVariable("id") Integer contactoId, HttpServletRequest request) {
+    public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
+
 
         if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
         }
         UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
         Usuario usuarioQueGuarda = servicioUsuario.getUsuarioById(usuarioDTO.getId());
-        Usuario usuarioAGuardar = servicioUsuario.getUsuarioById(contactoId);
+        Usuario usuarioAGuardar = servicioUsuario.getUsuarioById(id);
         servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 
         return "redirect:/contactos";
@@ -143,29 +146,30 @@ public class ControladorUsuario {
         if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
         }
+
         UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
         Usuario usuario = servicioUsuario.getUsuarioById(usuarioDTO.getId());
-        List<Usuario> contactoEncontrado = servicioUsuario.buscarUsuarioPorNombre(nombre);
-        List<Usuario> contactos = usuario.getContactos();
-        if(contactos.size() == 0) {
-                redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "Contacto no econtrado con ese nombre");
-                return "redirect:/contactos";
-            }
-        for (Usuario contacto : contactos) {
-            if (contactoEncontrado != null && contacto == contactoEncontrado) {
-                redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
-                redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "ya son amigos");
-                return "redirect:/contactos";
-            }
-        }
-        if (contactoEncontrado != null && contactoEncontrado!=usuario) {
-            redirectAttributes.addFlashAttribute("contactoEncontrado", contactoEncontrado);
-            redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavia no son amigos");
+        List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuarioPorNombre(nombre);
+        List<UsuarioDTO>contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
 
+        if (contactosEncontradosDTO.isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "contactos no encontrados con ese nombre");
         } else {
-            redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "Contacto no econtrado con ese nombre");
+            redirectAttributes.addFlashAttribute("contactosEncontrados", contactosEncontradosDTO);
+
+                List<UsuarioDTO> contactosActuales = usuarioDTO.getContactos();
+                for (UsuarioDTO contactoEncontrado : contactosEncontradosDTO) {
+                    if (contactosActuales.contains(contactoEncontrado)) {
+                        redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "Ya son amigos");
+                    } else {
+                        redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavía no son amigos");
+                    }
+                }
+
         }
         return "redirect:/contactos";
+
+
     }
 
     @Transactional
