@@ -185,7 +185,7 @@ public class RepositorioUsuarioTest {
         Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
         List<Usuario> usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuarioPorNombre("diego");
 
-        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
+        assertThat(usuarioEncontradoEnBD.getId(), equalTo(usuarioEncontradoPorRepo.get(0).getId()));
         assertThat(usuarioEncontradoPorRepo.get(0).getNombre(), equalTo("diego"));
     }
 
