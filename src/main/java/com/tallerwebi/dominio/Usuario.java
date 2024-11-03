@@ -21,7 +21,7 @@ public class Usuario {
     private String apellido;
     private Integer dni;
     private Double saldo;
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
     private String password;

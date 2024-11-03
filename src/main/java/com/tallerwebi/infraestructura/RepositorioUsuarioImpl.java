@@ -21,7 +21,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     private SessionFactory sessionFactory;
 
     @Autowired
-    public RepositorioUsuarioImpl(SessionFactory sessionFactory){
+    public RepositorioUsuarioImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
 
@@ -50,7 +50,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public boolean guardar(Usuario usuario) {
 
         Serializable user = sessionFactory.getCurrentSession().save(usuario);
-        if(user != null){
+        if (user != null) {
             return true;
         }
         return false;
@@ -79,7 +79,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     }
 
     @Override
-    public Usuario buscarUsuarioPorId(int id){
+    public List<Usuario> getContactosSugeridos(Integer miUsuarioId) {
+        final Session session =sessionFactory.getCurrentSession();
+        return (List<Usuario>) session.createCriteria(Usuario.class).add(Restrictions.ne("id", miUsuarioId))  .list();
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorId(int id) {
         final Session session = sessionFactory.getCurrentSession();
         return (Usuario) session.createCriteria(Usuario.class)
                 .add(Restrictions.eq("id", id))

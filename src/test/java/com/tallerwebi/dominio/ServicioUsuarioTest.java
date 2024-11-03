@@ -52,7 +52,7 @@ public class ServicioUsuarioTest {
     @Test
     public void siHayContactosDevuelveUnaListaDeSugeridos() {
         Usuario user = new Usuario();
-        user.setEmail("user@example.com");
+        user.setId(1);
         Usuario subContacto1 = new Usuario();
         Usuario subContacto2 = new Usuario();
         List<Usuario> contactos = crearListaDeContactos(user, subContacto1, subContacto2);
@@ -61,7 +61,7 @@ public class ServicioUsuarioTest {
         when(repositorioUsuarioMock.obtenerContactos("user@example.com"))
                 .thenReturn(contactos);
 
-        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos("user@example.com");
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(1);
 
         assertThat(contactosSugeridos, Matchers.is(notNullValue()));
         assertThat(contactosSugeridos, hasItem(subContacto2));

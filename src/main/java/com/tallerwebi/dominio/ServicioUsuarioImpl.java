@@ -51,10 +51,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return null;
     }
 
-    @Override
-    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
-        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
-    }
 
     @Override
     public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
@@ -106,8 +102,9 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
         return false;
     }
+
     @Override
-    public List<Usuario> buscarUsuario(String nombreUsuario) {
+    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
         return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
@@ -146,27 +143,26 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public List<Usuario> getContactosSugeridos(String email) {
-
-        Usuario user = repositorioUsuario.buscar(email);
-        List<Usuario> contactos = repositorioUsuario.obtenerContactos(email);
+    public List<Usuario> getContactosSugeridos(Integer id) {
+        List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
         List<Usuario> contactosSugeridos = new ArrayList<>();
 
-        Random random = new Random();
+     /*   Random random = new Random();
 
         for (Usuario contacto : contactos) {
             List<Usuario> contactosDeContacto = contacto.getContactos();
 
             if (!contactosDeContacto.isEmpty()) {
                 Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if (contactoAleatorio != user) {
+                if (contactoAleatorio.getId() != id) {
                     contactosSugeridos.add(contactoAleatorio);
                 }
             }
         }
 
         return contactosSugeridos;
-
+*/
+        return contactos;
     }
 
     @Override

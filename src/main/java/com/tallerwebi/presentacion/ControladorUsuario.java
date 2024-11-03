@@ -81,7 +81,7 @@ public class ControladorUsuario {
         List<UsuarioDTO> contactosDTO = Usuario.mapToUsuarioDTOList(contactos);
         usuarioDTO.setContactos(contactosDTO);
 
-        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getEmail());
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(usuarioDTO.getId());
         List<UsuarioDTO> contactosSugeridosDTO = Usuario.mapToUsuarioDTOList(contactosSugeridos);
 
         model.put("usuarioActual", usuarioDTO);
@@ -91,7 +91,6 @@ public class ControladorUsuario {
         if (contactosDTO.isEmpty()) {
             model.put("noHayContactos", "No hay contactos en tu lista");
         }
-
         return new ModelAndView("contactos", model);
     }
 
@@ -100,7 +99,6 @@ public class ControladorUsuario {
     public String suspenderUsuario(@PathVariable("id") Integer id, @RequestParam("motivo") String motivo, RedirectAttributes redirectAttributes) {
 
         Usuario usuario = servicioUsuario.getUsuarioById(id);
-
 
         boolean suspension = servicioUsuario.suspenderUsuario(motivo, id);
 
@@ -151,7 +149,7 @@ public class ControladorUsuario {
 
         UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
         Usuario usuario = servicioUsuario.getUsuarioById(usuarioDTO.getId());
-        List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuario(nombre);
+        List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuarioPorNombre(nombre);
         List<UsuarioDTO>contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
 
         if (contactosEncontradosDTO.isEmpty()) {
