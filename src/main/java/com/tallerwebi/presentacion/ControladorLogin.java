@@ -43,12 +43,12 @@ public class ControladorLogin {
 
             HttpSession session = request.getSession();
             UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO(usuarioBuscado);
-            session.setAttribute("USUARIO", usuarioBuscado);
             session.setAttribute("idUsuario", usuarioBuscado.getId());
-            model.addAttribute("idUsuario", usuarioBuscado.getId());
-            model.addAttribute("usuario", usuarioDTO);
             session.setAttribute("esAdmin", usuarioBuscado.getEsAdmin());
             session.setAttribute("saldo", usuarioBuscado.getSaldo());
+          //  model.addAttribute("idUsuario", usuarioBuscado.getId());
+            session.setAttribute("USUARIO", usuarioDTO);
+            model.addAttribute("USUARIO", usuarioDTO);
             return new ModelAndView("redirect:/dashboard");
 
         } else {

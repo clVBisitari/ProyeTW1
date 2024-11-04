@@ -42,11 +42,11 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
 
-        Usuario usuario = (Usuario) request.getSession().getAttribute("USUARIO");
+        UsuarioDTO usuarioDto = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-        Long idUsuario = Long.valueOf(usuario.getId());
+        Long idUsuarioDto = Long.valueOf(usuarioDto.getId());
 
-        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuario));
+        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuarioDto));
 
         GestorDeGastos gestorConectado = new GestorDeGastos();
 
@@ -58,7 +58,7 @@ public class ControladorUsuario {
 
         ModelMap modelo = new ModelMap();
 
-        modelo.put("usuario", usuario);
+        modelo.put("usuario", usuarioDto);
         modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
         modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
 
@@ -74,7 +74,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
         ModelMap model = new ModelMap();
-        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
+        UsuarioDTO usuarioDTO =(UsuarioDTO)request.getSession().getAttribute("USUARIO");
 
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
@@ -128,17 +128,19 @@ public class ControladorUsuario {
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
     public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
 
-
         if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
         }
-        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         Usuario usuarioQueGuarda = servicioUsuario.getUsuarioById(usuarioDTO.getId());
         Usuario usuarioAGuardar = servicioUsuario.getUsuarioById(id);
+
         servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 
         return "redirect:/contactos";
     }
+
 
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
     public String buscarContacto(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request) {
