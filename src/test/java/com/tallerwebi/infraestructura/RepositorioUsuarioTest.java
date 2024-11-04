@@ -183,10 +183,10 @@ public class RepositorioUsuarioTest {
         query.setParameter("nombreUsuario", "diego");
 
         Usuario usuarioEncontradoEnBD = (Usuario) query.getSingleResult();
-        Usuario usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuarioPorNombre("diego");
+        List<Usuario> usuarioEncontradoPorRepo = repositorioUsuario.buscarUsuarioPorNombre("diego");
 
-        assertThat(usuarioEncontradoEnBD, equalTo(usuarioEncontradoPorRepo));
-        assertThat(usuarioEncontradoPorRepo.getNombre(), equalTo("diego"));
+        assertThat(usuarioEncontradoEnBD.getId(), equalTo(usuarioEncontradoPorRepo.get(0).getId()));
+        assertThat(usuarioEncontradoPorRepo.get(0).getNombre(), equalTo("diego"));
     }
 
 

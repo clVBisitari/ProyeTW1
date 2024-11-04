@@ -1,6 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.UsuarioDTO;
+
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,12 +15,13 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
     private String password;
@@ -23,10 +29,12 @@ public class Usuario {
     private Boolean enSuspension = false;
     @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
     private GestorDeGastos gestorDeGastos;
+    ///private List<Inversion>
 
     public Usuario(){}
+
     public Usuario(String email, String password, String nombre, String apellido, Integer dni) {
         this.email = email;
         this.password = password;
@@ -159,5 +167,27 @@ public class Usuario {
                 ", enSuspencion=" + enSuspension +
                 ", proyecto=" + proyecto +
                 '}';
+    }
+    public static boolean isUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
+    }
+
+    public static Boolean isAttributeNotNull(HttpSession session, String attributeName){
+        return session.getAttribute(attributeName) != null;
+    }
+
+    public static List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+            usuariosDTO.add(usuarioDTO);
+        }
+        return usuariosDTO;
     }
 }

@@ -52,20 +52,19 @@ public class ServicioUsuarioTest {
     @Test
     public void siHayContactosDevuelveUnaListaDeSugeridos() {
         Usuario user = new Usuario();
-        user.setEmail("user@example.com");
-        Usuario subContacto1 = new Usuario();
-        Usuario subContacto2 = new Usuario();
-        List<Usuario> contactos = crearListaDeContactos(user, subContacto1, subContacto2);
+        user.setId(1);
+        List<Usuario> contactos = crearListaDeContactos(user);
 
-        when(repositorioUsuarioMock.buscar("user@example.com")).thenReturn(user);
-        when(repositorioUsuarioMock.obtenerContactos("user@example.com"))
-                .thenReturn(contactos);
+//        when(repositorioUsuarioMock.buscar("user@example.com")).thenReturn(user);
+//        when(repositorioUsuarioMock.obtenerContactos("user@example.com"))
+//                .thenReturn(contactos);
+        when(repositorioUsuarioMock.getContactosSugeridos(user.getId())).thenReturn(contactos);
 
-        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos("user@example.com");
+        List<Usuario> contactosSugeridos = servicioUsuario.getContactosSugeridos(1);
 
         assertThat(contactosSugeridos, Matchers.is(notNullValue()));
-        assertThat(contactosSugeridos, hasItem(subContacto2));
-        assertThat(contactosSugeridos, hasItem(subContacto1)); // Verificar que incluye contacto2
+        assertThat(contactosSugeridos.get(1).getId(), comparesEqualTo(contactos.get(1).getId()));
+        assertThat(contactosSugeridos.get(0).getId(), comparesEqualTo(contactos.get(0).getId())); // Verificar que incluye contacto2
         assertThat(contactosSugeridos, hasSize(2));
     }
 
@@ -107,11 +106,12 @@ public class ServicioUsuarioTest {
 
     @Test
     public void siBuscoUnUsuarioPorNombreDebeDevolverElUsuario() {
-        Usuario userBuscado = new Usuario();
-        userBuscado.setNombre("Diego");
-        when(repositorioUsuarioMock.buscarUsuarioPorNombre(userBuscado.getNombre())).thenReturn(userBuscado);
-       Usuario userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
-        assertThat(userEncontrado, equalTo(userBuscado));
+        List<Usuario> usersBuscado = new ArrayList<Usuario>();
+        usersBuscado.add(new Usuario());
+        usersBuscado.get(0).setNombre("Diego");
+        when(repositorioUsuarioMock.buscarUsuarioPorNombre(usersBuscado.get(0).getNombre())).thenReturn(usersBuscado);
+       List<Usuario> userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
+        assertThat(userEncontrado, equalTo(usersBuscado));
     }
 
     private void obtengoUnaListaDeContactos(List<Usuario> contactos) {
@@ -128,25 +128,18 @@ public class ServicioUsuarioTest {
     }
 
 
-    private List<Usuario> crearListaDeContactos(Usuario user, Usuario subContacto1, Usuario subContacto2) {
+    private List<Usuario> crearListaDeContactos(Usuario user) {
         List<Usuario> contactos = new ArrayList<>();
         Usuario contacto1 = new Usuario();
+        contacto1.setId(2);
         contacto1.setEmail("contact1@example.com");
-        List<Usuario> contactosContacto1 = new ArrayList<>();
-
-        subContacto1.setEmail("subContact1@example.com");
-        contactosContacto1.add(subContacto1);
-        contacto1.setContactos(contactosContacto1);
-
         contactos.add(contacto1);
+
         Usuario contacto2 = new Usuario();
+        contacto2.setId(3);
         contacto2.setEmail("contact2@example.com");
         contactos.add(contacto2);
-        List<Usuario> contactosContacto2 = new ArrayList<>();
 
-        subContacto2.setEmail("subContact2@example.com");
-        contactosContacto2.add(subContacto2);
-        contacto2.setContactos(contactosContacto2);
         user.setContactos(contactos);
         return contactos;
     }
