@@ -69,15 +69,13 @@ public class ControladorProyeInversionTests {
         userMock.setEmail("a@a.com");
         userMock.setNombre("Usuario 1");
         userMock.setApellido("Apellido 1");
-        userMock.setPassword("1234");
-
-
+        userMock.setPassword("123456");
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
         controlador = new ControladorProyeInversion(proyeInvServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
-        when(requestMock.getAttribute("idUsuario")).thenReturn(1234);
+
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
@@ -98,13 +96,14 @@ public class ControladorProyeInversionTests {
     public void DadosDatosValidos_CuandoGetProyectosSugeridos_RetornaListaDeProyectos(){
 
         when(this.proyeInvServiceMock.getProyectosUsuario(userMock.getId())).thenReturn(proyeInvList);
+        when(requestMock.getSession().getAttribute("idUsuario")).thenReturn(1234);
         ModelAndView modelAndView = this.controlador.getListaProyectosPorUsuario(this.requestMock);
 
         assert modelAndView != null;
-        var array = modelAndView.getModel().get("response");
+        var array = modelAndView.getModel().get("proyectos");
 
         assertThat("inversiones", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
         assertThat(false, is(modelAndView.getModel().isEmpty()));
-        assertThat(((ArrayList<?>) array).size(), is(2));
+        assertThat(((ArrayList<ProyectoInversion>) array).size(), is(2));
     }
 }
