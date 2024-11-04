@@ -182,6 +182,7 @@ public class Usuario {
         List<UsuarioDTO> usuariosDTO = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
             usuarioDTO.setEnSuspension(usuario.getEnSuspension());
