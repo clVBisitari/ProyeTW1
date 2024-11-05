@@ -172,6 +172,21 @@ public class ControladorUsuario {
 
 
     }
+    @Transactional
+    @RequestMapping(path = "/perfil", method = RequestMethod.GET)
+    public ModelAndView irAPerfil(HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuario", usuarioDTO);
+
+        return new ModelAndView("perfil", modelo);
+    }
 
     @Transactional
     @RequestMapping(path = "/saldo", method = RequestMethod.GET)
