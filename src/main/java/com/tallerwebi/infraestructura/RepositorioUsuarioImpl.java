@@ -80,8 +80,18 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
     @Override
     public List<Usuario> getContactosSugeridos(Integer miUsuarioId) {
-        final Session session =sessionFactory.getCurrentSession();
-        return (List<Usuario>) session.createCriteria(Usuario.class).add(Restrictions.ne("id", miUsuarioId))  .list();
+        final Session session = sessionFactory.getCurrentSession();
+
+        String hql = "SELECT u FROM Usuario u " +
+                "WHERE u.id != :miUsuarioId " +
+                "AND u.id NOT IN (" +
+                "   SELECT uu.id FROM Usuario usuario " +
+                "   JOIN usuario.contactos uu " +
+                "   WHERE usuario.id = :miUsuarioId" +
+                ")";
+        return (List<Usuario>) session.createQuery(hql)
+                .setParameter("miUsuarioId", miUsuarioId)
+                .list();
     }
 
     @Override
