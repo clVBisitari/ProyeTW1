@@ -57,7 +57,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         List<Usuario> contactos = usuarioQueGuarda.getContactos();
 
         for (Usuario contacto : contactos) {
-            if (contacto == usuarioAGuardar) {
+            if (Objects.equals(contacto.getId(), usuarioAGuardar.getId())) {
                 throw new ContactoExistente("este contacto ya esta en tu lista");
             }
         }
