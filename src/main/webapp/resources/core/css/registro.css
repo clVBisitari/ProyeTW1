@@ -12,7 +12,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    flex: 1;
+    flex: 3;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -44,7 +44,7 @@
     margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
+    gap: 2rem;
     border-radius: 5px;
 }
 
@@ -60,6 +60,7 @@
 }
 
 .login__input {
+    width: 100%;
     font-size: 1.2rem;
     padding: .5rem;
     border-radius: 5px;
@@ -78,11 +79,17 @@
     font-size: 1rem;
 }
 
+.login__button{
+    width: 50%;
+    margin: auto;
+    margin-top: 1rem;
+    grid-column: span 2;
+}
 
 @media screen and (min-width: 769px) {
     .login__aside {
         display: block;
-        flex: 1;
+        flex: 2;
         background-image: url('../img/oficina.jpg');
         background-position: center;
         background-repeat: no-repeat;
@@ -99,6 +106,9 @@
 
     .login__form {
         margin: 2rem auto;
-        width: 50%;
+        width: 80%;
+        min-width: 250px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
     }
 }

@@ -44,7 +44,7 @@
     margin-top: 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.4rem;
+    gap: 2rem;
     border-radius: 5px;
 }
 
@@ -60,6 +60,7 @@
 }
 
 .login__input {
+    width: 100%;
     font-size: 1.2rem;
     padding: .5rem;
     border-radius: 5px;
@@ -81,6 +82,10 @@
 
 .login__link {
     font-size: 1rem;
+}
+
+.login__button{
+    margin-top: 1rem;
 }
 
 p.alert.alert-danger{
@@ -108,5 +113,6 @@ p.alert.alert-danger{
     .login__form {
         margin: 2rem auto;
         width: 50%;
+        min-width: 250px;
     }
 }

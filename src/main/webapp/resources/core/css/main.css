@@ -37,6 +37,7 @@ h5 {
 /* Buttons */
 
 .button__primary {
+    width: 100%;
     background: var(--primary);
     border-radius: .5rem;
     padding: .5rem 1rem;
@@ -52,6 +53,7 @@ h5 {
 }
 
 .button__secondary {
+    width: 100%;
     background: #fff;
     border: 1px solid var(--primary);
     border-radius: .5rem;
