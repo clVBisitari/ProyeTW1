@@ -75,7 +75,7 @@
     <nav class="dashboard__top">
         <div class="dashboard__left">
             <a href="#" th:href="@{/perfil}"><img class="dashboard__userimg" th:src="@{img/perfil.jpg}" alt="foto de perfil" /></a>
-            <h2 class="dashboard__usertext">Bienvenido,</h2><h2 class="dashboard__usertext" th:text="${usuario.nombre}"></h2><h2>!!</h2>
+            <h2 class="dashboard__usertext">Bienvenido, <span th:text="${usuario.nombre}"></span>!</h2>
         </div>
         <div class="dashboard__right">
             <a class="dashboard__link" th:href="@{/inversiones}">Ir a Inversiones -></a>
@@ -83,7 +83,7 @@
     </nav>
     <header class="dashboard__header">
         <a class="box" th:href="@{/saldo}">
-            <div class="box">
+            <div class="box__cont">
                 <div class="box__top">
                     <h3 class="box__text">Saldo Total</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" class="box__icon" viewBox="0 0 16 16">
@@ -96,7 +96,7 @@
             </div>
         </a>
         <a class="box" th:href="@{/dashboardGastos}">
-            <div class="box">
+            <div class="box__cont">
                 <div class="box__top">
                     <h3 class="box__text">Gastos del Mes</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" class="box__icon" viewBox="0 0 16 16">
@@ -110,7 +110,7 @@
             </div>
         </a>
         <a class="box" th:href="@{/inversiones}">
-            <div class="box">
+            <div class="box__cont">
                 <div class="box__top">
                     <h3 class="box__text">Proyectos Activos</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" class="box__icon" viewBox="0 0 16 16">
@@ -123,8 +123,8 @@
             </div>
         </a>
         <a class="box" th:href="@{/vencimientos}">
-            <div class="box, box__top">
-                <div>
+            <div class="box__cont">
+                <div class="box__top">
                     <h3 class="box__text">Servicios por Vencer</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" class="box__icon" viewBox="0 0 16 16">
                         <path

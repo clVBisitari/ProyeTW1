@@ -77,6 +77,24 @@
     text-align: center;
 }
 
+.contacts__button{
+}
+
+.contacts__svg{
+    border-radius: 5px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    fill: var(--dark);
+    background: var(--light);
+    transition: all 1s ease-out;
+}
+
+.contacts__svg:hover{
+    fill: var(--light);
+    background: var(--dark);
+}
+
 @media screen and (min-width: 769px) {
 
     .contacts__main {

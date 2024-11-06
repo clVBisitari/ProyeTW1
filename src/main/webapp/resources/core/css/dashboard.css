@@ -205,6 +205,8 @@
     }
 
     .box {
+        color: unset;
+        text-decoration: none;
         width: 25%;
     }
 
