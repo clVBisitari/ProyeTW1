@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -115,6 +116,7 @@ public class ControladorUsuario {
     public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
 
         Usuario usuario = servicioUsuario.getUsuarioById(id);
+
         boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
 
         if (suspension) {
@@ -122,7 +124,7 @@ public class ControladorUsuario {
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al revertir suspencion");
         }
-        return "redirect:/contactos";
+        return "redirect:/vistaAdministrador";
     }
 
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
@@ -148,8 +150,7 @@ public class ControladorUsuario {
             return "redirect:/login";
         }
 
-        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
-        Usuario usuario = servicioUsuario.getUsuarioById(usuarioDTO.getId());
+        UsuarioDTO usuarioDTO = (UsuarioDTO)request.getSession().getAttribute("USUARIO");
         List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuarioPorNombre(nombre);
         List<UsuarioDTO>contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
 
@@ -193,5 +194,26 @@ public class ControladorUsuario {
     public ModelAndView getSaldo(HttpServletRequest request) {
 
         return new ModelAndView("saldo");
+    }
+
+    @Transactional
+    @RequestMapping(path = "/vistaAdministrador", method = RequestMethod.GET)
+    public ModelAndView irAAdmin(HttpServletRequest request) {
+
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuario = (UsuarioDTO) session.getAttribute("USUARIO");
+
+        if (!Usuario.isUserLoggedIn(request) && !usuario.getEsAdmin()) {
+            return new ModelAndView("redirect:/login");
+        }
+
+       List<Usuario>usuariosSuspedidos = servicioUsuario.getusuariosSuspedidos();
+        //servicioUsuario.getProyectosSuspendidos(); ------
+       List<UsuarioDTO>usuariosSuspendidos = Usuario.mapToUsuarioDTOList(usuariosSuspedidos);
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuariosSuspendidos", usuariosSuspendidos);
+
+        return new ModelAndView("vistaAdministrador", modelo);
     }
 }

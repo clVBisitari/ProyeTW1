@@ -110,4 +110,13 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                 .add(Restrictions.like("nombre", "%" + nombreUsuario + "%"))
                 .list();
     }
+
+    @Override
+    public List<Usuario> getUsuariosSuspendidos() {
+        final Session session = sessionFactory.getCurrentSession();
+
+        String hql = "FROM Usuario u WHERE u.enSuspension = true";
+
+        return session.createQuery(hql, Usuario.class).getResultList();
+    }
 }

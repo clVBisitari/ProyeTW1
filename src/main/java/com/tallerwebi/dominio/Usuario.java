@@ -21,6 +21,7 @@ public class Usuario {
     private String apellido;
     private Integer dni;
     private Double saldo;
+    private String motivoDeSuspension;
     @ManyToMany
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
@@ -42,7 +43,12 @@ public class Usuario {
         this.apellido = apellido;
         this.dni = dni;
     }
-
+    public String getMotivoDeSuspension() {
+        return  this.motivoDeSuspension;
+    }
+    public void setMotivoDeSuspension(String motivo) {
+        this.motivoDeSuspension = motivo;
+    }
     public Integer getId() {
         return id;
     }
@@ -174,6 +180,7 @@ public class Usuario {
         return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
     }
 
+
     public static Boolean isAttributeNotNull(HttpSession session, String attributeName){
         return session.getAttribute(attributeName) != null;
     }
@@ -182,9 +189,11 @@ public class Usuario {
         List<UsuarioDTO> usuariosDTO = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
+
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setMotivoDeSuspension(usuario.getMotivoDeSuspension());
             usuarioDTO.setEnSuspension(usuario.getEnSuspension());
             usuariosDTO.add(usuarioDTO);
         }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AssistPyme - Dashboard</title>
+  <!-- custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+</head>
+<body>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Suspensiones</title>
+</head>
+<body>
+<h1>Suspensiones</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nombre</th>
+    <th>Motivo</th>
+    <th>Acciones</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="suspension : ${usuariosSuspendidos}">
+    <td th:text="${suspension.id}">ID</td>
+    <td th:text="${suspension.nombre}">Nombre</td>
+    <td th:text="${suspension.motivoDeSuspension}">Motivo</td>
+    <td>
+      <form th:action="@{/revertir-suspension/usuario/{id}(id=${suspension.id})}" method="post">
+        <input type="hidden" name="usuarioId" th:value="${suspension.id}" />
+        <button class="button__primary" type="submit">Revertir</button>
+      </form>
+      <form th:action="@{/desactivarUsuario}" method="post">
+        <input type="hidden" name="usuarioId" th:value="${suspension.id}" />
+        <button class="button__primary" type="submit">Desactivar</button>
+      </form>
+    </td>
+  </tr>
+  </tbody>
+</table>
+
+<!--<h1>Suspensiones de Proyectos</h1>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>Nombre del Proyecto</th>
+    <th>Motivo</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="suspension : ${suspencionesProyectos}">
+    <td th:text="${suspension.id}">ID</td>
+    <td th:text="${suspension.nombreProyecto}">Nombre del Proyecto</td>
+    <td th:text="${suspension.motivo}">Motivo</td>
+  </tr>
+  </tbody>
+</table>--->
+</body>
+</html>
+
+</body>
+</html>

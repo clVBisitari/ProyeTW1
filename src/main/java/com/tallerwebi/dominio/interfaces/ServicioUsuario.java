@@ -28,6 +28,6 @@ public interface ServicioUsuario {
     public Boolean eliminarUsuario(int idUser);
     List<Usuario> getContactos(String email);
     List<Usuario> getContactosSugeridos(Integer id);
-
     Usuario buscarUsuarioPorId(Integer id);
+    List<Usuario> getusuariosSuspedidos();
 }

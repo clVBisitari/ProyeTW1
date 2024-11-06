@@ -11,6 +11,7 @@ public class UsuarioDTO {
     private String nombre;
     private String apellido;
     private Integer dni;
+    private String motivoDeSuspension;
     private boolean enSuspension;
     private boolean esAdmin;
     private List<UsuarioDTO> contactos;
@@ -31,6 +32,7 @@ public class UsuarioDTO {
         usuario.setDni(usuarioDTO.getDni());
         usuario.setEnSuspension(usuarioDTO.getEnSuspension());
         usuario.setEsAdmin(usuarioDTO.getEsAdmin());
+        usuario.setMotivoDeSuspension(usuarioDTO.getMotivoDeSuspension());
         usuario.setSaldo(usuarioDTO.getSaldo());
 
         return usuario;
@@ -51,7 +53,12 @@ public class UsuarioDTO {
 
         return usuarioDTO;
     }
-
+    public String getMotivoDeSuspension() {
+        return  this.motivoDeSuspension;
+    }
+    public void setMotivoDeSuspension(String motivo) {
+        this.motivoDeSuspension = motivo;
+    }
     public void setId(Integer id) {
         this.id = id;
     }

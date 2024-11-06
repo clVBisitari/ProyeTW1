@@ -97,6 +97,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
          Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
         if (usuario != null) {
             usuario.setEnSuspension(true);
+            usuario.setMotivoDeSuspension(motivo);
             repositorioUsuario.modificar(usuario);
             return true;
         }
@@ -120,6 +121,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
             Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
             if (usuario != null) {
                 usuario.setEnSuspension(false);
+                usuario.setMotivoDeSuspension("");
                 repositorioUsuario.modificar(usuario);
                 return true;
             }
@@ -168,6 +170,12 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public Usuario buscarUsuarioPorId(Integer id) {
         return repositorioUsuario.buscarUsuarioPorId(id);
+    }
+
+    @Override
+    public List<Usuario> getusuariosSuspedidos() {
+        List<Usuario> usuariosSuspendidos = repositorioUsuario.getUsuariosSuspendidos();
+        return usuariosSuspendidos;
     }
 
 }
