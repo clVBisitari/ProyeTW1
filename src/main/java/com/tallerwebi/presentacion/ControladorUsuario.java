@@ -141,6 +141,32 @@ public class ControladorUsuario {
 
         return "redirect:/contactos";
     }
+    @RequestMapping(path = "/eliminar/contacto/{id}", method = RequestMethod.POST)
+    public String elmininarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        Usuario usuarioQueElimina = servicioUsuario.getUsuarioById(usuarioDTO.getId());
+        Usuario usuarioAEliminar = servicioUsuario.getUsuarioById(id);
+
+        servicioUsuario.eliminarUsuarioDeContactos(usuarioQueElimina, usuarioAEliminar);
+
+        return "redirect:/contactos";
+    }
+    @RequestMapping(path = "/cambiarEstado/usuario/{id}", method = RequestMethod.POST)
+    public String cambiarEstadoUsuario(@PathVariable("id") Integer id, HttpServletRequest request) throws Exception {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+        Usuario usuario = servicioUsuario.getUsuarioById(id);
+        servicioUsuario.cambiarEstadoUsuario(usuario);
+        return "redirect:/vistaAdministrador";
+        }
+
 
 
     @RequestMapping(path = "/buscar/contacto", method = RequestMethod.POST)
@@ -207,7 +233,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
 
-       List<Usuario>usuariosSuspedidos = servicioUsuario.getusuariosSuspedidos();
+       List<Usuario>usuariosSuspedidos = servicioUsuario.getUsuariosSuspedidos();
         //servicioUsuario.getProyectosSuspendidos(); ------
        List<UsuarioDTO>usuariosSuspendidos = Usuario.mapToUsuarioDTOList(usuariosSuspedidos);
         ModelMap modelo = new ModelMap();

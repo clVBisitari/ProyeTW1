@@ -16,6 +16,7 @@ public interface RepositorioUsuario {
     List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
 
     List<Usuario> getUsuariosSuspendidos();
+
 }
 
 

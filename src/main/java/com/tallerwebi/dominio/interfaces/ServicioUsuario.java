@@ -25,9 +25,12 @@ public interface ServicioUsuario {
     Boolean revertirSuspensionProyecto(int idProyectoInversion);
     Boolean revertirSuspensionUsuario(int idUsuario);
     public Boolean eliminarPublicacion(int idProyectoInver);
-    public Boolean eliminarUsuario(int idUser);
+    public Boolean eliminarUsuario(int idUser) throws Exception;
     List<Usuario> getContactos(String email);
     List<Usuario> getContactosSugeridos(Integer id);
     Usuario buscarUsuarioPorId(Integer id);
-    List<Usuario> getusuariosSuspedidos();
+    List<Usuario> getUsuariosSuspedidos();
+    Boolean eliminarUsuarioDeContactos(Usuario usuarioQueElimina, Usuario usuarioAEliminar);
+
+    void cambiarEstadoUsuario(Usuario usuario) throws Exception;
 }

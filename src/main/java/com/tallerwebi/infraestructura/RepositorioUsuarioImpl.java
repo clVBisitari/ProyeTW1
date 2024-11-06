@@ -119,4 +119,5 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
         return session.createQuery(hql, Usuario.class).getResultList();
     }
+
 }

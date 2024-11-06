@@ -22,6 +22,7 @@ public class Usuario {
     private Integer dni;
     private Double saldo;
     private String motivoDeSuspension;
+    private Boolean estaActivo = true;
     @ManyToMany
     @JoinColumn(name = "usuario_id")
     private List<Usuario>contactos;
@@ -145,6 +146,14 @@ public class Usuario {
         this.proyecto = proyecto;
     }
 
+    public Boolean getEstaActivo() {
+        return this.estaActivo;
+    }
+
+    public void setEstaActivo(Boolean activo) {
+        this.estaActivo = activo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -195,6 +204,7 @@ public class Usuario {
             usuarioDTO.setEmail(usuario.getEmail());
             usuarioDTO.setMotivoDeSuspension(usuario.getMotivoDeSuspension());
             usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+            usuarioDTO.setEstaActivo(usuario.getEstaActivo());
             usuariosDTO.add(usuarioDTO);
         }
         return usuariosDTO;

@@ -14,6 +14,7 @@ public class UsuarioDTO {
     private String motivoDeSuspension;
     private boolean enSuspension;
     private boolean esAdmin;
+    private boolean estaActivo;
     private List<UsuarioDTO> contactos;
     private Double saldo;
 
@@ -50,9 +51,26 @@ public class UsuarioDTO {
         usuarioDTO.setEnSuspension(usuario.getEnSuspension());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
         usuarioDTO.setSaldo(usuario.getSaldo());
-
+        usuarioDTO.setEstaActivo(usuario.getEstaActivo());
         return usuarioDTO;
     }
+
+    public boolean isEsAdmin() {
+        return esAdmin;
+    }
+
+    public boolean isEnSuspension() {
+        return enSuspension;
+    }
+
+    public boolean isEstaActivo() {
+        return estaActivo;
+    }
+
+    public void setEstaActivo(boolean estaActivo) {
+        this.estaActivo = estaActivo;
+    }
+
     public String getMotivoDeSuspension() {
         return  this.motivoDeSuspension;
     }
