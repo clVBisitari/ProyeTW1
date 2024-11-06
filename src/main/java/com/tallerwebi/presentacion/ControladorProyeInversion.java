@@ -1,16 +1,14 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.ServicioProyectoInversion;
+import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -23,12 +21,14 @@ public class ControladorProyeInversion {
         this.servicioProyectoInversion = proyectoInversion;
     }
 
-    @RequestMapping(path= "/proyectosPorUsuario", method = RequestMethod.GET)
-    public ModelAndView getListaProyectosPorUsuario(@RequestParam Integer idUsuario){
+
+    @RequestMapping(path= "/inversiones", method = RequestMethod.GET)
+    public ModelAndView getListaProyectosPorUsuario(HttpServletRequest request){
         ModelMap model = new ModelMap();
-        List<ProyectoInversion> proyectosResult = this.servicioProyectoInversion.getProyectosUsuario(idUsuario);
+        Integer userId = (Integer) request.getSession().getAttribute("idUsuario");
+        List<ProyectoInversion> proyectosResult = this.servicioProyectoInversion.getProyectosUsuario(userId);
         model.put("proyectos", proyectosResult);
-        return new ModelAndView("proyectosPorUsuario", model);
+        return new ModelAndView("inversiones", model);
     }
 
     @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
@@ -38,6 +38,13 @@ public class ControladorProyeInversion {
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.buscarProyectoInversion(nombre);
         model.put("response", proyectos);
         return new ModelAndView("redirect:inversiones", model);
+    }
+
+
+    @RequestMapping(path = "/crearProyeInversion", method = RequestMethod.GET)
+    public ModelAndView crearProyectoInversion(){
+        ModelMap model = new ModelMap();
+        return new ModelAndView("creacionInversiones", model);
     }
 
     @RequestMapping(path = "/guardarProyeInversion", method = RequestMethod.POST)

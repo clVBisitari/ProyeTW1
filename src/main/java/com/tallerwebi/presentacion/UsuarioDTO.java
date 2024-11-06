@@ -1,84 +1,127 @@
 package com.tallerwebi.presentacion;
-import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 public class UsuarioDTO {
 
-    private Long id;
+    private Integer id;
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
+    private boolean enSuspension;
+    private boolean esAdmin;
+    private List<UsuarioDTO> contactos;
     private Double saldo;
-    private List<UsuarioDTO> contactos; /// lo quiero mostrar?
-    //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
-    private ProyectoInversion proyecto;
-    public Long getId() {
-        return id;
+
+    public UsuarioDTO() {
+
     }
 
-    public void setId(Long id) {
+    public static Usuario convertDTOToUsuario(UsuarioDTO usuarioDTO){
+
+        Usuario usuario = new Usuario();
+
+        usuario.setId(usuarioDTO.getId());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setDni(usuarioDTO.getDni());
+        usuario.setEnSuspension(usuarioDTO.getEnSuspension());
+        usuario.setEsAdmin(usuarioDTO.getEsAdmin());
+        usuario.setSaldo(usuarioDTO.getSaldo());
+
+        return usuario;
+    }
+
+    public static UsuarioDTO convertUsuarioToDTO(Usuario usuario){
+
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+
+        usuarioDTO.setId(usuario.getId());
+        usuarioDTO.setEmail(usuario.getEmail());
+        usuarioDTO.setNombre(usuario.getNombre());
+        usuarioDTO.setApellido(usuario.getApellido());
+        usuarioDTO.setDni(usuario.getDni());
+        usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+        usuarioDTO.setEsAdmin(usuario.getEsAdmin());
+        usuarioDTO.setSaldo(usuario.getSaldo());
+
+        return usuarioDTO;
+    }
+
+    public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
-    public String getNombre() {
-        return nombre;
-    }
-
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
     }
 
     public void setApellido(String apellido) {
         this.apellido = apellido;
     }
 
-    public Integer getDni() {
-        return dni;
-    }
-
     public void setDni(Integer dni) {
         this.dni = dni;
     }
 
-    public Double getSaldo() {
-        return saldo;
+    public void setEnSuspension(boolean enSuspension) {
+        this.enSuspension = enSuspension;
     }
 
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
-
-    public List<UsuarioDTO> getContactos() {
-        return contactos;
+    public void setEsAdmin(boolean esAdmin) {
+        this.esAdmin = esAdmin;
     }
 
     public void setContactos(List<UsuarioDTO> contactos) {
         this.contactos = contactos;
     }
 
-    public ProyectoInversion getProyecto() {
-        return proyecto;
+    public void setSaldo(Double saldo) {
+        this.saldo = saldo;
     }
 
-    public void setProyecto(ProyectoInversion proyecto) {
-        this.proyecto = proyecto;
+    public Integer getId() {
+        return id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public Integer getDni() {
+        return dni;
+    }
+
+    public boolean getEnSuspension() {
+        return enSuspension;
+    }
+
+    public boolean getEsAdmin() {
+        return esAdmin;
+    }
+
+    public List<UsuarioDTO> getContactos() {
+        return contactos;
+    }
+
+    public Double getSaldo() {
+        return saldo;
     }
 
     @Override
@@ -86,11 +129,26 @@ public class UsuarioDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UsuarioDTO that = (UsuarioDTO) o;
-        return Objects.equals(id, that.id) && Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni) && Objects.equals(saldo, that.saldo) && Objects.equals(contactos, that.contactos) && Objects.equals(proyecto, that.proyecto);
+        return Objects.equals(email, that.email) && Objects.equals(nombre, that.nombre) && Objects.equals(apellido, that.apellido) && Objects.equals(dni, that.dni);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, proyecto);
+        return Objects.hash(email, nombre, apellido, dni);
+    }
+
+    @Override
+    public String toString() {
+        return "UsuarioDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", apellido='" + apellido + '\'' +
+                ", dni=" + dni +
+                ", enSuspension=" + enSuspension +
+                ", esAdmin=" + esAdmin +
+                ", contactos=" + contactos +
+                ", saldo=" + saldo +
+                '}';
     }
 }

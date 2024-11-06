@@ -1,4 +1,6 @@
-package com.tallerwebi.dominio;
+package com.tallerwebi.dominio.interfaces;
+import com.tallerwebi.dominio.ProyectoInversion;
+
 import java.util.List;
 
  public interface RepositorioProyeInversion {

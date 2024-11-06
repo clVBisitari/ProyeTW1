@@ -1,6 +1,11 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.presentacion.UsuarioDTO;
+
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,22 +15,33 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(unique = true)
     private String email;
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
-    @OneToMany
+    @ManyToMany
     @JoinColumn(name = "usuario_id")
-
     private List<Usuario>contactos;
     private String password;
-    private Boolean esAdmin;
-    private Boolean enSuspencion;
-   @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
+    private Boolean esAdmin = false;
+    private Boolean enSuspension = false;
+    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
-   ///private List<Inversion>
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
+    private GestorDeGastos gestorDeGastos;
+    ///private List<Inversion>
 
+    public Usuario(){}
+
+    public Usuario(String email, String password, String nombre, String apellido, Integer dni) {
+        this.email = email;
+        this.password = password;
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.dni = dni;
+    }
 
     public Integer getId() {
         return id;
@@ -33,6 +49,14 @@ public class Usuario {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public GestorDeGastos getGestorDeGastos() {
+        return gestorDeGastos;
+    }
+
+    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
+        this.gestorDeGastos = gestorDeGastos;
     }
 
     public String getEmail() {
@@ -86,6 +110,7 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -98,12 +123,12 @@ public class Usuario {
         this.esAdmin = esAdmin;
     }
 
-    public Boolean getEnSuspencion() {
-        return enSuspencion;
+    public Boolean getEnSuspension() {
+        return enSuspension;
     }
 
-    public void setEnSuspencion(Boolean enSuspencion) {
-        this.enSuspencion = enSuspencion;
+    public void setEnSuspension(Boolean enSuspencion) {
+        this.enSuspension = enSuspencion;
     }
 
     public ProyectoInversion getProyecto() {
@@ -119,12 +144,12 @@ public class Usuario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspencion, usuario.enSuspencion) && Objects.equals(proyecto, usuario.proyecto);
+        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspension, usuario.enSuspension) && Objects.equals(proyecto, usuario.proyecto);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspencion, proyecto);
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspension, proyecto);
     }
 
     @Override
@@ -139,8 +164,30 @@ public class Usuario {
                 ", contactos=" + contactos +
                 ", password='" + password + '\'' +
                 ", esAdmin=" + esAdmin +
-                ", enSuspencion=" + enSuspencion +
+                ", enSuspencion=" + enSuspension +
                 ", proyecto=" + proyecto +
                 '}';
+    }
+    public static boolean isUserLoggedIn(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
+    }
+
+    public static Boolean isAttributeNotNull(HttpSession session, String attributeName){
+        return session.getAttribute(attributeName) != null;
+    }
+
+    public static List<UsuarioDTO> mapToUsuarioDTOList(List<Usuario> usuarios) {
+        List<UsuarioDTO> usuariosDTO = new ArrayList<>();
+        for (Usuario usuario : usuarios) {
+            UsuarioDTO usuarioDTO = new UsuarioDTO();
+            usuarioDTO.setId(usuario.getId());
+            usuarioDTO.setNombre(usuario.getNombre());
+            usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+            usuariosDTO.add(usuarioDTO);
+        }
+        return usuariosDTO;
     }
 }

@@ -1,22 +1,29 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.excepcion.ContactoExistente;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service("servicioUsuario")
 @Transactional
 
-public class ServicioUsuarioImpl implements ServicioUsuario{
+public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private RepositorioUsuario repositorioUsuario;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario){
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
         this.repositorioUsuario = repositorioUsuario;
+    }
+
+    @Override
+    public Usuario getUsuarioById(Integer id){
+        return this.repositorioUsuario.buscarUsuarioPorId(id);
     }
 
     @Override
@@ -44,14 +51,20 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
         return null;
     }
 
-    @Override
-    public Usuario buscarUsuarioPorNombre(String nombreUsuario) {
-        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
-    }
 
     @Override
-    public Boolean agregarUsuarioAContactos(Usuario usuarioAGuardar) {
-        return null;
+    public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
+        List<Usuario> contactos = usuarioQueGuarda.getContactos();
+
+        for (Usuario contacto : contactos) {
+            if (Objects.equals(contacto.getId(), usuarioAGuardar.getId())) {
+                throw new ContactoExistente("este contacto ya esta en tu lista");
+            }
+        }
+        contactos.add(usuarioAGuardar);
+        usuarioQueGuarda.setContactos(contactos);
+        repositorioUsuario.modificar(usuarioQueGuarda);
+        return true;
     }
 
     @Override
@@ -80,15 +93,19 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public void suspenderUsuario(String motivo, int idUser) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUser);
-        usuario.setEnSuspencion(true);
-        repositorioUsuario.modificar(usuario);
+    public Boolean suspenderUsuario(String motivo, int idUser) {
+         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUser);
+        if (usuario != null) {
+            usuario.setEnSuspension(true);
+            repositorioUsuario.modificar(usuario);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public List<Usuario> buscarUsuario(Usuario nombreUsuario) {
-        return List.of();
+    public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
+        return repositorioUsuario.buscarUsuarioPorNombre(nombreUsuario);
     }
 
 
@@ -99,11 +116,15 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     }
 
     @Override
-    public void revertirSuspensionUsuario(int idUsuario) {
-        Usuario usuario = repositorioUsuario.buscarUsuarioPorId( idUsuario);
-        usuario.setEnSuspencion(false);
-        repositorioUsuario.modificar(usuario);
-    }
+    public Boolean revertirSuspensionUsuario(int idUsuario) {
+            Usuario usuario = repositorioUsuario.buscarUsuarioPorId(idUsuario);
+            if (usuario != null) {
+                usuario.setEnSuspension(false);
+                repositorioUsuario.modificar(usuario);
+                return true;
+            }
+            return false;
+        }
 
     @Override
     public Boolean eliminarPublicacion(int idProyectoInver) {
@@ -119,7 +140,34 @@ public class ServicioUsuarioImpl implements ServicioUsuario{
     public List<Usuario> getContactos(String email) {
 
         return repositorioUsuario.obtenerContactos(email);
-
-
     }
+
+    @Override
+    public List<Usuario> getContactosSugeridos(Integer id) {
+        List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
+        List<Usuario> contactosSugeridos = new ArrayList<>();
+
+     /*   Random random = new Random();
+
+        for (Usuario contacto : contactos) {
+            List<Usuario> contactosDeContacto = contacto.getContactos();
+
+            if (!contactosDeContacto.isEmpty()) {
+                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
+                if (contactoAleatorio.getId() != id) {
+                    contactosSugeridos.add(contactoAleatorio);
+                }
+            }
+        }
+
+        return contactosSugeridos;
+*/
+        return contactos;
+    }
+
+    @Override
+    public Usuario buscarUsuarioPorId(Integer id) {
+        return repositorioUsuario.buscarUsuarioPorId(id);
+    }
+
 }

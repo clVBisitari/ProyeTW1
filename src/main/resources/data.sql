@@ -1,15 +1,11 @@
--- Insertar el primer usuario (admin)
-INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'admin@user.com', 'Admin', 'Cero', 123456789, 91865.7, 'admin', true, false);
-
--- Insertar el segundo usuario (Diego)
-INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'diego@user.com', 'Diego', 'Uno', 23456789, 0.0, 'diego', false, false);
-
--- Insertar el tercer usuario (Mariano)
-INSERT INTO Usuario (id, email, nombre, apellido, dni, saldo, password, esAdmin, enSuspencion)
-VALUES (null, 'mariano@user.com', 'Mariano', 'Dos', 34567890, 0.0, 'mariano', false, false);
-
--- Actualizar los usuarios para relacionarlos con el primer usuario (admin)
-UPDATE Usuario SET usuario_id = 1 WHERE id = 2;
-UPDATE Usuario SET usuario_id = 1 WHERE id = 3;
+-- Insertar múltiples usuarios en una sola línea con ON CONFLICT DO NOTHING
+INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password, esAdmin, enSuspension)
+VALUES
+   ('test@unlam.edu.ar', 'Juan', 'Perez', 38498777, 10500.0, 'test', true, false),
+   ('contacto1@unlam.edu.ar', 'Diego', 'Uno', 23456789, 500.0, 'password1', false, false),
+   ('contacto2@unlam.edu.ar', 'Mariano', 'Dos', 34567890, 700.0, 'password2', false, false),
+   ('contacto3@unlam.edu.ar', 'Marcos', 'Tres', 16558244, 8000.0, 'password3', false, false),
+   ('contacto4@unlam.edu.ar', 'Pedro', 'Cuatro', 38498798, 9888.0, 'password4', false, false),
+   ('contacto5@unlam.edu.ar', 'Alejandro', 'Cinco', 2345644, 745.0, 'password5', false, false),
+   ('contacto6@unlam.edu.ar', 'Ivan', 'Seis', 34567666, 7888.0, 'password6', false, false)
+ON CONFLICT DO NOTHING;

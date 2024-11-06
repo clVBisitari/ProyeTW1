@@ -41,6 +41,15 @@ public class Gasto {
         this.descripcion = descripcion;
         this.valor = valor;
         this.fechaVencimiento = fechaVencimiento;
+        this.frecuencia = frecuencia;
+    }
+
+    public Gasto(String descripcion, double valor, Date fechaVencimiento, Date fechaRecordatorio, Frecuencia frecuencia) {
+        this.descripcion = descripcion;
+        this.valor = valor;
+        this.fechaVencimiento = fechaVencimiento;
+        this.fechaRecordatorio = fechaRecordatorio;
+        this.frecuencia = frecuencia;
     }
 
 
@@ -91,6 +100,17 @@ public class Gasto {
         return frecuencia;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
 /*    public void setGestorId(Long gestorId) {
         this.gestorId = gestorId;
     }
