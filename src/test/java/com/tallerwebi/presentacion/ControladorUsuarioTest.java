@@ -150,7 +150,7 @@ public class ControladorUsuarioTest {
 
         verify(redirectAttributesMock).addFlashAttribute("mensaje", "Suspensión revertida");
 
-        assertThat(resultado, is("redirect:/contactos"));
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
     }
 
     @Test
