@@ -228,7 +228,7 @@ public class ControladorUsuario {
     @RequestMapping(path = "/vistaAdministrador", method = RequestMethod.GET)
     public ModelAndView irAAdmin(HttpServletRequest request) {
 
-        if (!Usuario.isUserLoggedIn(request) || !Usuario.IsAdmin(request)) {
+        if (!Usuario.isUserLoggedIn(request) || !Usuario.isAdmin(request)) {
             return new ModelAndView("redirect:/login");
         }
 

@@ -152,6 +152,7 @@ public class ControladorUsuarioTest {
 
         assertThat(resultado, is("redirect:/vistaAdministrador"));
     }
+
     @Test
     public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeAccederAlaVistaAdministrador() {
 
@@ -160,28 +161,26 @@ public class ControladorUsuarioTest {
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
         when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
-
-
-        // Simulación de que el usuario está logueado
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
         when(usuarioDTOMock.getId()).thenReturn(1);
+
+        // Simulación de que el usuario está logueado y es admin
         when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
 
         // Usuarios a ser guardados
-        Usuario usuarioQueGuarda = new Usuario();
-        usuarioQueGuarda.setId(1);
-
-        Usuario usuarioAGuardar = new Usuario();
-        usuarioAGuardar.setId(2);
+        List<Usuario> usuariosSuspendidos = new ArrayList<>();
+        usuariosSuspendidos.add(new Usuario());
+        usuariosSuspendidos.add(new Usuario());
+        usuariosSuspendidos.add(new Usuario());
 
         // Mock de servicios
-        when(servicioUsuarioMock.getUsuarioById(usuarioDTOMock.getId())).thenReturn(usuarioQueGuarda);
-        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioAGuardar);
-        when(servicioUsuarioMock.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar)).thenReturn(true);
+        when(servicioUsuarioMock.getUsuariosSuspedidos()).thenReturn(usuariosSuspendidos);
+        List<UsuarioDTO> usuariosSuspendidosDTO=  Usuario.mapToUsuarioDTOList(usuariosSuspendidos);
+        ModelAndView mav = controladorUsuario.irAAdmin(requestMock);
 
-        String vistaRedirigida = controladorUsuario.agregarContacto(16, requestMock);
-
-        assertThat(vistaRedirigida, equalTo("redirect:/contactos"));
-        verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+        assertThat(mav.getViewName(), equalToIgnoringCase("vistaAdministrador"));
+        assertThat(mav.getModel().get("usuariosSuspendidos"), equalTo(usuariosSuspendidosDTO));
     }
 
     @Test
