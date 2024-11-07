@@ -153,11 +153,46 @@ public class ControladorUsuarioTest {
         assertThat(resultado, is("redirect:/vistaAdministrador"));
     }
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeDesactivarAUsuariosSuspendidos() {
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeDesactivarAUsuariosSuspendidos() throws Exception {
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
+        when(usuarioDTOMock.getId()).thenReturn(1);
+
+        Usuario usuarioADesactivar = new Usuario();
+        usuarioADesactivar.setId(2);
+
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
+        when(servicioUsuarioMock.getUsuarioById(2)).thenReturn(usuarioADesactivar);
+
+        String resultado = controladorUsuario.cambiarEstadoUsuario(2, requestMock);
+        verify(servicioUsuarioMock).cambiarEstadoUsuario(usuarioADesactivar);
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
 
     }
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeReactivarAUsuariosSuspendidos() {
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeReactivarAUsuariosSuspendidos() throws Exception {
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
+        when(usuarioDTOMock.getId()).thenReturn(1);
+
+        Usuario usuarioAActivar = new Usuario();
+        usuarioAActivar.setId(2);
+        usuarioAActivar.setEstaActivo(false);
+
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
+        when(servicioUsuarioMock.getUsuarioById(2)).thenReturn(usuarioAActivar);
+
+        String resultado = controladorUsuario.cambiarEstadoUsuario(2, requestMock);
+        verify(servicioUsuarioMock).cambiarEstadoUsuario(usuarioAActivar);
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
 
     }
 

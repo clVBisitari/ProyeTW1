@@ -138,11 +138,14 @@ public class ServicioUsuarioTest {
 
     @Test
     public void siDesactivoUnUsuarioSuEstadoActivoCambiaAFalse(){
-
+        Usuario usuarioActivo = dadoQueHayUnUsuarioActivo();
+        puedoCambiarElEstadoAFalse(usuarioActivo);
     }
+
     @Test
     public void siActivoUnUsuarioSuEstadoActivoCambiaATrue(){
-
+        Usuario usuarioNoActivo = dadoQueHayUnUsuarioNoActivo();
+        puedoCambiarElEstadoATrue(usuarioNoActivo);
     }
 
     private void obtengoUnaListaDeContactos(List<Usuario> contactos) {
@@ -211,6 +214,30 @@ public class ServicioUsuarioTest {
 
     private void obtengoUnaListaVacia(List<Usuario> listado) {
         assertThat(listado.size(), equalTo(0));
+    }
+    private void puedoCambiarElEstadoAFalse(Usuario usuarioActivo) {
+        usuarioActivo.setEstaActivo(false);
+        repositorioUsuarioMock.modificar(usuarioActivo);
+        assertThat(usuarioActivo.getEstaActivo(), equalTo(false));
+    }
+
+    private Usuario dadoQueHayUnUsuarioActivo() {
+        Usuario userActivo = new Usuario();
+        userActivo.setEstaActivo(true);
+        when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userActivo);
+        return userActivo;
+    }
+    private Usuario dadoQueHayUnUsuarioNoActivo() {
+        Usuario userNoActivo = new Usuario();
+        userNoActivo.setEstaActivo(false);
+        when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userNoActivo);
+        return userNoActivo;
+    }
+
+    private void puedoCambiarElEstadoATrue(Usuario usuarioNoActivo) {
+        usuarioNoActivo.setEstaActivo(true);
+        repositorioUsuarioMock.modificar(usuarioNoActivo);
+        assertThat(usuarioNoActivo.getEstaActivo(), equalTo(true));
     }
 
 }
