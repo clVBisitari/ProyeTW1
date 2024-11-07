@@ -15,9 +15,9 @@
   <title>Suspensiones</title>
 </head>
 
-<div th:include="fragments :: navegadorLateral"></div>
 
 <body>
+
 <h1>Suspensiones</h1>
 <table>
   <thead>
@@ -34,18 +34,16 @@
     <td th:text="${suspension.nombre}">Nombre</td>
     <td th:text="${suspension.motivoDeSuspension}">Motivo</td>
     <td>
+      <!-- Botón para revertir la suspensión, visible solo si el usuario está activo -->
       <form th:action="@{/revertir-suspension/usuario/{id}(id=${suspension.id})}" method="post">
         <input type="hidden" name="usuarioId" th:value="${suspension.id}" />
-        <button class="button__primary" type="submit" th:if="${!suspension.estaActivo}">Revertir Suspensión</button>
+        <button class="button__primary" type="submit" th:if="${suspension.estaActivo}">Revertir Suspensión</button>
       </form>
 
-      <!-- Formulario para desactivar o reactivar el usuario -->
+      <!-- Botones para desactivar o reactivar el usuario -->
       <form th:action="@{/cambiarEstado/usuario/{id}(id=${suspension.id})}" method="post">
-        <!-- Si el usuario está suspendido (estaActivo = false), se muestra el botón "Reactivar" -->
-        <button class="button__primary" type="submit" th:if="${!suspension.estaActivo}">Reactivar</button>
-
-        <!-- Si el usuario no está suspendido (estaActivo = true), se muestra el botón "Desactivar" -->
         <button class="button__primary" type="submit" th:if="${suspension.estaActivo}">Desactivar</button>
+        <button class="button__primary" type="submit" th:if="${!suspension.estaActivo}">Reactivar</button>
       </form>
     </td>
   </tr>

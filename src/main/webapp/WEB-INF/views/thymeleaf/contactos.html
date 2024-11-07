@@ -33,42 +33,28 @@
             <img class="contacts__img" th:src="@{img/perfil.jpg}" alt="foto de perfil-contacto"/>
             <p class="contacts__text" th:text="${contactoEncontrado.nombre}">Usuario</p>
 
-        <div th:if="${usuarioActual != null}">
-
-
-            <div th:if="${usuarioActual.esAdmin}"> <!-- Verificar si el usuario actual es admin -->
                 <div th:if="${contactoEncontrado?.enSuspension == false}">
                     <form th:action="@{/suspender/usuario/{id}(id=${contactoEncontrado.id})}" method="post" style="display:flex;justify-content: center; align-items: center">
                         <textarea name="motivo" id="contactoEcontrado" cols="30" rows="2.5" placeholder="motivo de suspension"></textarea>
                         <button class="button__primary" type="submit">Suspender Usuario</button>
                     </form>
                 </div>
-                <div th:if="${contactoEncontrado?.enSuspension == true}">
-                        <p class="error" th:if="${contactoEncontrado.enSuspension}" th:text="${mensaje}"></p>
-                </div>
-                <div th:if="${contactoEncontrado != null && mensajeContactoEnLista == null}">
+            <div th:if="${ mensajeContactoEnLista != null}">
+            <form th:action="@{/eliminar/contacto/{id}(id=${contactoEncontrado.id})}" method="post">
+                <button class="button__primary" type="submit">Eliminar Usuario</button>
+            </form>
+            </div>
+                <div th:if="${ mensajeContactoEnLista == null && !contactoEncontrado.enSuspension}">
                     <form th:action="@{/agregar/contacto/{id}(id=${contactoEncontrado.id})}" method="post"style="display:flex;justify-content: center; align-items: center">
                         <button class="button__primary" type="submit">Agregar Usuario</button>
                     </form>
                 </div>
-            </div>
-        </div>
+            <div th:if="${contactoEncontrado?.enSuspension == true}">
+                <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
 
-
-
-        <div th:if="${usuarioActual != null}">
-            <div th:if="${!usuarioActual.esAdmin}"> <!-- Verificar si el usuario actual no es admin -->
-                <div th:if="${contactoEncontrado != null && mensajeContactoEnLista != null}">
-                    <form th:action="@{/agregar/contacto/{id}(id=${contactoEncontrado.id})}" method="post"style="display:flex;justify-content: center; align-items: center">
-                        <button class="button__primary" type="submit">Agregar Usuario</button>
-                    </form>
-                </div>
-            </div>
-        </div>
+             </div>
 
         </article>
-
-
     </aside>
 
     <aside th:if="${mensajeContactoNoEncontrado}">
@@ -101,7 +87,7 @@
                     </form>
                 </div>
 
-                <div th:if="${usuarioActual.esAdmin && contacto.enSuspension}" style="display:flex;justify-content: center; align-items: center">
+                <div th:if="${contacto.enSuspension}" style="display:flex;justify-content: center; align-items: center">
                     <form th:action="@{/eliminar/contacto/{id}(id=${contacto.id})}" method="post">
                         <button class="button__primary" type="submit">Eliminar Usuario</button>
                     </form>

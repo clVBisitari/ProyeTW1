@@ -148,9 +148,10 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public List<Usuario> getContactosSugeridos(Integer id) {
         List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
-        List<Usuario> contactosSugeridos = new ArrayList<>();
 
-     /*   Random random = new Random();
+        /*  List<Usuario> contactosSugeridos = new ArrayList<>();
+
+      Random random = new Random();
 
         for (Usuario contacto : contactos) {
             List<Usuario> contactosDeContacto = contacto.getContactos();
