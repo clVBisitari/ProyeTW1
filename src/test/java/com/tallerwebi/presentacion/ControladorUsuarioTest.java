@@ -122,7 +122,7 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro() {
+    public void dadoQueExisteUnUsuarioLogueadoPuedeSuspenderAOtro() {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         usuarioASuspender.setNombre("Alexi");
@@ -138,7 +138,7 @@ public class ControladorUsuarioTest {
 
 
     @Test
-    public void dadoQueSeRevierteLaSuspensionSeMuestraMensajeExitoso() {
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeRevertirUnaSuspension() {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
@@ -151,6 +151,14 @@ public class ControladorUsuarioTest {
         verify(redirectAttributesMock).addFlashAttribute("mensaje", "Suspensión revertida");
 
         assertThat(resultado, is("redirect:/vistaAdministrador"));
+    }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeDesactivarAUsuariosSuspendidos() {
+
+    }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeReactivarAUsuariosSuspendidos() {
+
     }
 
     @Test
