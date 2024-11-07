@@ -69,7 +69,7 @@
 
 
         <!---------------------------------------   Contactos   --------------------------------------->
-        <aside th:if="${contactos != null}" >
+        <aside >
             <h3 class="contacts__atitle">Contactos</h3>
             <div th:each="contacto : ${contactos}" style="display:flex;justify-content: center; align-items: center">
                 <article class="contacts__article">
@@ -77,7 +77,7 @@
                     <p class="contacts__text" th:text="${contacto.nombre}">Usuario</p>
                 </article>
 
-                <div th:if="${usuarioActual.esAdmin && !contacto.enSuspension}" style="display:flex;justify-content: center; align-items: center">
+                <div th:if="${!contacto.enSuspension}" style="display:flex;justify-content: center; align-items: center">
                     <form th:action="@{/suspender/usuario/{id}(id=${contacto.id})}" method="post"style="display:flex;justify-content: center; align-items: center">
                         <textarea name="motivo" id="" cols="30" rows="2.5" placeholder="motivo de suspension"></textarea>
                         <button class="button__primary" type="submit">Suspender Usuario</button>
@@ -98,11 +98,11 @@
                 </div>
             </div>
         </aside>
-        <!---------------------------------------   Contactos   --------------------------------------->
+        <!---------------------------------------   /Contactos   --------------------------------------->
 
         <!---------------------------------------   Contactos   SUGERIDOS--------------------------------------->
 
-        <aside class="contacts__aside" th:if="${contactosSugeridos != null}">
+        <aside class="contacts__aside">
             <h3 class="contacts__atitle">Contactos Sugeridos</h3>
             <div th:each="contactoSugerido : ${contactosSugeridos}" style="display:flex;justify-content: center; align-items: center">
 
@@ -112,7 +112,7 @@
                     <p class="contacts__text" th:text="${contactoSugerido.nombre}">Usuario</p>
                 </article>
 
-                <div th:if="${usuarioActual.esAdmin && !contactoSugerido.enSuspension}" style="display:flex;justify-content: center; align-items: center">
+                <div th:if="${!contactoSugerido.enSuspension}" style="display:flex;justify-content: center; align-items: center">
                     <form th:action="@{/agregar/contacto/{id}(id=${contactoSugerido.id})}" method="post">
                         <button class="button__primary" type="submit">Agregar Usuario</button>
                     </form>
@@ -121,7 +121,7 @@
                         <button class="button__primary" type="submit">Suspender Usuario</button>
                     </form>
                 </div>
-                <div th:if="${usuarioActual.esAdmin && contactoSugerido.enSuspension}">
+                <div th:if="${contactoSugerido.enSuspension}">
                     <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
                 </div>
 

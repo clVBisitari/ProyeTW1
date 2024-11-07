@@ -203,6 +203,10 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
 
         usuarioCambio.setEstaActivo(!usuarioCambio.getEstaActivo());
+
+        if(usuarioCambio.getEstaActivo() && !usuarioCambio.getEnSuspension()){ /// agrego ultima parte para limpiar motivo previo
+           usuarioCambio.setMotivoDeSuspension("");
+        }
         repositorioUsuario.modificar(usuarioCambio);
     }
 }
