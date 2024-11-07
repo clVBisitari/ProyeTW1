@@ -152,6 +152,37 @@ public class ControladorUsuarioTest {
 
         assertThat(resultado, is("redirect:/vistaAdministrador"));
     }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeAccederAlaVistaAdministrador() {
+
+        // Mock de la sesión y los atributos de la sesión
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+
+
+        // Simulación de que el usuario está logueado
+        when(usuarioDTOMock.getId()).thenReturn(1);
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+
+        // Usuarios a ser guardados
+        Usuario usuarioQueGuarda = new Usuario();
+        usuarioQueGuarda.setId(1);
+
+        Usuario usuarioAGuardar = new Usuario();
+        usuarioAGuardar.setId(2);
+
+        // Mock de servicios
+        when(servicioUsuarioMock.getUsuarioById(usuarioDTOMock.getId())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioAGuardar);
+        when(servicioUsuarioMock.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar)).thenReturn(true);
+
+        String vistaRedirigida = controladorUsuario.agregarContacto(16, requestMock);
+
+        assertThat(vistaRedirigida, equalTo("redirect:/contactos"));
+        verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
+    }
 
     @Test
     public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() {

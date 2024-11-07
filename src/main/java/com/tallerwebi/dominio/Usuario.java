@@ -44,6 +44,7 @@ public class Usuario {
         this.apellido = apellido;
         this.dni = dni;
     }
+
     public String getMotivoDeSuspension() {
         return  this.motivoDeSuspension;
     }
@@ -187,6 +188,11 @@ public class Usuario {
         HttpSession session = request.getSession(false);
 
         return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
+    }
+    public static boolean IsAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuarioDto = (UsuarioDTO) session.getAttribute("USUARIO");
+        return session != null && isAttributeNotNull(session, "USUARIO") && usuarioDto.getEsAdmin();
     }
 
 
