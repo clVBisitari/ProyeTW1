@@ -72,7 +72,7 @@ public class ControladorProyeInversionTests {
         userMock.setPassword("123456");
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
-        controlador = new ControladorProyeInversion(proyeInvServiceMock);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock, requestMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
 

@@ -8,11 +8,14 @@ import org.hibernate.SessionFactory;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.util.List;
 
+@Transactional
 @Repository("repositorioProyeInversion")
 public class ProyeInversionRepositorio implements RepositorioProyeInversion
 {

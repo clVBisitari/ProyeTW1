@@ -1,13 +1,14 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.presentacion.UsuarioDTO;
 
 import java.util.List;
 
 public interface ServicioProyectoInversion {
     public List<ProyectoInversion> buscarProyectoInversion(String name);
     public List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
-    public Long guardarProyectoInversion( ProyectoInversion proyeInversion);
+    public Long guardarProyectoInversion(ProyectoInversion proyeInversion, UsuarioDTO usuario);
     public ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
     public boolean borrarProyectoInversion(Long idProyeInversion);
     public boolean reportarProyecto(Long idProyeInversion);

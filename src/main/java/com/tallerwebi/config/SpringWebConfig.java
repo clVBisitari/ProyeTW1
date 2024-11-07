@@ -1,5 +1,7 @@
 package com.tallerwebi.config;
 
+import com.mercadopago.client.preference.PreferenceClient;
+import com.mercadopago.client.preference.PreferenceItemRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -72,4 +74,18 @@ public class SpringWebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
+    @Bean
+    public PreferenceClient preferenceClient() {
+        return new PreferenceClient();
+    }
+
+    @Bean
+    public PreferenceItemRequest.PreferenceItemRequestBuilder preferenceItemRequest() {
+        return PreferenceItemRequest.builder();
+    }
+
+//    @Bean
+//    public HttpServletRequest servletRequest(){
+//        return new
+//    }
 }

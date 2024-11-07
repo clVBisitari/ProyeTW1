@@ -3,10 +3,12 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("servicioProyectoInversion")
@@ -40,7 +42,12 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public Long guardarProyectoInversion(ProyectoInversion proyeInversion) {
+    public Long guardarProyectoInversion(ProyectoInversion proyeInversion, UsuarioDTO usuario) {
+        Usuario user = usuario.convertToUsuario();
+        proyeInversion.setTitular(user);
+        proyeInversion.setInversores(new ArrayList<Usuario>());
+        proyeInversion.setCantidadReportes(0);
+        proyeInversion.setEnSuspension(false);
         return this.repoProyeInversion.saveProyectoInversion(proyeInversion);
     }
 

@@ -151,4 +151,17 @@ public class UsuarioDTO {
                 ", saldo=" + saldo +
                 '}';
     }
+
+    public Usuario convertToUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setEmail(email);
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setDni(dni);
+        usuario.setEnSuspension(enSuspension);
+        usuario.setEsAdmin(esAdmin);
+        usuario.setSaldo(saldo);
+        return usuario;
+    }
 }

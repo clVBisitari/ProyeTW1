@@ -83,26 +83,26 @@
         </form>
        
     </header>
-    <form class="spent__form" action="#" th:action="@{/guardarProyeInversion}" method="post">
+    <form class="spent__form" action="#" th:action="@{/guardarproyeinversion}" method="POST" th:object="${proyeInversion}">
+        <fieldset class="spent__fieldset">
+            <label class="spent__label" for="titulo">Título:</label>
+            <input class="spent__input" id="titulo" th:field ="*{titulo}" name="titulo" type="text" min="3" max="250" required placeholder='Creacion de gorras' />
+        </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="descripcion">Descripción:</label>
-            <input class="spent__input" id="descripcion" name="descripcion" type="text" min="3" max="15" required placeholder='Comida' />
+            <input class="spent__input" id="descripcion" th:field ="*{description}" type="text" min="3" max="250" required placeholder='Comida' />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="valor">Valor:</label>
-            <input class="spent__input" id="valor" name="valor" type="number" min="3" max="15" required placeholder='97' />
+            <label class="spent__label" for="montoRequerido">Monto Requerido:</label>
+            <input class="spent__input" id="montoRequerido" th:field ="*{montoRequerido}" type="number" min="3" max="99999999" required placeholder='$100.000' />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="vencimiento">Fecha de vencimiento: (opcional)</label>
-            <input class="spent__input" id="vencimiento" name="vencimiento" type="date" />
+            <label class="spent__label" for="plazoParaInicio">Plazo de Inicio</label>
+            <input class="spent__input" id="plazoParaInicio" th:field ="*{plazoParaInicio}" type="datetime-local" />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="recordatorio">Fecha de recordatorio: (opcional)</label>
-            <input class="spent__input" id="recordatorio" name="recordatorio" type="date" />
-        </fieldset>
-        <fieldset class="spent__fieldset">
-            <label class="spent__label" for="frecuencia">Frecuencia: (opcional)</label>
-            <input class="spent__input" id="frecuencia" name="frecuencia" type="date" />
+            <label class="spent__label" for="plazoParaFinal">Plazo para finalización</label>
+            <input class="spent__input" id="plazoParaFinal" th:field ="*{plazoParaFinal}" type="datetime-local" />
         </fieldset>
         <div class='spent__button'>
             <button class='button__primary'>Guardar Proyecto</button>

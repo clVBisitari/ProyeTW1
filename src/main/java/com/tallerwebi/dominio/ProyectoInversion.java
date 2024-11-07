@@ -1,5 +1,8 @@
 package com.tallerwebi.dominio;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -14,12 +17,16 @@ public class ProyectoInversion {
     @OneToOne
     @JoinColumn(name = "Usuario")
     private Usuario titular;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "inversores")
+    @JoinColumn(name = "inversor_id")
     private List<Usuario> inversores;
     private Integer montoRequerido;
     private Integer montoRecaudado;
-    private Integer plazoParaInicio;
-    private Integer plazoParaFinal;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date plazoParaInicio;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private Date plazoParaFinal;
     private Integer cantidadReportes;
     private boolean enSuspension;
     private String motivoSuspension;
@@ -81,11 +88,11 @@ public class ProyectoInversion {
         this.montoRecaudado = montoRecaudado;
     }
 
-    public Integer getPlazoParaInicio() {
+    public Date getPlazoParaInicio() {
         return plazoParaInicio;
     }
 
-    public void setPlazoParaInicio(Integer plazoParaInicio) {
+    public void setPlazoParaInicio(Date plazoParaInicio) {
         this.plazoParaInicio = plazoParaInicio;
     }
 
@@ -105,11 +112,11 @@ public class ProyectoInversion {
         this.motivoSuspension = motivoSuspension;
     }
 
-    public Integer getPlazoParaFinal() {
+    public Date getPlazoParaFinal() {
         return plazoParaFinal;
     }
 
-    public void setPlazoParaFinal(Integer plazoParaFinal) {
+    public void setPlazoParaFinal(Date plazoParaFinal) {
         this.plazoParaFinal = plazoParaFinal;
     }
 
