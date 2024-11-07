@@ -129,7 +129,7 @@ public class ControladorUsuarioTest {
         usuarioASuspender.setEnSuspension(false);
         String motivo = "mal comportamiento";
 
-        when(servicioUsuarioMock.buscarUsuarioPorId(16)).thenReturn(usuarioASuspender);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
         when(servicioUsuarioMock.suspenderUsuario(eq("mal comportamiento"), eq(16))).thenReturn(true);
 
         String resultado = controladorUsuario.suspenderUsuario(usuarioASuspender.getId(), motivo, redirectAttributesMock);
