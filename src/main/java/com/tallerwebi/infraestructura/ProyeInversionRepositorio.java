@@ -62,12 +62,12 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public Long saveProyectoInversion(ProyectoInversion proyeInversion) {
+    public Integer saveProyectoInversion(ProyectoInversion proyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
 
         Serializable idProye = session.save(proyeInversion);
 
-        return (Long)idProye;
+        return (Integer) idProye;
     }
 
     @Override

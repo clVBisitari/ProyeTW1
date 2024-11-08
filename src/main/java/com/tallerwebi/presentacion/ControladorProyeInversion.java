@@ -47,18 +47,16 @@ public class ControladorProyeInversion {
     @RequestMapping(path = "/crearProyeInversion", method = RequestMethod.GET)
     public ModelAndView crearProyectoInversion(){
         this.user = (UsuarioDTO) this.request.getSession().getAttribute("USUARIO");
-        return new ModelAndView("creacionInversiones", new ModelMap("proyeInversion", new ProyectoInversion()));
+        return new ModelAndView("creacionInversiones", new ModelMap("proyeInversion", new ProyeInversionDTO()));
     }
 
     @Transactional
     @RequestMapping(path = "/guardarproyeinversion", method = RequestMethod.POST)
-    public ModelAndView guardarProyectoInversion(@ModelAttribute("proyeInversion") ProyectoInversion proyeInversion, HttpServletRequest request){
+    public ModelAndView guardarProyectoInversion(@ModelAttribute("proyeInversion") ProyeInversionDTO proyeInversion, HttpServletRequest request){
         ModelMap model = new ModelMap();
-        var session = request.getSession();
-        var algo = request.getAttribute("idUsuario");
         UsuarioDTO user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         var usuario = this.user;
-        Long proyectoResponse = this.servicioProyectoInversion.guardarProyectoInversion(proyeInversion, user);
+        Integer proyectoResponse = this.servicioProyectoInversion.guardarProyectoInversion(proyeInversion, user);
         model.put("response", proyectoResponse);
         return new ModelAndView("redirect:inversiones", model);
     }
