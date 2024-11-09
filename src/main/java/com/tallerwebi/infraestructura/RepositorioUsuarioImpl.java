@@ -127,4 +127,16 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return session.createQuery(hql, Usuario.class).getResultList();
     }
 
+    @Override
+    public void agregarContacto(Integer usuarioId, Integer contactoId) {
+            String hql = "INSERT INTO usuario_usuarios (usuario_id, contacto_id) VALUES (:usuarioId, :contactoId)";
+
+            Session session = sessionFactory.getCurrentSession();
+            session.createNativeQuery(hql)
+                    .setParameter("usuarioId", usuarioId)
+                    .setParameter("contactoId", contactoId)
+                    .executeUpdate();
+
+    }
+
 }

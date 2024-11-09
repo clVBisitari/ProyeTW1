@@ -16,7 +16,7 @@ public class ProyectoInversion {
     private String titulo;
     private String description;
     @OneToOne
-    @JoinColumn(name = "Usuario")
+    @JoinColumn(name = "usuario_id")
     private Usuario titular;
     @ManyToMany
     @JoinTable(name = "inversores")

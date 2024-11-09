@@ -78,7 +78,7 @@ public class ServicioUsuarioTest {
     }
 
     @Test
-    public void siAgregoUnContactoDebeDevolverVerdadero() {
+    public void siAgregoUnContactoDebeDevolverVerdadero() throws Exception {
         Usuario usuarioQueGuarda = new Usuario();
         usuarioQueGuarda.setContactos(new ArrayList<>());
 

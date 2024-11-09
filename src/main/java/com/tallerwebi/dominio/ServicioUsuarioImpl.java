@@ -54,17 +54,20 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
 
     @Override
-    public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) {
-        List<Usuario> contactos = usuarioQueGuarda.getContactos();
-
-        for (Usuario contacto : contactos) {
-            if (Objects.equals(contacto.getId(), usuarioAGuardar.getId())) {
-                throw new ContactoExistente("este contacto ya esta en tu lista");
-            }
+    public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(usuarioQueGuarda.getId());
+        Usuario contacto = repositorioUsuario.buscarUsuarioPorId((usuarioAGuardar.getId()));
+        if (usuario==null || contacto ==null){
+            throw new Exception("usuario no econtrado en la bd");
         }
-        contactos.add(usuarioAGuardar);
-        usuarioQueGuarda.setContactos(contactos);
-        repositorioUsuario.modificar(usuarioQueGuarda);
+
+        // Agregar el contacto a la lista de contactos del usuario
+        usuario.getContactos().add(contacto);
+
+        // Guardar la entidad Usuario con la relación actualizada
+        repositorioUsuario.modificar(usuario);
+        repositorioUsuario.agregarContacto((usuarioQueGuarda.getId()),(usuarioAGuardar.getId()));
+
         return true;
     }
 

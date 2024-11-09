@@ -227,7 +227,7 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() {
+    public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() throws Exception {
 
         // Mock de la sesión y los atributos de la sesión
         when(requestMock.getSession(false)).thenReturn(sessionMock);

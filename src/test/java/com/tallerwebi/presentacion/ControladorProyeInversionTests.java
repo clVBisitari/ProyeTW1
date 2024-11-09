@@ -58,9 +58,9 @@ public class ControladorProyeInversionTests {
     public void init(){
         proyeInversionMock = mock(ProyectoInversion.class);
         proye1.setTitulo("Proyecto 1");
-        proye1.setId(1L);
+        proye1.setId(1);
         proye2.setTitulo("Proyecto 2");
-        proye2.setId(2L);
+        proye2.setId(2);
         proyeInvList.add(proye1);
         proyeInvList.add(proye2);
         requestMock = mock(HttpServletRequest.class);

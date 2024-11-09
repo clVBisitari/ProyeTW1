@@ -24,16 +24,19 @@ public class Usuario {
     private String motivoDeSuspension;
     private Boolean estaActivo = true;
     @ManyToMany
-    @JoinColumn(name = "usuario_id")
-    private List<Usuario>contactos;
+    @JoinTable(
+            name = "usuario_usuarios",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "contacto_id")
+    )
+    private List<Usuario> contactos = new ArrayList<>();
     private String password;
     private Boolean esAdmin = false;
     private Boolean enSuspension = false;
-    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
+    @OneToOne(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProyectoInversion proyecto;
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
     private GestorDeGastos gestorDeGastos;
-    ///private List<Inversion>
 
     public Usuario(){}
 
@@ -215,4 +218,5 @@ public class Usuario {
         }
         return usuariosDTO;
     }
+
 }

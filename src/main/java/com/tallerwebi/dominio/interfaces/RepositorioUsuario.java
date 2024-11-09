@@ -17,6 +17,7 @@ public interface RepositorioUsuario {
 
     List<Usuario> getUsuariosSuspendidos();
 
+    void agregarContacto(Integer idUsuario, Integer idContacto);
 }
 
 

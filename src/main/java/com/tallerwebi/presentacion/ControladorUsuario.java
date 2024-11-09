@@ -128,7 +128,7 @@ public class ControladorUsuario {
     }
 
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
-    public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
+    public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) throws Exception {
 
         if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
