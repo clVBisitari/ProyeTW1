@@ -1,5 +1,9 @@
 package com.tallerwebi.dominio;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -8,28 +12,32 @@ public class ProyectoInversion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String titulo;
     private String description;
     @OneToOne
     @JoinColumn(name = "Usuario")
     private Usuario titular;
-    @OneToMany
+    @ManyToMany
+    @JoinTable(name = "inversores")
+    @JoinColumn(name = "inversor_id")
     private List<Usuario> inversores;
     private Integer montoRequerido;
     private Integer montoRecaudado;
-    private Integer plazoParaInicio;
-    private Integer plazoParaFinal;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate plazoParaInicio;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate plazoParaFinal;
     private Integer cantidadReportes;
     private boolean enSuspension;
     private String motivoSuspension;
 
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -81,11 +89,11 @@ public class ProyectoInversion {
         this.montoRecaudado = montoRecaudado;
     }
 
-    public Integer getPlazoParaInicio() {
+    public LocalDate getPlazoParaInicio() {
         return plazoParaInicio;
     }
 
-    public void setPlazoParaInicio(Integer plazoParaInicio) {
+    public void setPlazoParaInicio(LocalDate plazoParaInicio) {
         this.plazoParaInicio = plazoParaInicio;
     }
 
@@ -105,11 +113,11 @@ public class ProyectoInversion {
         this.motivoSuspension = motivoSuspension;
     }
 
-    public Integer getPlazoParaFinal() {
+    public LocalDate getPlazoParaFinal() {
         return plazoParaFinal;
     }
 
-    public void setPlazoParaFinal(Integer plazoParaFinal) {
+    public void setPlazoParaFinal(LocalDate plazoParaFinal) {
         this.plazoParaFinal = plazoParaFinal;
     }
 

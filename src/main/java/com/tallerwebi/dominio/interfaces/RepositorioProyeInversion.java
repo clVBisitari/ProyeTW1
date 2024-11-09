@@ -8,7 +8,7 @@ import java.util.List;
     List<ProyectoInversion> getPublicacionesSuspendidas(Integer idUsuario);
     List<ProyectoInversion>getProyectosInversion(Integer idUsuario);
     ProyectoInversion getProyectoById(Long idProyeInversion);
-    Long saveProyectoInversion(ProyectoInversion proyeInversion);
+    Integer saveProyectoInversion(ProyectoInversion proyeInversion);
     ProyectoInversion updateProyeInversion(ProyectoInversion proyeInversion);
     boolean deleteProyeInversion(Long idProyeInversion);
     boolean reportProyeInversion(Long idProyeInversion);

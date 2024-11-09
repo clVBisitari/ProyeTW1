@@ -27,7 +27,6 @@
         </div>
     </header>
     <div class="investments__content">
-        
         <section class="investments__end">
             <h2 class="investments__title">Saldo</h2>
             <article class="investment">
@@ -36,6 +35,28 @@
             </article>
         </section>
     </div>
+    <div>
+        <h1>Realizar Pago</h1>
+        <p>Serás redirigido a MercadoPago para completar el pago.</p>
+        <a th:href="@{/initPoint}" target="_blank">Ir a MercadoPago</a>
+    </div>
 </main>
+    <script>
+
+        const mp = new MercadoPago('TEST-371b5a27-0c64-4089-8aea-b04926e2c230');
+        const bricksBuilder = mp.bricks();
+
+        mp.bricks().create("wallet", "wallet_container", {
+            initialization: {
+                preferenceId: "1234",
+            },
+            customization: {
+                texts: {
+                    valueProp: 'smart_option',
+                },
+            },
+        });
+
+    </script>
 </body>
 </html>
