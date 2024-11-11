@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import static org.hamcrest.Matchers.empty;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,12 +78,16 @@ public class ServicioUsuarioTest {
     }
 
     @Test
-    public void siAgregoUnContactoDebeDevolverVerdadero() {
+    public void siAgregoUnContactoDebeDevolverVerdadero() throws Exception {
         Usuario usuarioQueGuarda = new Usuario();
         usuarioQueGuarda.setContactos(new ArrayList<>());
+        usuarioQueGuarda.setId(1);
 
         Usuario usuarioAGuardar = new Usuario();
         usuarioAGuardar.setEmail("contacto@example.com");
+        usuarioAGuardar.setId(2);
+        when(servicioUsuario.buscarUsuarioPorId(usuarioQueGuarda.getId())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuario.buscarUsuarioPorId(usuarioAGuardar.getId())).thenReturn(usuarioAGuardar);
 
         Boolean resultado = servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 
@@ -93,7 +98,7 @@ public class ServicioUsuarioTest {
     }
 
     @Test
-    public void dadoQueHayUnUsuarioSuspendidoSiSeRevierteLaSuspecionElUsuarioAfectadoCambiaDeEstado() {
+    public void dadoQueHayUnUsuarioSuspendidoSiSeRevierteLaSuspensionElUsuarioAfectadoCambiaDeEstado() {
         Usuario usuarioSuspendido = dadoQueHayUnUsuarioSuspendido();
         puedoRevertirSuspencion(usuarioSuspendido);
     }
@@ -106,12 +111,45 @@ public class ServicioUsuarioTest {
 
     @Test
     public void siBuscoUnUsuarioPorNombreDebeDevolverElUsuario() {
-        List<Usuario> usersBuscado = new ArrayList<Usuario>();
-        usersBuscado.add(new Usuario());
-        usersBuscado.get(0).setNombre("Diego");
-        when(repositorioUsuarioMock.buscarUsuarioPorNombre(usersBuscado.get(0).getNombre())).thenReturn(usersBuscado);
+        List<Usuario> usersBuscados = new ArrayList<Usuario>();
+        usersBuscados.add(new Usuario());
+        usersBuscados.get(0).setNombre("Diego");
+        when(repositorioUsuarioMock.buscarUsuarioPorNombre(usersBuscados.get(0).getNombre())).thenReturn(usersBuscados);
        List<Usuario> userEncontrado= servicioUsuario.buscarUsuarioPorNombre("Diego");
-        assertThat(userEncontrado, equalTo(usersBuscado));
+        assertThat(userEncontrado, equalTo(usersBuscados));
+    }
+
+   @Test
+   public void siBuscoUsuariosSuspendidosYHayObtengoUnaListaConUsuariosSuspendidos(){
+       List<Usuario> usersBuscados = new ArrayList<Usuario>();
+       usersBuscados.add(new Usuario());
+       usersBuscados.add(new Usuario());
+       usersBuscados.get(0).setNombre("Diego");
+       usersBuscados.get(0).setEnSuspension(true);
+       usersBuscados.get(1).setNombre("Marco");
+       usersBuscados.get(1).setEnSuspension(true);
+       when(repositorioUsuarioMock.getUsuariosSuspendidos()).thenReturn(usersBuscados);
+       List<Usuario> usersEncontrados= servicioUsuario.getUsuariosSuspedidos();
+       assertThat(usersEncontrados, equalTo(usersBuscados));
+   }
+    @Test
+    public void siBuscoUsuariosSuspendidosYNoHayObtengoUnaListaVacia(){
+        List<Usuario> usersBuscados = new ArrayList<Usuario>();
+        when(repositorioUsuarioMock.getUsuariosSuspendidos()).thenReturn(usersBuscados);
+        List<Usuario> usersEncontrados= servicioUsuario.getUsuariosSuspedidos();
+        assertThat(usersEncontrados, hasSize(0));
+    }
+
+    @Test
+    public void siDesactivoUnUsuarioSuEstadoActivoCambiaAFalse(){
+        Usuario usuarioActivo = dadoQueHayUnUsuarioActivo();
+        puedoCambiarElEstadoAFalse(usuarioActivo);
+    }
+
+    @Test
+    public void siActivoUnUsuarioSuEstadoActivoCambiaATrue(){
+        Usuario usuarioNoActivo = dadoQueHayUnUsuarioNoActivo();
+        puedoCambiarElEstadoATrue(usuarioNoActivo);
     }
 
     private void obtengoUnaListaDeContactos(List<Usuario> contactos) {
@@ -126,7 +164,6 @@ public class ServicioUsuarioTest {
         contactos.add(cont2);
         when(repositorioUsuarioMock.obtenerContactos("user@example.com")).thenReturn(contactos);
     }
-
 
     private List<Usuario> crearListaDeContactos(Usuario user) {
         List<Usuario> contactos = new ArrayList<>();
@@ -181,6 +218,30 @@ public class ServicioUsuarioTest {
 
     private void obtengoUnaListaVacia(List<Usuario> listado) {
         assertThat(listado.size(), equalTo(0));
+    }
+    private void puedoCambiarElEstadoAFalse(Usuario usuarioActivo) {
+        usuarioActivo.setEstaActivo(false);
+        repositorioUsuarioMock.modificar(usuarioActivo);
+        assertThat(usuarioActivo.getEstaActivo(), equalTo(false));
+    }
+
+    private Usuario dadoQueHayUnUsuarioActivo() {
+        Usuario userActivo = new Usuario();
+        userActivo.setEstaActivo(true);
+        when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userActivo);
+        return userActivo;
+    }
+    private Usuario dadoQueHayUnUsuarioNoActivo() {
+        Usuario userNoActivo = new Usuario();
+        userNoActivo.setEstaActivo(false);
+        when(repositorioUsuarioMock.buscarUsuarioPorId(usuarioDTOMock.getId())).thenReturn(userNoActivo);
+        return userNoActivo;
+    }
+
+    private void puedoCambiarElEstadoATrue(Usuario usuarioNoActivo) {
+        usuarioNoActivo.setEstaActivo(true);
+        repositorioUsuarioMock.modificar(usuarioNoActivo);
+        assertThat(usuarioNoActivo.getEstaActivo(), equalTo(true));
     }
 
 }

@@ -98,6 +98,38 @@ public class RepositorioUsuarioTest {
         assertThat(usuarioBD, equalTo(usuario));
 
     }
+    @Test
+    @Transactional
+    @Rollback
+    public void dadoQueExisteUnRepositorioUsuarioYPidoLosUsuariosSuspendidosLaBdLosDevuelve() {
+
+        Usuario usuario = new Usuario();
+
+        Usuario user1 = new Usuario();
+        user1.setId(1);
+        user1.setEnSuspension(true);
+        this.repositorioUsuario.guardar(user1);
+
+        Usuario user2 = new Usuario();
+        user2.setId(2);
+        user2.setEnSuspension(false);
+        this.repositorioUsuario.guardar(user2);
+
+        Usuario user3 = new Usuario();
+        user3.setId(3);
+        user3.setEnSuspension(true);
+        this.repositorioUsuario.guardar(user3);
+
+
+        String hql = "FROM Usuario u WHERE u.enSuspension = true";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        List<Usuario> usuariosSuspendidos = query.getResultList();
+
+        assertThat(usuariosSuspendidos, is(notNullValue()));
+        assertThat(usuariosSuspendidos.size(), is(2));
+        assertThat(usuariosSuspendidos, containsInAnyOrder(user1,user3));
+
+    }
 
     @Test
     @Transactional

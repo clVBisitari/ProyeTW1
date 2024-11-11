@@ -11,8 +11,10 @@ public class UsuarioDTO {
     private String nombre;
     private String apellido;
     private Integer dni;
+    private String motivoDeSuspension;
     private boolean enSuspension;
     private boolean esAdmin;
+    private boolean estaActivo;
     private List<UsuarioDTO> contactos;
     private Double saldo;
 
@@ -31,6 +33,7 @@ public class UsuarioDTO {
         usuario.setDni(usuarioDTO.getDni());
         usuario.setEnSuspension(usuarioDTO.getEnSuspension());
         usuario.setEsAdmin(usuarioDTO.getEsAdmin());
+        usuario.setMotivoDeSuspension(usuarioDTO.getMotivoDeSuspension());
         usuario.setSaldo(usuarioDTO.getSaldo());
 
         return usuario;
@@ -48,10 +51,32 @@ public class UsuarioDTO {
         usuarioDTO.setEnSuspension(usuario.getEnSuspension());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
         usuarioDTO.setSaldo(usuario.getSaldo());
-
+        usuarioDTO.setEstaActivo(usuario.getEstaActivo());
         return usuarioDTO;
     }
 
+    public boolean isEsAdmin() {
+        return esAdmin;
+    }
+
+    public boolean isEnSuspension() {
+        return enSuspension;
+    }
+
+    public boolean isEstaActivo() {
+        return estaActivo;
+    }
+
+    public void setEstaActivo(boolean estaActivo) {
+        this.estaActivo = estaActivo;
+    }
+
+    public String getMotivoDeSuspension() {
+        return  this.motivoDeSuspension;
+    }
+    public void setMotivoDeSuspension(String motivo) {
+        this.motivoDeSuspension = motivo;
+    }
     public void setId(Integer id) {
         this.id = id;
     }
@@ -150,5 +175,18 @@ public class UsuarioDTO {
                 ", contactos=" + contactos +
                 ", saldo=" + saldo +
                 '}';
+    }
+
+    public Usuario convertToUsuario() {
+        Usuario usuario = new Usuario();
+        usuario.setId(id);
+        usuario.setEmail(email);
+        usuario.setNombre(nombre);
+        usuario.setApellido(apellido);
+        usuario.setDni(dni);
+        usuario.setEnSuspension(enSuspension);
+        usuario.setEsAdmin(esAdmin);
+        usuario.setSaldo(saldo);
+        return usuario;
     }
 }

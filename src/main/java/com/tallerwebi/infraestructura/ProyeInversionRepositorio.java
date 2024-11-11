@@ -8,11 +8,14 @@ import org.hibernate.SessionFactory;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.io.Serializable;
 import java.util.List;
 
+@Transactional
 @Repository("repositorioProyeInversion")
 public class ProyeInversionRepositorio implements RepositorioProyeInversion
 {
@@ -59,12 +62,12 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public Long saveProyectoInversion(ProyectoInversion proyeInversion) {
+    public Integer saveProyectoInversion(ProyectoInversion proyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
 
         Serializable idProye = session.save(proyeInversion);
 
-        return (Long)idProye;
+        return (Integer) idProye;
     }
 
     @Override

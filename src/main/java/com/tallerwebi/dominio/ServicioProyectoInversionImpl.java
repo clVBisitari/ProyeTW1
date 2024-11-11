@@ -3,10 +3,15 @@ package com.tallerwebi.dominio;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.presentacion.ProyeInversionDTO;
+import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("servicioProyectoInversion")
@@ -40,7 +45,17 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public Long guardarProyectoInversion(ProyectoInversion proyeInversion) {
+    public Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario) {
+        Usuario user = usuario.convertToUsuario();
+        ProyectoInversion proyeInversion = proyeInversionDTO.convertToProyectoInversion();
+        proyeInversion.setTitular(user);
+        proyeInversion.setInversores(new ArrayList<Usuario>());
+        proyeInversion.setCantidadReportes(0);
+        proyeInversion.setEnSuspension(false);
+        proyeInversion.setMontoRecaudado(0);
+//        proyeInversion.setPlazoParaInicio(LocalDate.of(proyeInversion.getPlazoParaInicio().cdate.getYear(), proyeInversion.getPlazoParaInicio().cdate.getMonth(), proyeInversion.getPlazoParaInicio().cdate.getDayOfMonth()));
+//        proyeInversion.setPlazoParaFinal(LocalDate.of(proyeInversion.getPlazoParaFinal().getYear(), proyeInversion.getPlazoParaFinal().getMonth(), proyeInversion.getPlazoParaFinal().getDayOfMonth()));
+
         return this.repoProyeInversion.saveProyectoInversion(proyeInversion);
     }
 

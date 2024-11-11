@@ -5,7 +5,11 @@
     flex-direction: column;
     gap: 2rem;
 }
-
+.contenedor-contacto{
+display:flex;
+justify-content:center;
+align-items:center
+}
 .contacts__search {
     width: 80%;
     margin: auto;

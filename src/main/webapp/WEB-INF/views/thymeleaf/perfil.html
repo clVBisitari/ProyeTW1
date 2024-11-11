@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil</title>
+  <!-- custom style -->
+  <link rel="stylesheet" th:href="@{/css/main.css}"/>
+  <link rel="stylesheet" th:href="@{/css/dashboard.css}"/>
+  <link rel="stylesheet" th:href="@{/css/perfil.css}"/>
+</head>
+<body>
+<div th:include="fragments :: navegadorLateral"></div>
+
+<main class="perfil__main">
+  <div class="perfil__content">
+    <h1 class="perfil__h1">Perfil de Usuario</h1>
+    <div class="perfil__info">
+      <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre del Usuario</span></p>
+      <p><strong>Apellido:</strong> <span th:text="${usuario.apellido}">Apellido del Usuario</span></p>
+      <p><strong>Email:</strong> <span th:text="${usuario.email}">email@ejemplo.com</span></p>
+      <p><strong>DNI:</strong> <span th:text="${usuario.dni}">DNI del Usuario</span></p>
+      <p><strong>Saldo:</strong> <span th:text="${usuario.saldo}">0.00</span> ARS</p>
+    </div>
+    <button class="button__primary" th:onclick="'location.href=\'/editar-perfil\''">Editar Información</button>
+  </div>
+</main>
+</body>
+</html>

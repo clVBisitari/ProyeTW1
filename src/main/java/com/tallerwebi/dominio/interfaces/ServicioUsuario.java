@@ -15,7 +15,7 @@ public interface ServicioUsuario {
     ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio);
     Boolean eliminarProyectoPropio(String motivo, int idProyecto);
     List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
-    Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar);
+    Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception;
     Boolean invertirEnProyecto(int valor, int idProyecto);
     void activarRecomendacionesAutomaticas(Double valor, int idUser);
     Boolean reportarProyectoSospechoso(String motivo, int idProyect, int idUser2, int idUserQueReporta); // int denuncias acumm en user
@@ -25,9 +25,12 @@ public interface ServicioUsuario {
     Boolean revertirSuspensionProyecto(int idProyectoInversion);
     Boolean revertirSuspensionUsuario(int idUsuario);
     public Boolean eliminarPublicacion(int idProyectoInver);
-    public Boolean eliminarUsuario(int idUser);
+    public Boolean eliminarUsuario(int idUser) throws Exception;
     List<Usuario> getContactos(String email);
     List<Usuario> getContactosSugeridos(Integer id);
-
     Usuario buscarUsuarioPorId(Integer id);
+    List<Usuario> getUsuariosSuspedidos();
+    Boolean eliminarUsuarioDeContactos(Usuario usuarioQueElimina, Usuario usuarioAEliminar);
+
+    void cambiarEstadoUsuario(Usuario usuario) throws Exception;
 }

@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Controller
 public class ControladorProyeInversion {
 
     private ServicioProyectoInversion servicioProyectoInversion;
-
+    private UsuarioDTO user;
     @Autowired
     public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion) {
         this.servicioProyectoInversion = proyectoInversion;
@@ -42,15 +43,18 @@ public class ControladorProyeInversion {
 
 
     @RequestMapping(path = "/crearProyeInversion", method = RequestMethod.GET)
-    public ModelAndView crearProyectoInversion(){
-        ModelMap model = new ModelMap();
-        return new ModelAndView("creacionInversiones", model);
+    public ModelAndView crearProyectoInversion(HttpServletRequest request){
+        this.user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        return new ModelAndView("creacionInversiones", new ModelMap("proyeInversion", new ProyeInversionDTO()));
     }
 
-    @RequestMapping(path = "/guardarProyeInversion", method = RequestMethod.POST)
-    public ModelAndView guardarProyectoInversion(@ModelAttribute ProyectoInversion proyeInversion){
+    @Transactional
+    @RequestMapping(path = "/guardarproyeinversion", method = RequestMethod.POST)
+    public ModelAndView guardarProyectoInversion(@ModelAttribute("proyeInversion") ProyeInversionDTO proyeInversion, HttpServletRequest request){
         ModelMap model = new ModelMap();
-        Long proyectoResponse = this.servicioProyectoInversion.guardarProyectoInversion(proyeInversion);
+        UsuarioDTO user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        var usuario = this.user;
+        Integer proyectoResponse = this.servicioProyectoInversion.guardarProyectoInversion(proyeInversion, user);
         model.put("response", proyectoResponse);
         return new ModelAndView("redirect:inversiones", model);
     }
