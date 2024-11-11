@@ -81,9 +81,13 @@ public class ServicioUsuarioTest {
     public void siAgregoUnContactoDebeDevolverVerdadero() throws Exception {
         Usuario usuarioQueGuarda = new Usuario();
         usuarioQueGuarda.setContactos(new ArrayList<>());
+        usuarioQueGuarda.setId(1);
 
         Usuario usuarioAGuardar = new Usuario();
         usuarioAGuardar.setEmail("contacto@example.com");
+        usuarioAGuardar.setId(2);
+        when(servicioUsuario.buscarUsuarioPorId(usuarioQueGuarda.getId())).thenReturn(usuarioQueGuarda);
+        when(servicioUsuario.buscarUsuarioPorId(usuarioAGuardar.getId())).thenReturn(usuarioAGuardar);
 
         Boolean resultado = servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 

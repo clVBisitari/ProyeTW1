@@ -12,6 +12,7 @@ import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
 import com.mercadopago.resources.preference.Preference;
 import com.tallerwebi.dominio.excepcion.MercadoPagoException;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.presentacion.CardPaymentDTO;
 import com.tallerwebi.presentacion.PaymentResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class ServicioMercadoPagoImpl {
+public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 
     @Value("${mercadopago.access.token}")
     private String accessToken;

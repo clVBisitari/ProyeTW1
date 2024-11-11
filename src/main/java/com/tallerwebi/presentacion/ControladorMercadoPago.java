@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 import com.mercadopago.exceptions.MPApiException;
 import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
 import com.tallerwebi.dominio.excepcion.PagoException;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +18,11 @@ import com.mercadopago.exceptions.MPException;
 @Controller
 public class ControladorMercadoPago {
 
+    private final ServicioMercadoPago mercadoPagoService;
     @Autowired
-    private ServicioMercadoPagoImpl mercadoPagoService;
+    public ControladorMercadoPago(ServicioMercadoPago mercadoPagoService) {
+        this.mercadoPagoService = mercadoPagoService;
+    }
 
     @GetMapping("/crear-pago")
     public String crearPago(@RequestParam("monto") Double monto, Model model) throws PagoException {

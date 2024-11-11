@@ -38,8 +38,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration(classes = {SpringWebTestConfig.class, HibernateTestConfig.class})
 public class ControladorProyeInversionTests {
 
-    private ProyectoInversion proyeInversionMock;
-    private List<ProyectoInversion> proyeInvList = new ArrayList<ProyectoInversion>();
+    private final List<ProyectoInversion> proyeInvList = new ArrayList<>();
     ProyectoInversion proye1 = new ProyectoInversion();
     ProyectoInversion proye2 = new ProyectoInversion();
 
@@ -56,7 +55,6 @@ public class ControladorProyeInversionTests {
 
     @BeforeEach
     public void init(){
-        proyeInversionMock = mock(ProyectoInversion.class);
         proye1.setTitulo("Proyecto 1");
         proye1.setId(1);
         proye2.setTitulo("Proyecto 2");
@@ -72,11 +70,11 @@ public class ControladorProyeInversionTests {
         userMock.setPassword("123456");
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
-        controlador = new ControladorProyeInversion(proyeInvServiceMock, requestMock);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
 
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
+//        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
 
     @Test

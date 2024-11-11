@@ -16,19 +16,17 @@ import java.util.List;
 public class ControladorProyeInversion {
 
     private ServicioProyectoInversion servicioProyectoInversion;
-    private HttpServletRequest request;
     private UsuarioDTO user;
     @Autowired
-    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion, HttpServletRequest request) {
+    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion) {
         this.servicioProyectoInversion = proyectoInversion;
-        this.request = request;
     }
 
 
     @RequestMapping(path= "/inversiones", method = RequestMethod.GET)
     public ModelAndView getListaProyectosPorUsuario(HttpServletRequest request){
         ModelMap model = new ModelMap();
-        Integer userId = (Integer) this.request.getSession().getAttribute("idUsuario");
+        Integer userId = (Integer) request.getSession().getAttribute("idUsuario");
         List<ProyectoInversion> proyectosResult = this.servicioProyectoInversion.getProyectosUsuario(userId);
         model.put("proyectos", proyectosResult);
         return new ModelAndView("inversiones", model);
@@ -45,8 +43,8 @@ public class ControladorProyeInversion {
 
 
     @RequestMapping(path = "/crearProyeInversion", method = RequestMethod.GET)
-    public ModelAndView crearProyectoInversion(){
-        this.user = (UsuarioDTO) this.request.getSession().getAttribute("USUARIO");
+    public ModelAndView crearProyectoInversion(HttpServletRequest request){
+        this.user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         return new ModelAndView("creacionInversiones", new ModelMap("proyeInversion", new ProyeInversionDTO()));
     }
 

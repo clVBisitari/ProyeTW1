@@ -2,6 +2,10 @@ package com.tallerwebi.config;
 
 import com.mercadopago.client.preference.PreferenceClient;
 import com.mercadopago.client.preference.PreferenceItemRequest;
+import com.mercadopago.exceptions.MPException;
+import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
+import com.tallerwebi.presentacion.ControladorMercadoPago;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +21,13 @@ import org.thymeleaf.templatemode.TemplateMode;
 
 @EnableWebMvc
 @Configuration
-@ComponentScan({"com.tallerwebi.presentacion", "com.tallerwebi.dominio", "com.tallerwebi.infraestructura"})
+@ComponentScan({"com.tallerwebi.presentacion", "com.tallerwebi.dominio", "com.tallerwebi.infraestructura", "com.mercadopago"})
 public class SpringWebConfig implements WebMvcConfigurer {
 
     // Spring + Thymeleaf need this
     @Autowired
     private ApplicationContext applicationContext;
+    private ServicioMercadoPago mercadopagoService;
 
     @Override
     public void addResourceHandlers(final ResourceHandlerRegistry registry) {
@@ -85,7 +90,15 @@ public class SpringWebConfig implements WebMvcConfigurer {
     }
 
 //    @Bean
-//    public HttpServletRequest servletRequest(){
-//        return new
+//    public ServicioMercadoPagoImpl serviceMpImpl() throws MPException {
+//        PreferenceClient preferenceClient = preferenceClient();
+//        PreferenceItemRequest.PreferenceItemRequestBuilder prefItemRequest = preferenceItemRequest();
+//
+//        return new ServicioMercadoPagoImpl(preferenceClient, prefItemRequest);
 //    }
+    @Bean
+    public ControladorMercadoPago controladorMercadoPago() {
+        return new ControladorMercadoPago(this.mercadopagoService);
+    }
+
 }
