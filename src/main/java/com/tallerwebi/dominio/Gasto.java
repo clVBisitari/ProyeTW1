@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -13,19 +14,25 @@ public class Gasto {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinTable(name = "gasto_usuario")
+    private Usuario usuario;
+
     @Column(nullable = false)
     private String descripcion;
 
     @Column(nullable = false)
     private double valor;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private GestorDeGastos gestor;
+//    @JsonIgnore
+//    @JoinTable(name ="gestor")
+//    private GestorDeGastos gestor;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(nullable = false)
     private Date fechaVencimiento;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column
     private Date fechaRecordatorio;
 
@@ -69,12 +76,12 @@ public class Gasto {
         return valor;
     }
 
-    public GestorDeGastos getGestor() {
-        return gestor;
-    }
-    public void setGestor(GestorDeGastos gestor) {
-        this.gestor = gestor;
-    }
+//    public GestorDeGastos getGestor() {
+//        return gestor;
+//    }
+//    public void setGestor(GestorDeGastos gestor) {
+//        this.gestor = gestor;
+//    }
 
     public void setFechaVencimiento(Date fechaVencimiento) {
         this.fechaVencimiento = fechaVencimiento;

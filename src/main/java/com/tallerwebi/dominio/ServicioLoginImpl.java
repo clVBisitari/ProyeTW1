@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 
 @Service("servicioLogin")
 @Transactional
@@ -36,9 +37,14 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         Usuario nuevoUser = new Usuario(usuario.getEmail(), usuario.getPassword(), usuario.getNombre(), usuario.getApellido(), usuario.getDni());
 
+        GestorDeGastos gestor = new GestorDeGastos();
+        gestor.setGastos(new ArrayList<>());
+        gestor.setUsuario(nuevoUser);
+
         nuevoUser.setEsAdmin(false);
         nuevoUser.setEnSuspension(false);
         nuevoUser.setSaldo(0.00);
+        nuevoUser.setGestorDeGastos(gestor);
 
         repositorioUsuario.guardar(nuevoUser);
     }

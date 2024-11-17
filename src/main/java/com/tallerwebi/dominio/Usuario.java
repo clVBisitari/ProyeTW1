@@ -35,8 +35,11 @@ public class Usuario {
     private Boolean enSuspension = false;
     @OneToOne(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProyectoInversion proyecto;
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
-    private GestorDeGastos gestorDeGastos;
+//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
+//    private GestorDeGastos gestorDeGastos;
+    @OneToMany()
+    @JoinTable( name = "usuario_gastos", joinColumns = @JoinColumn(name = "usuarioid_gastoid"), inverseJoinColumns = @JoinColumn(name="gastoid_usuarioid"))
+    private List<Gasto> gastos = new ArrayList<Gasto>();
 
     public Usuario(){}
 
@@ -62,13 +65,13 @@ public class Usuario {
         this.id = id;
     }
 
-    public GestorDeGastos getGestorDeGastos() {
-        return gestorDeGastos;
-    }
-
-    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
-        this.gestorDeGastos = gestorDeGastos;
-    }
+//    public GestorDeGastos getGestorDeGastos() {
+//        return gestorDeGastos;
+//    }
+//
+//    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
+//        this.gestorDeGastos = gestorDeGastos;
+//    }
 
     public String getEmail() {
         return email;

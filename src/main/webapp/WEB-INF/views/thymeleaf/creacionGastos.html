@@ -22,33 +22,30 @@
         </form>
        
     </header>
-    <form class="spent__form" action="#" th:action="@{http://localhost:8080/spring/registrarGasto}" method="POST" th:object="${gasto}">
+    <form class="spent__form" action="#" th:action="@{/registrarGasto}" method="POST" th:object="${gasto}">
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="descripcion">Descripción:</label>
             <input class="spent__input" id="descripcion" th:field="*{descripcion}" type="text" min="3" max="15" required placeholder='Comida' />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="valor">Valor:</label>
-            <input class="spent__input" id="valor" name="valor" type="number" min="1" required placeholder='$10.000' />
+            <input class="spent__input" id="valor" th:field="*{valor}" type="number" min="1" required placeholder='$10.000' />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="vencimiento">Fecha de vencimiento: (opcional)</label>
-            <input class="spent__input" id="vencimiento" name="vencimiento" type="date" />
+            <input class="spent__input" id="vencimiento" th:field="*{fechaVencimiento}" type="date" />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="recordatorio">Fecha de recordatorio: (opcional)</label>
-            <input class="spent__input" id="recordatorio" name="recordatorio" type="date" />
+            <input class="spent__input" id="recordatorio" th:field="*{fechaRecordatorio}" type="date" />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="frecuencia">Frecuencia: (opcional)</label>
-            <select class="spent__input" id="frecuencia" name="frecuencia" >
-                <option value="unico">Unico</option>
-                <option value="diario">Diario</option>
-                <option value="semanal">Semanal</option>
-                <option value="mensual">Mensual</option>
-                <option value="bimestral">Bimestral</option>
-                <option value="semestral">Semestral</option>
-                <option value="anual">Anual</option>
+            <select class="spent__input" id="frecuencia" name = "frecuencia" th:field="*{frecuencia}" >
+                <option th:each="frecuencia : ${T(com.tallerwebi.dominio.Frecuencia).values()}"
+                        th:value="${frecuencia}"
+                        th:text="${frecuencia}"
+                        th:selected="${frecuencia != null && frecuencia == 'MENSUAL'}"></option>
             </select>
         </fieldset>
         <button class="button__primary" id="btn-gasto">Agregar Gasto</button>

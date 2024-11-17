@@ -1,4 +1,5 @@
 package com.tallerwebi.presentacion;
+import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class UsuarioDTO {
     private boolean enSuspension;
     private boolean esAdmin;
     private boolean estaActivo;
+    private GestorDeGastos gestorGastos;
     private List<UsuarioDTO> contactos;
     private Double saldo;
 
@@ -51,7 +53,9 @@ public class UsuarioDTO {
         usuarioDTO.setEnSuspension(usuario.getEnSuspension());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
         usuarioDTO.setSaldo(usuario.getSaldo());
+        usuarioDTO.setContactos(Usuario.mapToUsuarioDTOList(usuario.getContactos()));
         usuarioDTO.setEstaActivo(usuario.getEstaActivo());
+        usuarioDTO.setGestorGastos(usuario.getGestorDeGastos());
         return usuarioDTO;
     }
 
@@ -74,9 +78,11 @@ public class UsuarioDTO {
     public String getMotivoDeSuspension() {
         return  this.motivoDeSuspension;
     }
+
     public void setMotivoDeSuspension(String motivo) {
         this.motivoDeSuspension = motivo;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -113,6 +119,8 @@ public class UsuarioDTO {
         this.saldo = saldo;
     }
 
+    public void setGestorGastos(GestorDeGastos gestorDeGastos){this.gestorGastos = gestorDeGastos;}
+
     public Integer getId() {
         return id;
     }
@@ -148,6 +156,8 @@ public class UsuarioDTO {
     public Double getSaldo() {
         return saldo;
     }
+
+    public GestorDeGastos getGestorGastos(){return gestorGastos;}
 
     @Override
     public boolean equals(Object o) {
@@ -187,6 +197,7 @@ public class UsuarioDTO {
         usuario.setEnSuspension(enSuspension);
         usuario.setEsAdmin(esAdmin);
         usuario.setSaldo(saldo);
+        usuario.setGestorDeGastos(gestorGastos);
         return usuario;
     }
 }

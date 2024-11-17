@@ -34,16 +34,16 @@ public class ControladorGestorDeGastos {
 
     @RequestMapping(path = "/crearGasto", method = RequestMethod.GET)
     public ModelAndView crearGasto(HttpServletRequest request) {
-        ModelMap model = new ModelMap();
-        return new ModelAndView("creacionGastos");
+
+        return new ModelAndView("creacionGastos", new ModelMap("gasto", new Gasto()));
     }
 
     @RequestMapping(path = "/registrarGasto", method = RequestMethod.POST)
     public ModelAndView registrarGasto(@ModelAttribute("gasto") Gasto gasto, HttpServletRequest request) {
         ModelMap model = new ModelMap();
         HttpSession session = request.getSession();
-        Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
-        GestorDeGastos gestorConectado = usuarioConectado.getGestorDeGastos();
+        UsuarioDTO usuarioConectado = (UsuarioDTO) session.getAttribute("USUARIO");
+        GestorDeGastos gestorConectado = usuarioConectado.convertToUsuario().getGestorDeGastos();
         gestorConectado.registrarGasto(gasto);
         this.servicioGestorGastos.guardarGestor(gestorConectado);
         return new ModelAndView("redirect:/dashboard");

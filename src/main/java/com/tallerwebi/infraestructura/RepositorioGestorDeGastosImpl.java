@@ -20,7 +20,7 @@ public class RepositorioGestorDeGastosImpl {
     }
 
     public List<Gasto> obtenerTodosLosGastosDeUnGestor(Long gestorDeGastosId) {
-        String hql = "SELECT g FROM Gasto g Join GestorDeGastos s ON g.gestor.id = s.id WHERE g.gestor.id = :gestorDeGastosId";
+        String hql = "SELECT g FROM Gasto g Join GestorDeGastos s ON g.gestorId = s.id WHERE g.gestorId = :gestorDeGastosId";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("gestorDeGastosId", gestorDeGastosId);
 

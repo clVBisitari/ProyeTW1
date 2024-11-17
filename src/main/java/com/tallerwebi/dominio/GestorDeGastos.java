@@ -12,12 +12,12 @@ public class GestorDeGastos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     Usuario usuario;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "gestor", orphanRemoval = true)
-    private List<Gasto> gastos = new ArrayList<Gasto>();
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "gestor", orphanRemoval = true)
+//    private List<Gasto> gastos = new ArrayList<Gasto>();
 
     public void setId(Long id) {
         this.id = id;
@@ -27,19 +27,20 @@ public class GestorDeGastos {
         return id;
     }
 
-    public void registrarGasto(Gasto gasto) {
-        this.gastos.add(gasto);
-        gasto.setGestor(this);
-    }
+//    public void registrarGasto(Gasto gasto) {
+//        gasto.setGestorId(this.id);
+//        this.gastos.add(gasto);
+//    }
+//
+//    public void eliminarGasto(Gasto gasto) {
+//
+//        this.gastos.remove(gasto);
+//    }
 
-    public void eliminarGasto(Gasto gasto) {
-        this.gastos.remove(gasto);
-        gasto.setGestor(null);
-    }
-
-    public List<Gasto> getGastos() {
-        return gastos;
-    }
-
-    public void setGastos(List<Gasto> gastos) {this.gastos = gastos;}
+//    public List<Gasto> getGastos() {
+//        return gastos;
+//    }
+//
+//    public void setGastos(List<Gasto> gastos) {this.gastos = gastos;}
+    public void setUsuario(Usuario usuario){this.usuario = usuario;}
 }

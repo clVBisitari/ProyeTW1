@@ -1,12 +1,16 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.helpers.FechaHelper;
 import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
+import com.tallerwebi.presentacion.ProyeInversionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -63,28 +67,30 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         fechaActualSinHora.set(Calendar.MINUTE, 0);
         fechaActualSinHora.set(Calendar.SECOND, 0);
         fechaActualSinHora.set(Calendar.MILLISECOND, 0);
+        LocalDate fechaActual = LocalDate.now();
 
         // Configurar la fecha a comparar sin horas
-        Calendar fechaVencimientoSinHora = Calendar.getInstance();
-        fechaVencimientoSinHora.setTime(fechaVencimiento);
-        fechaVencimientoSinHora.set(Calendar.HOUR_OF_DAY, 0);
-        fechaVencimientoSinHora.set(Calendar.MINUTE, 0);
-        fechaVencimientoSinHora.set(Calendar.SECOND, 0);
-        fechaVencimientoSinHora.set(Calendar.MILLISECOND, 0);
-
-        return fechaVencimientoSinHora.before(fechaActualSinHora.getTime());
+//        Calendar fechaVencimientoSinHora = Calendar.getInstance();
+//        fechaVencimientoSinHora.setTime(fechaVencimiento);
+//        fechaVencimientoSinHora.set(Calendar.HOUR_OF_DAY, 0);
+//        fechaVencimientoSinHora.set(Calendar.MINUTE, 0);
+//        fechaVencimientoSinHora.set(Calendar.SECOND, 0);
+//        fechaVencimientoSinHora.set(Calendar.MILLISECOND, 0);
+        LocalDate fechaVenc = FechaHelper.convertToLocalDate(fechaVencimiento);
+        return fechaVenc.isBefore(fechaActual);
     }
 
     public Boolean esGastoDelMesEnCurso(Date fechaAComparar){
         Date fechaActual = new Date();
+        LocalDate fechaLocalActual = LocalDate.now();
 
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-
-        calendar.setTime(fechaActual);
-        calendar2.setTime(fechaAComparar);
-
-        return (calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH));
+//        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar2 = Calendar.getInstance();
+//
+//        calendar.setTime(fechaActual);
+//        calendar2.setTime(fechaAComparar);
+        return fechaLocalActual.getMonth() == fechaAComparar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth();
+//        return (calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH));
     }
 
 }
