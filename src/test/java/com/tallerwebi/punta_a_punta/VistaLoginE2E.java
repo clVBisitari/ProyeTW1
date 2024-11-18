@@ -61,8 +61,8 @@ public class VistaLoginE2E {
 
     @Test
     void deberiaNavegarAlHomeSiElUsuarioExiste() {
-        vistaLogin.escribirEmail("admin@user.com");
-        vistaLogin.escribirClave("admin");
+        vistaLogin.escribirEmail("test@unlam.edu.ar");
+        vistaLogin.escribirClave("test");
         vistaLogin.darClickEnIniciarSesion();
         String url = vistaLogin.obtenerURLActual();
         assertThat(url, containsStringIgnoringCase("/spring/dashboard"));

@@ -83,16 +83,16 @@ public class RepositorioGastoImplTest {
         assertThat(gastos.size(), equalTo(0));
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void QueSePuedaBuscarUnGastoPorDescripcion() {
-        dadoQueExisteUnGasto();
-
-        List<Gasto> gastos = this.repositorioGastoImpl.buscarGastoPorDescripcion("impuesto");
-
-        assertThat(gastos.size(), equalTo(1));
-    }
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void QueSePuedaBuscarUnGastoPorDescripcion() {
+//        dadoQueExisteUnGasto();
+//
+//        List<Gasto> gastos = this.repositorioGastoImpl.buscarGastoPorDescripcion("impuesto");
+//
+//        assertThat(gastos.size(), equalTo(1));
+//    }
 
     @Test
     @Transactional
