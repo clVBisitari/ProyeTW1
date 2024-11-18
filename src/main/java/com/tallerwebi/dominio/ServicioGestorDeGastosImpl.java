@@ -14,6 +14,7 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("LanguageDetectionInspection")
 @Service("servicioGestorDeGastos")
@@ -39,22 +40,27 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
 
     public Double actualizarTotalGastosDelMesEnCursoPorId(Integer gestorId) {
         List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
-        Double gastoTotal = 0.0;
-        for(int i=0; i<gastos.size(); i++ ){
-            if(esGastoDelMesEnCurso(gastos.get(i).getFechaVencimiento()))
-             gastoTotal += gastos.get(i).getValor();
+
+        double gastoTotal = 0.0;
+
+        for (Gasto gasto : gastos) {
+            if (esGastoDelMesEnCurso(gasto.getFechaVencimiento()))
+                gastoTotal += gasto.getValor();
         }
+
         return gastoTotal;
     }
 
     public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId){
         List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
         int cantidad = 0;
-        for(int i=0; i<gastos.size(); i++ ){
-            if((!esGastoVencido(gastos.get(i).getFechaVencimiento())) && esGastoDelMesEnCurso(gastos.get(i).getFechaVencimiento())){
+
+        for (Gasto gasto : gastos) {
+            if ((!esGastoVencido(gasto.getFechaVencimiento())) && esGastoDelMesEnCurso(gasto.getFechaVencimiento())) {
                 cantidad++;
             }
         }
+
         return cantidad;
     }
 

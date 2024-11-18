@@ -6,6 +6,7 @@
     <title>AssistPyme - Crear Gasto</title>
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gasto.css}"/>
     <link rel="stylesheet" th:href="@{/css/inversiones.css}"/>
 </head>
 <body class="body">
@@ -20,12 +21,11 @@
                 />
             </svg>
         </form>
-       
     </header>
     <form class="spent__form" action="#" th:action="@{/registrarGasto}" method="POST" th:object="${gasto}">
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="descripcion">Descripción:</label>
-            <input class="spent__input" id="descripcion" th:field="*{descripcion}" type="text" min="3" max="15" required placeholder='Comida' />
+            <label class="spent__label" for="descripcion">*Descripción:</label>
+            <input class="spent__input" id="descripcion" name="descripcion" th:field="*{descripcion}" type="text" min="3" max="15" required placeholder='Comida' />
         </fieldset>
         <fieldset class="spent__fieldset">
             <label class="spent__label" for="valor">Valor:</label>

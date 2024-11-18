@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UsuarioDTO {
 
@@ -44,7 +45,6 @@ public class UsuarioDTO {
     public static UsuarioDTO convertUsuarioToDTO(Usuario usuario){
 
         UsuarioDTO usuarioDTO = new UsuarioDTO();
-
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setNombre(usuario.getNombre());
@@ -182,7 +182,6 @@ public class UsuarioDTO {
                 ", dni=" + dni +
                 ", enSuspension=" + enSuspension +
                 ", esAdmin=" + esAdmin +
-                ", contactos=" + contactos +
                 ", saldo=" + saldo +
                 '}';
     }

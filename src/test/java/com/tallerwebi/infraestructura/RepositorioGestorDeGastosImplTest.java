@@ -72,7 +72,9 @@ public class RepositorioGestorDeGastosImplTest {
     @Rollback
     @Transactional
     public void queSePuedaCrearUnGestorDeGastos(){
+
         GestorDeGastos gestor  = new GestorDeGastos();
+
         this.sessionFactory.getCurrentSession().save(gestor);
 
         List<GestorDeGastos> gestorCreado = this.repositorioGestorDeGastosImpl.obtenerTodosLosGestores();
@@ -135,8 +137,8 @@ public class RepositorioGestorDeGastosImplTest {
 
     }*/
 
-
     private GestorDeGastos dadoQueExisteUnGestorConUnGastoRegistrado() throws ParseException {
+
         String fechaString = "2024-10-10";
         Date fechaVencimiento = formatoFechas.parse(fechaString);
         Gasto gasto = new Gasto("impuesto",5000, fechaVencimiento, Frecuencia.MENSUAL);

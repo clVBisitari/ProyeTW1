@@ -2,6 +2,7 @@ package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.Gasto;
 import com.tallerwebi.dominio.GestorDeGastos;
+import com.tallerwebi.presentacion.GastoDTO;
 
 import java.time.LocalDate;
 import java.util.Date;

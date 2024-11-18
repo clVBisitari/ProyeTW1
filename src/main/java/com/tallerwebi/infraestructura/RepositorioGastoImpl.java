@@ -56,7 +56,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeVencimientoDeUnGasto(Long id, Date fechaVencimiento) {
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, LocalDate fechaVencimiento) {
         String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaVencimiento", fechaVencimiento);
@@ -65,7 +65,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeRecordatorioDeUnGasto(Long id, Date fechaRecordatorio) {
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, LocalDate fechaRecordatorio) {
         String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaRecordatorio", fechaRecordatorio);

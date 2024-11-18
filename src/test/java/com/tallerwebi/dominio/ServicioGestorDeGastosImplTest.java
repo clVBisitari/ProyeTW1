@@ -6,18 +6,15 @@ import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import static org.mockito.Mockito.*;
 
@@ -64,23 +61,36 @@ public class ServicioGestorDeGastosImplTest {
 //    }
 
     private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
-        DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
-        Gasto primerGasto = new Gasto("impuesto", 50000, new Date(), Frecuencia.MENSUAL);
+        DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        Gasto primerGasto = new Gasto("impuesto", 50000, LocalDate.now(), Frecuencia.MENSUAL);
 
         String fechaSegundoGastoString = "2099-10-10";
-        Date fechaSegundoGastoVencimiento = formatoFechas.parse(fechaSegundoGastoString);
+        LocalDate fechaSegundoGastoVencimiento = LocalDate.parse(fechaSegundoGastoString);
         Gasto segundoGasto = new Gasto("impuesto", 60000, fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
 
         String fechaTercerGastoString = "2099-10-10";
-        Date fechaTercerGastoVencimiento = formatoFechas.parse(fechaTercerGastoString);
+        LocalDate fechaTercerGastoVencimiento = LocalDate.parse(fechaTercerGastoString);
         Gasto tercerGasto = new Gasto("impuesto", 70000, fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
 
 //        GestorDeGastos gestor = new GestorDeGastos();
-//        gestor.registrarGasto(primerGasto);
-//        gestor.registrarGasto(segundoGasto);
-//        gestor.registrarGasto(tercerGasto);
-//        return gestor;
+//        //gestor.registrarGasto(primerGasto);
+//        //gestor.registrarGasto(segundoGasto);
+//        //gestor.registrarGasto(tercerGasto);
+//
+        return gestor;
         return new GestorDeGastos();
+
     }
+
+//    @Test
+//    @Transactional
+//    @Rollback
+//    public void busacarGestorDeGastosPorUsuario() {
+//
+//        GestorDeGastos gestor = servicioGestorDeGastos.buscarPorUsuario(1);
+//
+//        assertThat(gestor.getId(), equalTo(1));
+//    }
 }
