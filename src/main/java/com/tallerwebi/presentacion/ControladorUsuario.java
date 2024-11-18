@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Controller
@@ -39,27 +40,27 @@ public class ControladorUsuario {
     @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
     public ModelAndView irADashboard(HttpServletRequest request) {
 
+        // Redirigir si no esta loggeado
         if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
 
+        // Obtener datos de usuario
         UsuarioDTO usuarioDto = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
+        // Id de usuario se espera que sea igual que el gestor de gastos
         Long idUsuarioDto = Long.valueOf(usuarioDto.getId());
 
-        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuarioDto));
+        // Gastos del mes
+        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(idUsuarioDto);
 
-        GestorDeGastos gestorConectado = new GestorDeGastos();
-
-        gestorConectado.setGastos(gastoList);
-
-        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
-
-        Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
+        // Gastos por vencer
+        Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
 
         ModelMap modelo = new ModelMap();
 
         modelo.put("usuario", usuarioDto);
+
         modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
         modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
 

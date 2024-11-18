@@ -1,7 +1,5 @@
 package com.tallerwebi.dominio;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.util.*;
 
@@ -12,8 +10,8 @@ public class GestorDeGastos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
     Usuario usuario;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "gestor", orphanRemoval = true)
@@ -27,11 +25,6 @@ public class GestorDeGastos {
         return id;
     }
 
-    public void registrarGasto(Gasto gasto) {
-        this.gastos.add(gasto);
-        gasto.setGestor(this);
-    }
-
     public void eliminarGasto(Gasto gasto) {
         this.gastos.remove(gasto);
         gasto.setGestor(null);
@@ -42,4 +35,13 @@ public class GestorDeGastos {
     }
 
     public void setGastos(List<Gasto> gastos) {this.gastos = gastos;}
+
+    @Override
+    public String toString() {
+        return "GestorDeGastos{" +
+                "id=" + id +
+                ", usuario=" + usuario +
+                ", gastos=" + gastos +
+                '}';
+    }
 }

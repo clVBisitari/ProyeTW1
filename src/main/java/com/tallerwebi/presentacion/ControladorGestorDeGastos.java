@@ -8,10 +8,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Enumeration;
 import java.util.List;
 
 @Controller
@@ -34,31 +31,48 @@ public class ControladorGestorDeGastos {
 
     @RequestMapping(path = "/crearGasto", method = RequestMethod.GET)
     public ModelAndView crearGasto(HttpServletRequest request) {
+
         ModelMap model = new ModelMap();
-        return new ModelAndView("creacionGastos");
+
+        model.put("gastoDTO", new GastoDTO());
+
+        return new ModelAndView("creacionGastos", model);
     }
 
     @RequestMapping(path = "/registrarGasto", method = RequestMethod.POST)
-    public ModelAndView registrarGasto(@ModelAttribute("gasto") Gasto gasto, HttpServletRequest request) {
+    public ModelAndView registrarGasto(GastoDTO gastoDTO, HttpServletRequest request) {
+
         ModelMap model = new ModelMap();
-        HttpSession session = request.getSession();
-        Usuario usuarioConectado = (Usuario) session.getAttribute("USUARIO");
-        GestorDeGastos gestorConectado = usuarioConectado.getGestorDeGastos();
-        gestorConectado.registrarGasto(gasto);
-        this.servicioGestorGastos.guardarGestor(gestorConectado);
-        return new ModelAndView("redirect:/dashboard");
+
+        // Buscar datos de usuario
+        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        // Buscar gestor de usuarios
+        GestorDeGastos gestorConectado = servicioGestorGastos.buscarPorUsuario(usuarioConectado.getId());
+
+        // Convertir gastos y asignar gestor
+        Gasto gasto = GastoDTO.convertirDTOaGasto(gastoDTO);
+        gasto.setGestor(gestorConectado);
+
+        // Guardar gasto
+        this.servicioGestorGastos.guardarGasto(gasto);
+
+        return new ModelAndView("redirect:/dashboardGastos");
     }
 
     @RequestMapping(path = "/dashboardGastos", method = RequestMethod.GET)
     public ModelAndView getDashboardGastos(HttpServletRequest request) {
-        ModelMap model = new ModelMap();
-        HttpSession session = request.getSession(false);
 
-     //   if (session != null && session.getAttribute("id") != null) {
-    //        Long id = (Long) session.getAttribute("id");
-          //  Double totalGastosDelMes = servicioGestorDeGastosImpl.actualizarTotalGastosDelMesEnCurso(id);
-            model.put("totalGastosDelMes", 22);
-    //    }
+        ModelMap model = new ModelMap();
+
+        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        GestorDeGastos gestorConectado = servicioGestorGastos.buscarPorUsuario(usuarioConectado.getId());
+
+        List<GastoDTO> gastos = servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(gestorConectado.getId());
+
+        model.addAttribute("gastos", gastos);
+
         return new ModelAndView("gastos", model);
     }
 

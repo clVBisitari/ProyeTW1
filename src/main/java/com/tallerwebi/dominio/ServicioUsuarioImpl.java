@@ -12,7 +12,6 @@ import java.util.*;
 
 @Service("servicioUsuario")
 @Transactional
-
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private RepositorioUsuario repositorioUsuario;

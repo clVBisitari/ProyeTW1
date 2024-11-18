@@ -6,6 +6,7 @@
     <title>AssistPyme - Crear Gasto</title>
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/gasto.css}"/>
     <link rel="stylesheet" th:href="@{/css/inversiones.css}"/>
 </head>
 <body class="body">
@@ -20,35 +21,32 @@
                 />
             </svg>
         </form>
-       
     </header>
-    <form class="spent__form" action="#" th:action="@{http://localhost:8080/spring/registrarGasto}" method="POST" th:object="${gasto}">
+    <form class="spent__form" action="#" th:action="@{/registrarGasto}" method="post" th:object="${gastoDTO}">
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="descripcion">Descripción:</label>
-            <input class="spent__input" id="descripcion" th:field="*{descripcion}" type="text" min="3" max="15" required placeholder='Comida' />
+            <label class="spent__label" for="descripcion">*Descripción:</label>
+            <input class="spent__input" id="descripcion" name="descripcion" th:field="*{descripcion}" type="text" min="3" max="15" required placeholder='Comida' />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="valor">Valor:</label>
-            <input class="spent__input" id="valor" name="valor" type="number" min="1" required placeholder='$10.000' />
+            <label class="spent__label" for="valor">*Valor:</label>
+            <input class="spent__input" id="valor" name="valor" th:field="*{valor}" type="number" min="1" max="10000000" required placeholder='97' />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="vencimiento">Fecha de vencimiento: (opcional)</label>
-            <input class="spent__input" id="vencimiento" name="vencimiento" type="date" />
+            <label class="spent__label" for="fechaVencimiento">*Fecha de vencimiento:</label>
+            <input class="spent__input" id="fechaVencimiento" name="fechaVencimiento" th:field="*{fechaVencimiento}" type="date" required />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="recordatorio">Fecha de recordatorio: (opcional)</label>
-            <input class="spent__input" id="recordatorio" name="recordatorio" type="date" />
+            <label class="spent__label" for="fechaRecordatorio">Fecha de recordatorio:</label>
+            <input class="spent__input" id="fechaRecordatorio" name="fechaRecordatorio" th:field="*{fechaRecordatorio}" type="date" />
         </fieldset>
         <fieldset class="spent__fieldset">
-            <label class="spent__label" for="frecuencia">Frecuencia: (opcional)</label>
-            <select class="spent__input" id="frecuencia" name="frecuencia" >
-                <option value="unico">Unico</option>
-                <option value="diario">Diario</option>
-                <option value="semanal">Semanal</option>
-                <option value="mensual">Mensual</option>
-                <option value="bimestral">Bimestral</option>
-                <option value="semestral">Semestral</option>
-                <option value="anual">Anual</option>
+            <label class="spent__label" for="frecuencia">Frecuencia:</label>
+            <select class="spent__input" id="frecuencia" name="frecuencia" th:field="*{frecuencia}">
+                <option value="UNICO">UNICO</option>
+                <option value="MENSUAL">MENSUAL</option>
+                <option value="BIMESTRAL">BIMESTRAL</option>
+                <option value="SEMESTRAL">SEMESTRAL</option>
+                <option value="ANUAL">ANUAL</option>
             </select>
         </fieldset>
         <button class="button__primary" id="btn-gasto">Agregar Gasto</button>

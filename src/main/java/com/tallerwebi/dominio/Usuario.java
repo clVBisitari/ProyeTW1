@@ -15,8 +15,10 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true)
     private String email;
+
     private String nombre;
     private String apellido;
     private Integer dni;
@@ -35,6 +37,7 @@ public class Usuario {
     private Boolean enSuspension = false;
     @OneToOne(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProyectoInversion proyecto;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
     private GestorDeGastos gestorDeGastos;
 
