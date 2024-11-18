@@ -37,8 +37,7 @@ public class Usuario {
     private ProyectoInversion proyecto;
 //    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
 //    private GestorDeGastos gestorDeGastos;
-    @OneToMany()
-    @JoinTable( name = "usuario_gastos", joinColumns = @JoinColumn(name = "usuarioid_gastoid"), inverseJoinColumns = @JoinColumn(name="gastoid_usuarioid"))
+    @OneToMany(mappedBy = "usuario")
     private List<Gasto> gastos = new ArrayList<Gasto>();
 
     public Usuario(){}
@@ -60,106 +59,32 @@ public class Usuario {
     public Integer getId() {
         return id;
     }
+    public String getEmail() {return email;}
+    public String getNombre() {return nombre;}
+    public List<Gasto> getGastos(){return this.gastos;};
+    public String getApellido() {return apellido;}
+    public Integer getDni() {return dni;}
+    public Double getSaldo() {return saldo;}
+    public List<Usuario> getContactos() {return contactos;}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-//    public GestorDeGastos getGestorDeGastos() {
-//        return gestorDeGastos;
-//    }
-//
-//    public void setGestorDeGastos(GestorDeGastos gestorDeGastos) {
-//        this.gestorDeGastos = gestorDeGastos;
-//    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public Integer getDni() {
-        return dni;
-    }
-
-    public void setDni(Integer dni) {
-        this.dni = dni;
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
-
-    public List<Usuario> getContactos() {
-        return contactos;
-    }
-
-    public void setContactos(List<Usuario> contactos) {
-        this.contactos = contactos;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getEsAdmin() {
-        return esAdmin;
-    }
-
-    public void setEsAdmin(Boolean esAdmin) {
-        this.esAdmin = esAdmin;
-    }
-
-    public Boolean getEnSuspension() {
-        return enSuspension;
-    }
-
-    public void setEnSuspension(Boolean enSuspencion) {
-        this.enSuspension = enSuspencion;
-    }
-
-    public ProyectoInversion getProyecto() {
-        return proyecto;
-    }
-
-    public void setProyecto(ProyectoInversion proyecto) {
-        this.proyecto = proyecto;
-    }
-
-    public Boolean getEstaActivo() {
-        return this.estaActivo;
-    }
-
-    public void setEstaActivo(Boolean activo) {
-        this.estaActivo = activo;
-    }
+    public void setId(Integer id) {this.id = id;}
+    public void setNombre(String nombre) {this.nombre = nombre;}
+    public void setEmail(String email) {this.email = email;}
+    public void setApellido(String apellido) {this.apellido = apellido;}
+    public void setDni(Integer dni) {this.dni = dni;}
+    public void setSaldo(Double saldo) {this.saldo = saldo;}
+    public String getPassword() {return password;}
+    public Boolean getEsAdmin() {return esAdmin;}
+    public Boolean getEnSuspension() {return enSuspension;}
+    public ProyectoInversion getProyecto() {return proyecto;}
+    public Boolean getEstaActivo() {return this.estaActivo;}
+    public void setContactos(List<Usuario> contactos) {this.contactos = contactos;}
+    public void setPassword(String password) {this.password = password;}
+    public void setEsAdmin(Boolean esAdmin) {this.esAdmin = esAdmin;}
+    public void setEnSuspension(Boolean enSuspension) {this.enSuspension = enSuspension;}
+    public void setProyecto(ProyectoInversion proyecto) {this.proyecto = proyecto;}
+    public void setEstaActivo(Boolean activo) {this.estaActivo = activo;}
+    public void setGastos(List<Gasto>gastos){this.gastos= gastos;}
 
     @Override
     public boolean equals(Object o) {
@@ -221,5 +146,4 @@ public class Usuario {
         }
         return usuariosDTO;
     }
-
 }

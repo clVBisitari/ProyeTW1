@@ -19,12 +19,12 @@ public class RepositorioGestorDeGastosImpl {
         this.sessionFactory = sessionFactory;
     }
 
-    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Long gestorDeGastosId) {
-        String hql = "SELECT g FROM Gasto g Join GestorDeGastos s ON g.gestorId = s.id WHERE g.gestorId = :gestorDeGastosId";
-        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("gestorDeGastosId", gestorDeGastosId);
-
-        return query.getResultList();
+    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer usuarioId) {
+        String hql = "FROM Gasto g WHERE g.usuario.id = :usuarioId";
+        List<Gasto> gastos = sessionFactory.getCurrentSession().createQuery(hql, Gasto.class)
+                .setParameter("usuarioId", usuarioId)
+                .getResultList();
+        return gastos;
     }
 
     public List<GestorDeGastos> obtenerTodosLosGestores() {
@@ -35,6 +35,7 @@ public class RepositorioGestorDeGastosImpl {
     }
 
     public void guardarGestor(GestorDeGastos gestorDeGastos) {
+
         this.sessionFactory.getCurrentSession().save(gestorDeGastos);
     }
 

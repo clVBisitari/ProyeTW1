@@ -37,14 +37,15 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         Usuario nuevoUser = new Usuario(usuario.getEmail(), usuario.getPassword(), usuario.getNombre(), usuario.getApellido(), usuario.getDni());
 
-        GestorDeGastos gestor = new GestorDeGastos();
-        gestor.setGastos(new ArrayList<>());
-        gestor.setUsuario(nuevoUser);
+
+//        GestorDeGastos gestor = new GestorDeGastos();
+//        gestor.setGastos(new ArrayList<>());
+//        gestor.setUsuario(nuevoUser);
 
         nuevoUser.setEsAdmin(false);
         nuevoUser.setEnSuspension(false);
         nuevoUser.setSaldo(0.00);
-        nuevoUser.setGestorDeGastos(gestor);
+//        nuevoUser.setGestorDeGastos(gestor);
 
         repositorioUsuario.guardar(nuevoUser);
     }

@@ -8,11 +8,11 @@ import java.util.Date;
 import java.util.List;
 
 public interface ServicioGestorGastos {
-    Double actualizarTotalGastosDelMesEnCursoPorId(Long gestorId);
-    Integer actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId);
-    List<Gasto> obtenerTodosLosGastosDeUnGestor(Long id);
+    Double actualizarTotalGastosDelMesEnCursoPorId(Integer usuarioId);
+    Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId);
+    List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id);
     void guardarGestor(GestorDeGastos gestorDeGastos);
     Boolean esGastoVencido(Date fechaVencimiento);
     Boolean esGastoDelMesEnCurso(Date fechaAComparar);
-    void guardarGasto(Gasto gasto);
+    Boolean guardarGasto(Integer userId, Gasto gasto);
 }

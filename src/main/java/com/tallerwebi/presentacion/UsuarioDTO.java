@@ -55,7 +55,7 @@ public class UsuarioDTO {
         usuarioDTO.setSaldo(usuario.getSaldo());
         usuarioDTO.setContactos(Usuario.mapToUsuarioDTOList(usuario.getContactos()));
         usuarioDTO.setEstaActivo(usuario.getEstaActivo());
-        usuarioDTO.setGestorGastos(usuario.getGestorDeGastos());
+//        usuarioDTO.setGestorGastos(usuario.getGestorDeGastos());
         return usuarioDTO;
     }
 
@@ -197,7 +197,7 @@ public class UsuarioDTO {
         usuario.setEnSuspension(enSuspension);
         usuario.setEsAdmin(esAdmin);
         usuario.setSaldo(saldo);
-        usuario.setGestorDeGastos(gestorGastos);
+//        usuario.setGestorDeGastos(gestorGastos);
         return usuario;
     }
 }

@@ -15,7 +15,7 @@ public class Gasto {
     private Long id;
 
     @ManyToOne
-    @JoinTable(name = "gasto_usuario")
+    @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
     @Column(nullable = false)
@@ -75,6 +75,7 @@ public class Gasto {
     public double getValor() {
         return valor;
     }
+    public Usuario getUsuario(){return usuario;}
 
 //    public GestorDeGastos getGestor() {
 //        return gestor;
@@ -118,6 +119,7 @@ public class Gasto {
     public void setValor(double valor) {
         this.valor = valor;
     }
+    public void setUsuario(Usuario usuario){this.usuario = usuario;}
 /*    public void setGestorId(Long gestorId) {
         this.gestorId = gestorId;
     }

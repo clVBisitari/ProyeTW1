@@ -43,10 +43,11 @@ public class ControladorGestorDeGastos {
         ModelMap model = new ModelMap();
         HttpSession session = request.getSession();
         UsuarioDTO usuarioConectado = (UsuarioDTO) session.getAttribute("USUARIO");
-        GestorDeGastos gestorConectado = usuarioConectado.convertToUsuario().getGestorDeGastos();
-        gestorConectado.registrarGasto(gasto);
-        this.servicioGestorGastos.guardarGestor(gestorConectado);
-        return new ModelAndView("redirect:/dashboard");
+//        GestorDeGastos gestorConectado = usuarioConectado.convertToUsuario().getGestorDeGastos();
+//        gestorConectado.registrarGasto(gasto);
+        boolean guardadoExitoso = this.servicioGestorGastos.guardarGasto(usuarioConectado.getId(), gasto);
+        if(guardadoExitoso){model.addAttribute("gastoGuardado", true);}
+        return new ModelAndView("redirect:/dashboard", model);
     }
 
     @RequestMapping(path = "/dashboardGastos", method = RequestMethod.GET)

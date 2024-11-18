@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("LanguageDetectionInspection")
 @Service("servicioGestorDeGastos")
 @Transactional
 public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
@@ -32,11 +33,11 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
          repositorioGestorDeGastos.guardarGestor(gestorDeGastos);
     }
 
-    public void guardarGasto(Gasto gasto){
-        repositorioGasto.guardarGasto(gasto);
+    public Boolean guardarGasto(Integer userId, Gasto gasto){
+        return repositorioGasto.guardarGasto(userId, gasto);
     }
 
-    public Double actualizarTotalGastosDelMesEnCursoPorId(Long gestorId) {
+    public Double actualizarTotalGastosDelMesEnCursoPorId(Integer gestorId) {
         List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
         Double gastoTotal = 0.0;
         for(int i=0; i<gastos.size(); i++ ){
@@ -46,8 +47,8 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return gastoTotal;
     }
 
-    public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId){
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
+    public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId){
+        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
         int cantidad = 0;
         for(int i=0; i<gastos.size(); i++ ){
             if((!esGastoVencido(gastos.get(i).getFechaVencimiento())) && esGastoDelMesEnCurso(gastos.get(i).getFechaVencimiento())){
@@ -57,7 +58,7 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return cantidad;
     }
 
-    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Long id){
+    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id){
         return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
     }
 

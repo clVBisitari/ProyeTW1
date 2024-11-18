@@ -45,17 +45,17 @@ public class ControladorUsuario {
 
         UsuarioDTO usuarioDto = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-        Long idUsuarioDto = Long.valueOf(usuarioDto.getId());
+        Integer idUsuarioDto = usuarioDto.getId();
 
-        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(Long.valueOf(idUsuarioDto));
+        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(idUsuarioDto);
 
-        GestorDeGastos gestorConectado = new GestorDeGastos();
+//        GestorDeGastos gestorConectado = new GestorDeGastos();
 
-        gestorConectado.setGastos(gastoList);
+//        gestorConectado.setGastos(gastoList);
 
-        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(gestorConectado.getId());
+        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(idUsuarioDto);
 
-        Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestorConectado.getId());
+        Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
 
         ModelMap modelo = new ModelMap();
 
