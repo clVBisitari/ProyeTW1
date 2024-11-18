@@ -23,15 +23,19 @@ public class Usuario {
     private String apellido;
     private Integer dni;
     private Double saldo;
+    private String motivoDeSuspension;
+    private Boolean estaActivo = true;
+    @ManyToMany
+    @JoinTable(
+            name = "usuario_usuarios",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "contacto_id")
+    )
+    private List<Usuario> contactos = new ArrayList<>();
     private String password;
     private Boolean esAdmin = false;
     private Boolean enSuspension = false;
-
-    @ManyToMany
-    @JoinColumn(name = "usuario_id")
-    private List<Usuario>contactos;
-
-    @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
+    @OneToOne(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
     private ProyectoInversion proyecto;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
@@ -47,6 +51,12 @@ public class Usuario {
         this.dni = dni;
     }
 
+    public String getMotivoDeSuspension() {
+        return  this.motivoDeSuspension;
+    }
+    public void setMotivoDeSuspension(String motivo) {
+        this.motivoDeSuspension = motivo;
+    }
     public Integer getId() {
         return id;
     }
@@ -143,6 +153,14 @@ public class Usuario {
         this.proyecto = proyecto;
     }
 
+    public Boolean getEstaActivo() {
+        return this.estaActivo;
+    }
+
+    public void setEstaActivo(Boolean activo) {
+        this.estaActivo = activo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -177,6 +195,12 @@ public class Usuario {
 
         return session != null && isAttributeNotNull(session, "USUARIO") && isAttributeNotNull(session, "idUsuario");
     }
+    public static boolean isAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        UsuarioDTO usuarioDto = (UsuarioDTO) session.getAttribute("USUARIO");
+        return session != null && isAttributeNotNull(session, "USUARIO") && usuarioDto.getEsAdmin();
+    }
+
 
     public static Boolean isAttributeNotNull(HttpSession session, String attributeName){
         return session.getAttribute(attributeName) != null;
@@ -186,12 +210,16 @@ public class Usuario {
         List<UsuarioDTO> usuariosDTO = new ArrayList<>();
         for (Usuario usuario : usuarios) {
             UsuarioDTO usuarioDTO = new UsuarioDTO();
+
             usuarioDTO.setId(usuario.getId());
             usuarioDTO.setNombre(usuario.getNombre());
             usuarioDTO.setEmail(usuario.getEmail());
+            usuarioDTO.setMotivoDeSuspension(usuario.getMotivoDeSuspension());
             usuarioDTO.setEnSuspension(usuario.getEnSuspension());
+            usuarioDTO.setEstaActivo(usuario.getEstaActivo());
             usuariosDTO.add(usuarioDTO);
         }
         return usuariosDTO;
     }
+
 }

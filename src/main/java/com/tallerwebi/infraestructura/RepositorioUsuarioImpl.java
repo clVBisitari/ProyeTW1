@@ -14,6 +14,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
@@ -71,16 +72,30 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public List<Usuario> obtenerContactos(String email) {
         Usuario usuario = buscar(email);
         if (usuario != null) {
-            return usuario.getContactos();
+            // Filtrar los contactos para incluir solo los que están activos
+            return usuario.getContactos().stream()
+                    .filter(Usuario::getEstaActivo) // Filtrar por usuarios activos
+                    .collect(Collectors.toList());
         }
         return null;
     }
-
     @Override
     public List<Usuario> getContactosSugeridos(Integer miUsuarioId) {
-        final Session session =sessionFactory.getCurrentSession();
-        return (List<Usuario>) session.createCriteria(Usuario.class).add(Restrictions.ne("id", miUsuarioId))  .list();
+        final Session session = sessionFactory.getCurrentSession();
+
+        String hql = "SELECT u FROM Usuario u " +
+                "WHERE u.id != :miUsuarioId " +
+                "AND u.estaActivo = true " + // Agregamos la condición para usuarios activos
+                "AND u.id NOT IN (" +
+                "   SELECT uu.id FROM Usuario usuario " +
+                "   JOIN usuario.contactos uu " +
+                "   WHERE usuario.id = :miUsuarioId" +
+                ")";
+        return (List<Usuario>) session.createQuery(hql)
+                .setParameter("miUsuarioId", miUsuarioId)
+                .list();
     }
+
 
     @Override
     public Usuario buscarUsuarioPorId(int id) {
@@ -94,8 +109,32 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     @Override
     public List<Usuario> buscarUsuarioPorNombre(String nombreUsuario) {
         final Session session = sessionFactory.getCurrentSession();
-        return (List<Usuario>) session.createCriteria(Usuario.class)
-                .add(Restrictions.like("nombre", "%" + nombreUsuario + "%"))
+
+        String hql = "FROM Usuario u WHERE u.nombre LIKE :nombreUsuario AND u.estaActivo = true";
+        return (List<Usuario>) session.createQuery(hql)
+                .setParameter("nombreUsuario", "%" + nombreUsuario + "%")
                 .list();
     }
+
+    @Override
+    public List<Usuario> getUsuariosSuspendidos() {
+        final Session session = sessionFactory.getCurrentSession();
+
+        String hql = "FROM Usuario u WHERE u.enSuspension = true";
+
+        return session.createQuery(hql, Usuario.class).getResultList();
+    }
+
+    @Override
+    public void agregarContacto(Integer usuarioId, Integer contactoId) {
+            String hql = "INSERT INTO usuario_usuarios (usuario_id, contacto_id) VALUES (:usuarioId, :contactoId)";
+
+            Session session = sessionFactory.getCurrentSession();
+            session.createNativeQuery(hql)
+                    .setParameter("usuarioId", usuarioId)
+                    .setParameter("contactoId", contactoId)
+                    .executeUpdate();
+
+    }
+
 }

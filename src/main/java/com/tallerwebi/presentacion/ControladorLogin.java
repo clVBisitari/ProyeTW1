@@ -34,7 +34,6 @@ public class ControladorLogin {
     @Transactional
     @RequestMapping(path = "/validar-login", method = RequestMethod.POST)
     public ModelAndView validarLogin(@ModelAttribute("datosLogin") DatosLogin datosLogin, HttpServletRequest request) {
-
         ModelMap model = new ModelMap();
 
         Usuario usuarioBuscado = servicioLogin.consultarUsuario(datosLogin.getEmail(), datosLogin.getPassword());
@@ -71,13 +70,6 @@ public class ControladorLogin {
             return new ModelAndView("nuevo-usuario", model);
         }
         return new ModelAndView("redirect:/login");
-    }
-
-    @RequestMapping(path = "/registro", method = RequestMethod.GET)
-    public ModelAndView nuevoUsuario() {
-        ModelMap model = new ModelMap();
-        model.put("usuario", new Usuario());
-        return new ModelAndView("registro", model);
     }
 
     @RequestMapping(path = "/home", method = RequestMethod.GET)

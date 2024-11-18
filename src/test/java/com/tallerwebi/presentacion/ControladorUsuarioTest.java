@@ -122,14 +122,14 @@ public class ControladorUsuarioTest {
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoYEsAdminSePuedeSuspenderAOtro() {
+    public void dadoQueExisteUnUsuarioLogueadoPuedeSuspenderAOtro() {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         usuarioASuspender.setNombre("Alexi");
         usuarioASuspender.setEnSuspension(false);
         String motivo = "mal comportamiento";
 
-        when(servicioUsuarioMock.buscarUsuarioPorId(16)).thenReturn(usuarioASuspender);
+        when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
         when(servicioUsuarioMock.suspenderUsuario(eq("mal comportamiento"), eq(16))).thenReturn(true);
 
         String resultado = controladorUsuario.suspenderUsuario(usuarioASuspender.getId(), motivo, redirectAttributesMock);
@@ -138,7 +138,7 @@ public class ControladorUsuarioTest {
 
 
     @Test
-    public void dadoQueSeRevierteLaSuspensionSeMuestraMensajeExitoso() {
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeRevertirUnaSuspension() {
         Usuario usuarioASuspender = new Usuario();
         usuarioASuspender.setId(16);
         when(servicioUsuarioMock.getUsuarioById(16)).thenReturn(usuarioASuspender);
@@ -150,11 +150,84 @@ public class ControladorUsuarioTest {
 
         verify(redirectAttributesMock).addFlashAttribute("mensaje", "Suspensión revertida");
 
-        assertThat(resultado, is("redirect:/contactos"));
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
+    }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeDesactivarAUsuariosSuspendidos() throws Exception {
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
+        when(usuarioDTOMock.getId()).thenReturn(1);
+
+        Usuario usuarioADesactivar = new Usuario();
+        usuarioADesactivar.setId(2);
+
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
+        when(servicioUsuarioMock.getUsuarioById(2)).thenReturn(usuarioADesactivar);
+
+        String resultado = controladorUsuario.cambiarEstadoUsuario(2, requestMock);
+        verify(servicioUsuarioMock).cambiarEstadoUsuario(usuarioADesactivar);
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
+
+    }
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeReactivarAUsuariosSuspendidos() throws Exception {
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
+        when(usuarioDTOMock.getId()).thenReturn(1);
+
+        Usuario usuarioAActivar = new Usuario();
+        usuarioAActivar.setId(2);
+        usuarioAActivar.setEstaActivo(false);
+
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
+        when(servicioUsuarioMock.getUsuarioById(2)).thenReturn(usuarioAActivar);
+
+        String resultado = controladorUsuario.cambiarEstadoUsuario(2, requestMock);
+        verify(servicioUsuarioMock).cambiarEstadoUsuario(usuarioAActivar);
+        assertThat(resultado, is("redirect:/vistaAdministrador"));
+
     }
 
     @Test
-    public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() {
+    public void dadoQueExisteUnUsuarioLogueadoYEsAdministradorPuedeAccederAlaVistaAdministrador() {
+
+        // Mock de la sesión y los atributos de la sesión
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(1);
+        when(usuarioDTOMock.getEsAdmin()).thenReturn(true);
+        when(usuarioDTOMock.getId()).thenReturn(1);
+
+        // Simulación de que el usuario está logueado y es admin
+        when(Usuario.isUserLoggedIn(requestMock)).thenReturn(true);
+        when(Usuario.isAdmin(requestMock)).thenReturn(true);
+
+        // Usuarios a ser guardados
+        List<Usuario> usuariosSuspendidos = new ArrayList<>();
+        usuariosSuspendidos.add(new Usuario());
+        usuariosSuspendidos.add(new Usuario());
+        usuariosSuspendidos.add(new Usuario());
+
+        // Mock de servicios
+        when(servicioUsuarioMock.getUsuariosSuspedidos()).thenReturn(usuariosSuspendidos);
+        List<UsuarioDTO> usuariosSuspendidosDTO=  Usuario.mapToUsuarioDTOList(usuariosSuspendidos);
+        ModelAndView mav = controladorUsuario.irAAdmin(requestMock);
+
+        assertThat(mav.getViewName(), equalToIgnoringCase("vistaAdministrador"));
+        assertThat(mav.getModel().get("usuariosSuspendidos"), equalTo(usuariosSuspendidosDTO));
+    }
+
+    @Test
+    public void dadoQueExisteUnUsuarioLogueadoPuedeAgregarOtroUsuarioQueNoEsteEnSuListaDeContactos() throws Exception {
 
         // Mock de la sesión y los atributos de la sesión
         when(requestMock.getSession(false)).thenReturn(sessionMock);
@@ -184,5 +257,4 @@ public class ControladorUsuarioTest {
         assertThat(vistaRedirigida, equalTo("redirect:/contactos"));
         verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
     }
-
 }

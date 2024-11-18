@@ -14,6 +14,10 @@ public interface RepositorioUsuario {
     List<Usuario> obtenerContactos(String email);
     List<Usuario>getContactosSugeridos(Integer id);
     List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
+
+    List<Usuario> getUsuariosSuspendidos();
+
+    void agregarContacto(Integer idUsuario, Integer idContacto);
 }
 
 

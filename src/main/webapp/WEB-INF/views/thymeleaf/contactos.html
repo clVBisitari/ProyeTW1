@@ -94,6 +94,8 @@
     </div>
 </nav>
 <main class="contacts__main">
+
+    <!---------------------------------------   BUSQUEDA   --------------------------------------->
     <header class="contacts__search">
         <form
                 class="contacts__form"
@@ -252,10 +254,17 @@
         <h1>No se encontró ningún contacto con ese nombre</h1>
     </aside>
 
-    <section>
-        <aside th:if="${contactos != null}">
+    <!---------------------------------------   BUSQUEDA   --------------------------------------->
+
+
+
+    <section>        <!---------------------------------------   Contactos//////Sugeridos   --------------------------------------->
+
+
+        <!---------------------------------------   Contactos   --------------------------------------->
+        <aside >
             <h3 class="contacts__atitle">Contactos</h3>
-            <div th:each="contacto : ${contactos}">
+            <div th:each="contacto : ${contactos}" style="display:flex;justify-content: center; align-items: center">
                 <article class="contacts__article">
                     <img
                             class="contacts__img"
@@ -329,9 +338,16 @@
                                 th:text="${mensaje}"
                         ></p>
                     </form>
+                    <div>
+                        <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
+                    </div>
+
                 </div>
             </div>
         </aside>
+        <!---------------------------------------   /Contactos   --------------------------------------->
+
+        <!---------------------------------------   Contactos   SUGERIDOS--------------------------------------->
 
         <aside
                 class="contacts__aside"
@@ -434,7 +450,11 @@
                 </div>
             </div>
         </aside>
+        <!---------------------------------------   Contactos   SUGERIDOS--------------------------------------->
+
     </section>
+
+
 </main>
 </body>
 </html>

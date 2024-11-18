@@ -6,6 +6,7 @@ import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -36,7 +37,7 @@ public class ControladorUsuario {
     }
 
     @Transactional
-    @RequestMapping(path ="/dashboard", method = RequestMethod.GET)
+    @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
     public ModelAndView irADashboard(HttpServletRequest request) {
 
         // Redirigir si no esta loggeado
@@ -75,7 +76,7 @@ public class ControladorUsuario {
             return new ModelAndView("redirect:/login");
         }
         ModelMap model = new ModelMap();
-        UsuarioDTO usuarioDTO =(UsuarioDTO)request.getSession().getAttribute("USUARIO");
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
         List<Usuario> contactos = servicioUsuario.getContactos(usuarioDTO.getEmail());
 
@@ -113,9 +114,10 @@ public class ControladorUsuario {
     }
 
     @RequestMapping(path = "/revertir-suspension/usuario/{id}", method = RequestMethod.POST)
-    public String revertirSuspencion(@PathVariable("id") Integer id,RedirectAttributes redirectAttributes) {
+    public String revertirSuspencion(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
 
         Usuario usuario = servicioUsuario.getUsuarioById(id);
+
         boolean suspension = servicioUsuario.revertirSuspensionUsuario(id);
 
         if (suspension) {
@@ -123,11 +125,11 @@ public class ControladorUsuario {
         } else {
             redirectAttributes.addFlashAttribute("mensaje", "Error al revertir suspencion");
         }
-        return "redirect:/contactos";
+        return "redirect:/vistaAdministrador";
     }
 
     @RequestMapping(path = "/agregar/contacto/{id}", method = RequestMethod.POST)
-    public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
+    public String agregarContacto(@PathVariable("id") Integer id, HttpServletRequest request) throws Exception {
 
         if (!Usuario.isUserLoggedIn(request)) {
             return "redirect:/login";
@@ -136,10 +138,36 @@ public class ControladorUsuario {
         UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         Usuario usuarioQueGuarda = servicioUsuario.getUsuarioById(usuarioDTO.getId());
         Usuario usuarioAGuardar = servicioUsuario.getUsuarioById(id);
-
         servicioUsuario.agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
 
         return "redirect:/contactos";
+    }
+
+    @RequestMapping(path = "/eliminar/contacto/{id}", method = RequestMethod.POST)
+    public String elmininarContacto(@PathVariable("id") Integer id, HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        Usuario usuarioQueElimina = servicioUsuario.getUsuarioById(usuarioDTO.getId());
+        Usuario usuarioAEliminar = servicioUsuario.getUsuarioById(id);
+
+        servicioUsuario.eliminarUsuarioDeContactos(usuarioQueElimina, usuarioAEliminar);
+
+        return "redirect:/contactos";
+    }
+
+    @RequestMapping(path = "/cambiarEstado/usuario/{id}", method = RequestMethod.POST)
+    public String cambiarEstadoUsuario(@PathVariable("id") Integer id, HttpServletRequest request) throws Exception {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+        Usuario usuario = servicioUsuario.getUsuarioById(id);
+        servicioUsuario.cambiarEstadoUsuario(usuario);
+        return "redirect:/vistaAdministrador";
     }
 
 
@@ -150,24 +178,23 @@ public class ControladorUsuario {
             return "redirect:/login";
         }
 
-        UsuarioDTO usuarioDTO = UsuarioDTO.convertUsuarioToDTO((Usuario)request.getSession().getAttribute("USUARIO"));
-        Usuario usuario = servicioUsuario.getUsuarioById(usuarioDTO.getId());
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         List<Usuario> contactosEncontrados = servicioUsuario.buscarUsuarioPorNombre(nombre);
-        List<UsuarioDTO>contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
+        List<UsuarioDTO> contactosEncontradosDTO = Usuario.mapToUsuarioDTOList(contactosEncontrados);
 
         if (contactosEncontradosDTO.isEmpty()) {
             redirectAttributes.addFlashAttribute("mensajeContactoNoEncontrado", "contactos no encontrados con ese nombre");
         } else {
             redirectAttributes.addFlashAttribute("contactosEncontrados", contactosEncontradosDTO);
 
-                List<UsuarioDTO> contactosActuales = usuarioDTO.getContactos();
-                for (UsuarioDTO contactoEncontrado : contactosEncontradosDTO) {
-                    if (contactosActuales.contains(contactoEncontrado)) {
-                        redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "Ya son amigos");
-                    } else {
-                        redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavía no son amigos");
-                    }
+            List<UsuarioDTO> contactosActuales = usuarioDTO.getContactos();
+            for (UsuarioDTO contactoEncontrado : contactosEncontradosDTO) {
+                if (contactosActuales.contains(contactoEncontrado)) {
+                    redirectAttributes.addFlashAttribute("mensajeContactoEnLista", "Ya son amigos");
+                } else {
+                    redirectAttributes.addFlashAttribute("mensajeContactoNuevo", "Todavía no son amigos");
                 }
+            }
 
         }
         return "redirect:/contactos";
@@ -176,9 +203,43 @@ public class ControladorUsuario {
     }
 
     @Transactional
+    @RequestMapping(path = "/perfil", method = RequestMethod.GET)
+    public ModelAndView irAPerfil(HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuario", usuarioDTO);
+
+        return new ModelAndView("perfil", modelo);
+    }
+
+    @Transactional
     @RequestMapping(path = "/saldo", method = RequestMethod.GET)
     public ModelAndView getSaldo(HttpServletRequest request) {
 
         return new ModelAndView("saldo");
+    }
+
+    @Transactional
+    @RequestMapping(path = "/vistaAdministrador", method = RequestMethod.GET)
+    public ModelAndView irAAdmin(HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request) || !Usuario.isAdmin(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        List<Usuario> usuariosSuspedidos = servicioUsuario.getUsuariosSuspedidos();
+        //servicioUsuario.getProyectosSuspendidos(); ------
+        List<UsuarioDTO> usuariosSuspendidos = Usuario.mapToUsuarioDTOList(usuariosSuspedidos);
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuariosSuspendidos", usuariosSuspendidos);
+
+        return new ModelAndView("vistaAdministrador", modelo);
     }
 }
