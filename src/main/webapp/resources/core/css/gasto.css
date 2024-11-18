@@ -38,6 +38,7 @@
 .spent__input {
     padding: .5rem;
     font-size: 1.2rem;
+    width: 100%;
 }
 
 .spent__button {
@@ -66,13 +67,14 @@
     }
 
     .spent__form {
-        flex-direction: row;
-        flex-wrap: wrap;
-        align-items: end;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        width: 50%;
+        margin: 5rem auto;
     }
 
     .spent__fieldset {
-        width: 45%;
+        width: 100%;
     }
 
     .spent__button {

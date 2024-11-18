@@ -3,6 +3,7 @@ import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UsuarioDTO {
 
@@ -39,7 +40,6 @@ public class UsuarioDTO {
     public static UsuarioDTO convertUsuarioToDTO(Usuario usuario){
 
         UsuarioDTO usuarioDTO = new UsuarioDTO();
-
         usuarioDTO.setId(usuario.getId());
         usuarioDTO.setEmail(usuario.getEmail());
         usuarioDTO.setNombre(usuario.getNombre());
@@ -48,6 +48,13 @@ public class UsuarioDTO {
         usuarioDTO.setEnSuspension(usuario.getEnSuspension());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
         usuarioDTO.setSaldo(usuario.getSaldo());
+
+        if (usuario.getContactos() != null) {
+            List<UsuarioDTO> contactosDTO = usuario.getContactos().stream()
+                    .map(UsuarioDTO::convertUsuarioToDTO)
+                    .collect(Collectors.toList());
+            usuarioDTO.setContactos(contactosDTO);
+        }
 
         return usuarioDTO;
     }
@@ -147,7 +154,6 @@ public class UsuarioDTO {
                 ", dni=" + dni +
                 ", enSuspension=" + enSuspension +
                 ", esAdmin=" + esAdmin +
-                ", contactos=" + contactos +
                 ", saldo=" + saldo +
                 '}';
     }

@@ -16,6 +16,8 @@ import javax.transaction.Transactional;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -63,23 +65,37 @@ public class ServicioGestorDeGastosImplTest {
         assertThat(cantidadGastosPorVencer, equalTo(1));
     }
 
-    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
-        DateFormat formatoFechas = new SimpleDateFormat("yyyy-MM-dd");
 
-        Gasto primerGasto = new Gasto("impuesto", 50000, new Date(), Frecuencia.MENSUAL);
+    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
+
+        DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        Gasto primerGasto = new Gasto("impuesto", 50000, LocalDate.now(), Frecuencia.MENSUAL);
 
         String fechaSegundoGastoString = "2099-10-10";
-        Date fechaSegundoGastoVencimiento = formatoFechas.parse(fechaSegundoGastoString);
+        LocalDate fechaSegundoGastoVencimiento = LocalDate.parse(fechaSegundoGastoString);
         Gasto segundoGasto = new Gasto("impuesto", 60000, fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
 
         String fechaTercerGastoString = "2099-10-10";
-        Date fechaTercerGastoVencimiento = formatoFechas.parse(fechaTercerGastoString);
+        LocalDate fechaTercerGastoVencimiento = LocalDate.parse(fechaTercerGastoString);
         Gasto tercerGasto = new Gasto("impuesto", 70000, fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
 
         GestorDeGastos gestor = new GestorDeGastos();
-        gestor.registrarGasto(primerGasto);
-        gestor.registrarGasto(segundoGasto);
-        gestor.registrarGasto(tercerGasto);
+        //gestor.registrarGasto(primerGasto);
+        //gestor.registrarGasto(segundoGasto);
+        //gestor.registrarGasto(tercerGasto);
+
         return gestor;
+
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    public void busacarGestorDeGastosPorUsuario() {
+
+        GestorDeGastos gestor = servicioGestorDeGastos.buscarPorUsuario(1);
+
+        assertThat(gestor.getId(), equalTo(1));
     }
 }

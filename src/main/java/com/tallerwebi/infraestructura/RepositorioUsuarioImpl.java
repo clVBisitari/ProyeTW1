@@ -50,10 +50,8 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public boolean guardar(Usuario usuario) {
 
         Serializable user = sessionFactory.getCurrentSession().save(usuario);
-        if (user != null) {
-            return true;
-        }
-        return false;
+
+        return user != null;
     }
 
     @Override

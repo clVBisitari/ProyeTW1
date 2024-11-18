@@ -8,6 +8,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -53,7 +54,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeVencimientoDeUnGasto(Long id, Date fechaVencimiento) {
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, LocalDate fechaVencimiento) {
         String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaVencimiento", fechaVencimiento);
@@ -62,7 +63,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeRecordatorioDeUnGasto(Long id, Date fechaRecordatorio) {
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, LocalDate fechaRecordatorio) {
         String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaRecordatorio", fechaRecordatorio);
@@ -91,4 +92,5 @@ public class RepositorioGastoImpl {
     public void guardarGasto(Gasto gasto) {
         this.sessionFactory.getCurrentSession().save(gasto);
     }
+
 }

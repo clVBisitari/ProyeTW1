@@ -15,23 +15,27 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     @Column(unique = true)
     private String email;
+
     private String nombre;
     private String apellido;
     private Integer dni;
     private Double saldo;
-    @ManyToMany
-    @JoinColumn(name = "usuario_id")
-    private List<Usuario>contactos;
     private String password;
     private Boolean esAdmin = false;
     private Boolean enSuspension = false;
+
+    @ManyToMany
+    @JoinColumn(name = "usuario_id")
+    private List<Usuario>contactos;
+
     @OneToOne //-- los otros son inversores ... en este caso, un user puede publicar un/mas proyectos de inversion
     private ProyectoInversion proyecto;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
     private GestorDeGastos gestorDeGastos;
-    ///private List<Inversion>
 
     public Usuario(){}
 
