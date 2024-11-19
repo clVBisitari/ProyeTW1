@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 @Service("servicioLogin")
@@ -44,7 +45,7 @@ public class ServicioLoginImpl implements ServicioLogin {
 
         nuevoUser.setEsAdmin(false);
         nuevoUser.setEnSuspension(false);
-        nuevoUser.setSaldo(0.00);
+        nuevoUser.setSaldo(new BigDecimal(0.00));
 //        nuevoUser.setGestorDeGastos(gestor);
 
         repositorioUsuario.guardar(nuevoUser);

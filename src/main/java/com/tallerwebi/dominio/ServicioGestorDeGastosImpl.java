@@ -4,11 +4,13 @@ import com.tallerwebi.dominio.helpers.FechaHelper;
 import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
+import com.tallerwebi.presentacion.GastoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Calendar;
@@ -30,22 +32,19 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         this.repositorioGasto = repositorioGasto;
     }
 
-    public void guardarGestor(GestorDeGastos gestorDeGastos){
-         repositorioGestorDeGastos.guardarGestor(gestorDeGastos);
-    }
-
-    public Boolean guardarGasto(Integer userId, Gasto gasto){
+    public Boolean guardarGasto(Integer userId, GastoDTO gastoDto){
+        var gasto = GastoDTO.convertirDTOaGasto(gastoDto);
         return repositorioGasto.guardarGasto(userId, gasto);
     }
 
-    public Double actualizarTotalGastosDelMesEnCursoPorId(Integer gestorId) {
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
+    public BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer userId) {
+        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(userId);
 
-        double gastoTotal = 0.0;
+        BigDecimal gastoTotal = new BigDecimal(0.0);
 
         for (Gasto gasto : gastos) {
             if (esGastoDelMesEnCurso(gasto.getFechaVencimiento()))
-                gastoTotal += gasto.getValor();
+                gastoTotal.add(gasto.getValor());
         }
 
         return gastoTotal;

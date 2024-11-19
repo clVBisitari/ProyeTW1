@@ -5,6 +5,7 @@ import com.tallerwebi.presentacion.UsuarioDTO;
 import javax.persistence.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +23,7 @@ public class Usuario {
     private String nombre;
     private String apellido;
     private Integer dni;
-    private Double saldo;
+    private BigDecimal saldo;
     private String motivoDeSuspension;
     private Boolean estaActivo = true;
     @ManyToMany
@@ -35,11 +36,9 @@ public class Usuario {
     private String password;
     private Boolean esAdmin = false;
     private Boolean enSuspension = false;
-    @OneToOne(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
-    private ProyectoInversion proyecto;
-//    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "usuario", orphanRemoval = true)
-//    private GestorDeGastos gestorDeGastos;
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "titular", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProyectoInversion> proyectos;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gasto> gastos = new ArrayList<Gasto>();
 
     public Usuario(){}
@@ -66,7 +65,7 @@ public class Usuario {
     public List<Gasto> getGastos(){return this.gastos;};
     public String getApellido() {return apellido;}
     public Integer getDni() {return dni;}
-    public Double getSaldo() {return saldo;}
+    public BigDecimal getSaldo() {return saldo;}
     public List<Usuario> getContactos() {return contactos;}
 
     public void setId(Integer id) {this.id = id;}
@@ -74,17 +73,17 @@ public class Usuario {
     public void setEmail(String email) {this.email = email;}
     public void setApellido(String apellido) {this.apellido = apellido;}
     public void setDni(Integer dni) {this.dni = dni;}
-    public void setSaldo(Double saldo) {this.saldo = saldo;}
+    public void setSaldo(BigDecimal saldo) {this.saldo = saldo;}
     public String getPassword() {return password;}
     public Boolean getEsAdmin() {return esAdmin;}
     public Boolean getEnSuspension() {return enSuspension;}
-    public ProyectoInversion getProyecto() {return proyecto;}
+    public List<ProyectoInversion> getProyectos() {return proyectos;}
     public Boolean getEstaActivo() {return this.estaActivo;}
     public void setContactos(List<Usuario> contactos) {this.contactos = contactos;}
     public void setPassword(String password) {this.password = password;}
     public void setEsAdmin(Boolean esAdmin) {this.esAdmin = esAdmin;}
     public void setEnSuspension(Boolean enSuspension) {this.enSuspension = enSuspension;}
-    public void setProyecto(ProyectoInversion proyecto) {this.proyecto = proyecto;}
+    public void setProyectos(List<ProyectoInversion> proyecto) {this.proyectos = proyecto;}
     public void setEstaActivo(Boolean activo) {this.estaActivo = activo;}
     public void setGastos(List<Gasto>gastos){this.gastos= gastos;}
 
@@ -93,12 +92,12 @@ public class Usuario {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Usuario usuario = (Usuario) o;
-        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspension, usuario.enSuspension) && Objects.equals(proyecto, usuario.proyecto);
+        return Objects.equals(id, usuario.id) && Objects.equals(email, usuario.email) && Objects.equals(nombre, usuario.nombre) && Objects.equals(apellido, usuario.apellido) && Objects.equals(dni, usuario.dni) && Objects.equals(saldo, usuario.saldo) && Objects.equals(contactos, usuario.contactos) && Objects.equals(password, usuario.password) && Objects.equals(esAdmin, usuario.esAdmin) && Objects.equals(enSuspension, usuario.enSuspension) && Objects.equals(proyectos, usuario.proyectos);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspension, proyecto);
+        return Objects.hash(id, email, nombre, apellido, dni, saldo, contactos, password, esAdmin, enSuspension, proyectos);
     }
 
     @Override
@@ -113,8 +112,8 @@ public class Usuario {
                 ", contactos=" + contactos +
                 ", password='" + password + '\'' +
                 ", esAdmin=" + esAdmin +
-                ", enSuspencion=" + enSuspension +
-                ", proyecto=" + proyecto +
+                ", enSuspension=" + enSuspension +
+                ", proyecto=" + proyectos +
                 '}';
     }
     public static boolean isUserLoggedIn(HttpServletRequest request) {

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -82,10 +83,10 @@ public class RepositorioUsuarioTest {
     public void dadoQueExisteUnRepositorioUsuarioYElUsuarioCargaSaldoElSaldoSeActualizaEnLaBaseDeDatos() {
 
         Usuario usuario = new Usuario();
-        usuario.setSaldo(100.00);
+        usuario.setSaldo(new BigDecimal(100.00));
         this.repositorioUsuario.guardar(usuario);
-        Double saldoAAgregar = 251.00;
-        usuario.setSaldo(usuario.getSaldo() + saldoAAgregar);
+        BigDecimal saldoAAgregar = new BigDecimal(251.00);
+        usuario.setSaldo(usuario.getSaldo().add(saldoAAgregar));
         this.repositorioUsuario.modificar(usuario);
 
         String hql = "SELECT u FROM Usuario u WHERE u.saldo = :saldo";

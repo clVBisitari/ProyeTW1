@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "PROYECTOINVERSION")
+@Table(name = "proyecto_inversion")
 public class ProyectoInversion {
 
     @Id
@@ -15,8 +15,8 @@ public class ProyectoInversion {
     private Integer id;
     private String titulo;
     private String description;
-    @OneToOne
-    @JoinColumn(name = "usuario_id")
+    @ManyToOne
+    @JoinColumn(name = "titular_id")
     private Usuario titular;
     @ManyToMany
     @JoinTable(name = "inversores")

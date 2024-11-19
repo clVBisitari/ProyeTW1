@@ -13,8 +13,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import javax.transaction.Transactional;
 
 import java.text.ParseException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 import static org.mockito.Mockito.*;
 
@@ -60,29 +62,22 @@ public class ServicioGestorDeGastosImplTest {
 //        assertThat(cantidadGastosPorVencer, equalTo(1));
 //    }
 
-    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
-
-        DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
-        Gasto primerGasto = new Gasto("impuesto", 50000, LocalDate.now(), Frecuencia.MENSUAL);
-
-        String fechaSegundoGastoString = "2099-10-10";
-        LocalDate fechaSegundoGastoVencimiento = LocalDate.parse(fechaSegundoGastoString);
-        Gasto segundoGasto = new Gasto("impuesto", 60000, fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
-
-        String fechaTercerGastoString = "2099-10-10";
-        LocalDate fechaTercerGastoVencimiento = LocalDate.parse(fechaTercerGastoString);
-        Gasto tercerGasto = new Gasto("impuesto", 70000, fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
-
-//        GestorDeGastos gestor = new GestorDeGastos();
-//        //gestor.registrarGasto(primerGasto);
-//        //gestor.registrarGasto(segundoGasto);
-//        //gestor.registrarGasto(tercerGasto);
+//    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
 //
-        return gestor;
-        return new GestorDeGastos();
-
-    }
+//        DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//
+//        Gasto primerGasto = new Gasto("impuesto", 50000, Date.from(Instant.now()), Frecuencia.MENSUAL);
+//
+//        String fechaSegundoGastoString = "2099-10-10";
+//        Date fechaSegundoGastoVencimiento = new Date(fechaSegundoGastoString);
+//        Gasto segundoGasto = new Gasto("impuesto", 60000, fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
+//
+//        String fechaTercerGastoString = "2099-10-10";
+//        Date fechaTercerGastoVencimiento = new Date(fechaTercerGastoString);
+//        Gasto tercerGasto = new Gasto("impuesto", 70000, fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
+//
+//        return new GestorDeGastos();
+//    }
 
 //    @Test
 //    @Transactional

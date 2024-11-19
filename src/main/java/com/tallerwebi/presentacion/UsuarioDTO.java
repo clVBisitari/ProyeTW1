@@ -1,7 +1,7 @@
 package com.tallerwebi.presentacion;
-import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.dominio.Usuario;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,9 +17,8 @@ public class UsuarioDTO {
     private boolean enSuspension;
     private boolean esAdmin;
     private boolean estaActivo;
-    private GestorDeGastos gestorGastos;
     private List<UsuarioDTO> contactos;
-    private Double saldo;
+    private BigDecimal saldo;
 
     public UsuarioDTO() {
 
@@ -115,11 +114,9 @@ public class UsuarioDTO {
         this.contactos = contactos;
     }
 
-    public void setSaldo(Double saldo) {
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
-
-    public void setGestorGastos(GestorDeGastos gestorDeGastos){this.gestorGastos = gestorDeGastos;}
 
     public Integer getId() {
         return id;
@@ -153,11 +150,9 @@ public class UsuarioDTO {
         return contactos;
     }
 
-    public Double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
-
-    public GestorDeGastos getGestorGastos(){return gestorGastos;}
 
     @Override
     public boolean equals(Object o) {
@@ -196,7 +191,6 @@ public class UsuarioDTO {
         usuario.setEnSuspension(enSuspension);
         usuario.setEsAdmin(esAdmin);
         usuario.setSaldo(saldo);
-//        usuario.setGestorDeGastos(gestorGastos);
         return usuario;
     }
 }

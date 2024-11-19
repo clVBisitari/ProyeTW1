@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarValorDeUnGasto(Long id, double valor) {
+    public void modificarValorDeUnGasto(Long id, BigDecimal valor) {
         String hql = "UPDATE Gasto SET valor = :valor WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("valor", valor);
@@ -56,7 +57,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeVencimientoDeUnGasto(Long id, LocalDate fechaVencimiento) {
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, Date fechaVencimiento) {
         String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaVencimiento", fechaVencimiento);
@@ -65,7 +66,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeRecordatorioDeUnGasto(Long id, LocalDate fechaRecordatorio) {
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, Date fechaRecordatorio) {
         String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaRecordatorio", fechaRecordatorio);
@@ -92,19 +93,15 @@ public class RepositorioGastoImpl {
     }
 
     public boolean guardarGasto(Integer userId, Gasto gasto) {
-        // Obtén la sesión actual de Hibernate
+
         Session session = sessionFactory.getCurrentSession();
 
-        // Busca el usuario correspondiente al userId
         Usuario usuario = session.get(Usuario.class, userId);
         if (usuario == null) {
             throw new IllegalArgumentException("No se encontró un usuario con el ID proporcionado: " + userId);
         }
-
-        // Asocia el usuario al gasto
         gasto.setUsuario(usuario);
 
-        // Guarda el gasto
         Serializable gastoId = session.save(gasto);
         if(gastoId != null) return true;
         return false;

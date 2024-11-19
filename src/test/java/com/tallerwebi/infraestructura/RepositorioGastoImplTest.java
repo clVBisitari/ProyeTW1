@@ -15,6 +15,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,12 +61,12 @@ public class RepositorioGastoImplTest {
 
         List<Gasto> gastos = this.repositorioGastoImpl.obtenerTodosLosGastos();
         Gasto gastoAModificar = gastos.get(0);
-        gastoAModificar.setValor(7000);
+        gastoAModificar.setValor(new BigDecimal(7000));
         this.repositorioGastoImpl.modificarValorDeUnGasto(gastoAModificar.getId(), gastoAModificar.getValor());
         Gasto gastoModificado = this.repositorioGastoImpl.buscarGastoPorId(gastoAModificar.getId());
-        double valorEsperado = gastoModificado.getValor();
+        BigDecimal valorEsperado = gastoModificado.getValor();
 
-        assertThat(valorEsperado, equalTo((double)7000));
+        assertThat(valorEsperado, equalTo(new BigDecimal(7000)));
     }
 
     @Test
@@ -108,7 +109,7 @@ public class RepositorioGastoImplTest {
 
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        LocalDate nuevaFechaVencimiento = LocalDate.parse(fechaString, formatoFechas);
+        Date nuevaFechaVencimiento = new Date(fechaString);
 
         gastoAModificar.setFechaVencimiento(nuevaFechaVencimiento);
 
@@ -116,7 +117,7 @@ public class RepositorioGastoImplTest {
 
         Gasto gastoModificado = this.repositorioGastoImpl.buscarGastoPorId(gastoAModificar.getId());
 
-        LocalDate fechaObtenida = gastoModificado.getFechaVencimiento();
+        Date fechaObtenida = gastoModificado.getFechaVencimiento();
 
         assertThat(fechaObtenida, equalTo(nuevaFechaVencimiento));
     }
@@ -136,7 +137,7 @@ public class RepositorioGastoImplTest {
 
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        LocalDate nuevaFechaRecordatorio = LocalDate.parse(fechaString, formatoFechas);
+        Date nuevaFechaRecordatorio = new Date(fechaString);
 
         gastoAModificar.setFechaRecordatorio(nuevaFechaRecordatorio);
 
@@ -144,7 +145,7 @@ public class RepositorioGastoImplTest {
 
         Gasto gastoModificado = this.repositorioGastoImpl.buscarGastoPorId(gastoAModificar.getId());
 
-        LocalDate fechaObtenida = gastoModificado.getFechaRecordatorio();
+        Date fechaObtenida = gastoModificado.getFechaRecordatorio();
 
         assertThat(fechaObtenida, equalTo(nuevaFechaRecordatorio));
     }
@@ -179,9 +180,9 @@ public class RepositorioGastoImplTest {
 
         DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
-        LocalDate fechaVencimiento = LocalDate.parse(fechaString, formatoFechas);
+        Date fechaVencimiento = new Date(fechaString);
 
-        Gasto gasto = new Gasto("Impuesto", 50000, fechaVencimiento, Frecuencia.MENSUAL);
+        Gasto gasto = new Gasto("Impuesto", new BigDecimal(50000), fechaVencimiento, Frecuencia.MENSUAL);
 
         this.sessionFactory.getCurrentSession().save(gasto);
     }
