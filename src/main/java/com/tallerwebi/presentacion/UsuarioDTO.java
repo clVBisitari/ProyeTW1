@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.Usuario;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,7 +18,7 @@ public class UsuarioDTO {
     private boolean esAdmin;
     private boolean estaActivo;
     private List<UsuarioDTO> contactos;
-    private Double saldo;
+    private BigDecimal saldo;
 
     public UsuarioDTO() {
 
@@ -51,7 +52,9 @@ public class UsuarioDTO {
         usuarioDTO.setEnSuspension(usuario.getEnSuspension());
         usuarioDTO.setEsAdmin(usuario.getEsAdmin());
         usuarioDTO.setSaldo(usuario.getSaldo());
+        usuarioDTO.setContactos(Usuario.mapToUsuarioDTOList(usuario.getContactos()));
         usuarioDTO.setEstaActivo(usuario.getEstaActivo());
+//        usuarioDTO.setGestorGastos(usuario.getGestorDeGastos());
         return usuarioDTO;
     }
 
@@ -74,9 +77,11 @@ public class UsuarioDTO {
     public String getMotivoDeSuspension() {
         return  this.motivoDeSuspension;
     }
+
     public void setMotivoDeSuspension(String motivo) {
         this.motivoDeSuspension = motivo;
     }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -109,7 +114,7 @@ public class UsuarioDTO {
         this.contactos = contactos;
     }
 
-    public void setSaldo(Double saldo) {
+    public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
     }
 
@@ -145,7 +150,7 @@ public class UsuarioDTO {
         return contactos;
     }
 
-    public Double getSaldo() {
+    public BigDecimal getSaldo() {
         return saldo;
     }
 

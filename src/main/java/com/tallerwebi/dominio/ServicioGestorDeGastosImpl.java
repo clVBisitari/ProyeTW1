@@ -1,17 +1,24 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.helpers.FechaHelper;
 import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import com.tallerwebi.presentacion.GastoDTO;
+import com.tallerwebi.presentacion.ProyeInversionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@SuppressWarnings("LanguageDetectionInspection")
 @Service("servicioGestorDeGastos")
 @Transactional
 public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
@@ -25,36 +32,26 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         this.repositorioGasto = repositorioGasto;
     }
 
-    public void guardarGestor(GestorDeGastos gestorDeGastos){
-         repositorioGestorDeGastos.guardarGestor(gestorDeGastos);
+    public Boolean guardarGasto(Integer userId, GastoDTO gastoDto){
+        var gasto = GastoDTO.convertirDTOaGasto(gastoDto);
+        return repositorioGasto.guardarGasto(userId, gasto);
     }
 
-    public void guardarGasto(Gasto gasto){
-        repositorioGasto.guardarGasto(gasto);
-    }
+    public BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer userId) {
+        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(userId);
 
-    @Override
-    public GestorDeGastos buscarPorUsuario(Integer id) {
-        return repositorioGestorDeGastos.buscarGestorPorUsuario(id);
-    }
-
-    public Double actualizarTotalGastosDelMesEnCursoPorId(Long gestorId) {
-
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
-
-        double gastoTotal = 0.0;
+        BigDecimal gastoTotal = new BigDecimal(0.0);
 
         for (Gasto gasto : gastos) {
             if (esGastoDelMesEnCurso(gasto.getFechaVencimiento()))
-                gastoTotal += gasto.getValor();
+                gastoTotal.add(gasto.getValor());
         }
 
         return gastoTotal;
     }
 
-    public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId){
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(gestorId);
-
+    public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId){
+        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
         int cantidad = 0;
 
         for (Gasto gasto : gastos) {
@@ -66,25 +63,40 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return cantidad;
     }
 
-    public List<GastoDTO> obtenerTodosLosGastosDeUnGestor(Long id){
-
-        List<Gasto> gastos = repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
-
-        return gastos.stream().map(GastoDTO::convertirGastoaDTO).collect(Collectors.toList());
-
+    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id){
+        return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
     }
 
-    public Boolean esGastoVencido(LocalDate fechaVencimiento) {
-        LocalDate fechaActualSinHora = LocalDate.now();
-
-        return fechaVencimiento.isBefore(fechaActualSinHora);
-    }
-
-    public Boolean esGastoDelMesEnCurso(LocalDate fechaAComparar) {
+    public Boolean esGastoVencido(Date fechaVencimiento) {
+        Calendar fechaActualSinHora = Calendar.getInstance();
+        fechaActualSinHora.set(Calendar.HOUR_OF_DAY, 0);
+        fechaActualSinHora.set(Calendar.MINUTE, 0);
+        fechaActualSinHora.set(Calendar.SECOND, 0);
+        fechaActualSinHora.set(Calendar.MILLISECOND, 0);
         LocalDate fechaActual = LocalDate.now();
 
-        return (fechaActual.getYear() == fechaAComparar.getYear() &&
-                fechaActual.getMonth() == fechaAComparar.getMonth());
+        // Configurar la fecha a comparar sin horas
+//        Calendar fechaVencimientoSinHora = Calendar.getInstance();
+//        fechaVencimientoSinHora.setTime(fechaVencimiento);
+//        fechaVencimientoSinHora.set(Calendar.HOUR_OF_DAY, 0);
+//        fechaVencimientoSinHora.set(Calendar.MINUTE, 0);
+//        fechaVencimientoSinHora.set(Calendar.SECOND, 0);
+//        fechaVencimientoSinHora.set(Calendar.MILLISECOND, 0);
+        LocalDate fechaVenc = FechaHelper.convertToLocalDate(fechaVencimiento);
+        return fechaVenc.isBefore(fechaActual);
+    }
+
+    public Boolean esGastoDelMesEnCurso(Date fechaAComparar){
+        Date fechaActual = new Date();
+        LocalDate fechaLocalActual = LocalDate.now();
+
+//        Calendar calendar = Calendar.getInstance();
+//        Calendar calendar2 = Calendar.getInstance();
+//
+//        calendar.setTime(fechaActual);
+//        calendar2.setTime(fechaAComparar);
+        return fechaLocalActual.getMonth() == fechaAComparar.toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getMonth();
+//        return (calendar.get(Calendar.YEAR) == calendar2.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == calendar2.get(Calendar.MONTH));
     }
 
 }

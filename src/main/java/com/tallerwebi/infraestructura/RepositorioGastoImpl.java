@@ -3,12 +3,15 @@ package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.Frecuencia;
 import com.tallerwebi.dominio.Gasto;
 
+import com.tallerwebi.dominio.Usuario;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
+import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -45,7 +48,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarValorDeUnGasto(Long id, double valor) {
+    public void modificarValorDeUnGasto(Long id, BigDecimal valor) {
         String hql = "UPDATE Gasto SET valor = :valor WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("valor", valor);
@@ -54,7 +57,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeVencimientoDeUnGasto(Long id, LocalDate fechaVencimiento) {
+    public void modificarFechaDeVencimientoDeUnGasto(Long id, Date fechaVencimiento) {
         String hql = "UPDATE Gasto SET fechaVencimiento = :fechaVencimiento WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaVencimiento", fechaVencimiento);
@@ -63,7 +66,7 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void modificarFechaDeRecordatorioDeUnGasto(Long id, LocalDate fechaRecordatorio) {
+    public void modificarFechaDeRecordatorioDeUnGasto(Long id, Date fechaRecordatorio) {
         String hql = "UPDATE Gasto SET fechaRecordatorio = :fechaRecordatorio WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("fechaRecordatorio", fechaRecordatorio);
@@ -89,8 +92,18 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
-    public void guardarGasto(Gasto gasto) {
-        this.sessionFactory.getCurrentSession().save(gasto);
-    }
+    public boolean guardarGasto(Integer userId, Gasto gasto) {
 
+        Session session = sessionFactory.getCurrentSession();
+
+        Usuario usuario = session.get(Usuario.class, userId);
+        if (usuario == null) {
+            throw new IllegalArgumentException("No se encontró un usuario con el ID proporcionado: " + userId);
+        }
+        gasto.setUsuario(usuario);
+
+        Serializable gastoId = session.save(gasto);
+        if(gastoId != null) return true;
+        return false;
+    }
 }

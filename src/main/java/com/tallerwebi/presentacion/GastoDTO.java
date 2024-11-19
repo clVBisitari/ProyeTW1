@@ -2,17 +2,21 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Frecuencia;
 import com.tallerwebi.dominio.Gasto;
+import org.apache.commons.beanutils.converters.CalendarConverter;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Objects;
 
 public class GastoDTO {
 
     private Long id;
     private String descripcion;
-    private double valor;
-    private Long gestorId;
+    private String valor;
     private String fechaVencimiento;
     private String fechaRecordatorio;
     private Frecuencia frecuencia;
@@ -33,20 +37,13 @@ public class GastoDTO {
         this.descripcion = descripcion;
     }
 
-    public double getValor() {
-        return valor;
+    public BigDecimal getValor() {
+
+        return new BigDecimal(valor.replace(",", "."));
     }
 
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public Long getGestorId() {
-        return gestorId;
-    }
-
-    public void setGestorId(Long gestorId) {
-        this.gestorId = gestorId;
+    public void setValor(BigDecimal valor) {
+        this.valor = valor.toString();
     }
 
     public String getFechaVencimiento() {
@@ -78,12 +75,12 @@ public class GastoDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GastoDTO gastoDTO = (GastoDTO) o;
-        return Double.compare(valor, gastoDTO.valor) == 0 && Objects.equals(id, gastoDTO.id) && Objects.equals(descripcion, gastoDTO.descripcion) && Objects.equals(gestorId, gastoDTO.gestorId) && Objects.equals(fechaVencimiento, gastoDTO.fechaVencimiento) && Objects.equals(fechaRecordatorio, gastoDTO.fechaRecordatorio) && frecuencia == gastoDTO.frecuencia;
+        return valor.compareTo(gastoDTO.valor) == 0 && Objects.equals(id, gastoDTO.id) && Objects.equals(descripcion, gastoDTO.descripcion) && Objects.equals(fechaVencimiento, gastoDTO.fechaVencimiento) && Objects.equals(fechaRecordatorio, gastoDTO.fechaRecordatorio) && frecuencia == gastoDTO.frecuencia;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, descripcion, valor, gestorId, fechaVencimiento, fechaRecordatorio, frecuencia);
+        return Objects.hash(id, descripcion, valor, fechaVencimiento, fechaRecordatorio, frecuencia);
     }
 
     @Override
@@ -92,7 +89,6 @@ public class GastoDTO {
                 "id=" + id +
                 ", descripcion='" + descripcion + '\'' +
                 ", valor=" + valor +
-                ", gestorId=" + gestorId +
                 ", fechaVencimiento=" + fechaVencimiento +
                 ", fechaRecordatorio=" + fechaRecordatorio +
                 ", frecuencia=" + frecuencia +
@@ -104,7 +100,6 @@ public class GastoDTO {
 
         gastoDTO.setId(gasto.getId());
         gastoDTO.setFrecuencia(gasto.getFrecuencia());
-        gastoDTO.setGestorId(gasto.getGestor().getId());
         gastoDTO.setValor(gasto.getValor());
         gastoDTO.setDescripcion(gasto.getDescripcion());
 
@@ -122,15 +117,17 @@ public class GastoDTO {
     public static Gasto convertirDTOaGasto(GastoDTO gastoDTO){
         Gasto gasto = new Gasto();
 
-        gasto.setGestor(null);
-
         gasto.setId(gastoDTO.getId());
         gasto.setFrecuencia(gastoDTO.getFrecuencia());
         gasto.setValor(gastoDTO.getValor());
         gasto.setDescripcion(gastoDTO.getDescripcion());
+        LocalDate fechaRecordatorio = convertirStringALocalDate(gastoDTO.getFechaRecordatorio());
+        Date fechaRecordatorioDate = Date.from(fechaRecordatorio.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        gasto.setFechaRecordatorio(convertirStringALocalDate(gastoDTO.getFechaRecordatorio()));
-        gasto.setFechaVencimiento(convertirStringALocalDate(gastoDTO.getFechaVencimiento()));
+        gasto.setFechaRecordatorio(fechaRecordatorioDate);
+
+        Date fechaVencimiento = Date.from(convertirStringALocalDate(gastoDTO.getFechaVencimiento()).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        gasto.setFechaVencimiento(fechaVencimiento);
 
         return gasto;
     }

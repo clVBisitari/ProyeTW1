@@ -1,28 +1,18 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.Gasto;
-import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.presentacion.GastoDTO;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface ServicioGestorGastos {
-
-    Double actualizarTotalGastosDelMesEnCursoPorId(Long gestorId);
-
-    Integer actualizarCantidadServiciosPorVencerMesEnCurso(Long gestorId);
-
-    List<GastoDTO> obtenerTodosLosGastosDeUnGestor(Long id);
-
-    void guardarGestor(GestorDeGastos gestorDeGastos);
-
-    Boolean esGastoVencido(LocalDate fechaVencimiento);
-
-    Boolean esGastoDelMesEnCurso(LocalDate fechaAComparar);
-
-    void guardarGasto(Gasto gasto);
-
-    GestorDeGastos buscarPorUsuario(Integer id);
-
+    BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer usuarioId);
+    Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId);
+    List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id);
+    Boolean esGastoVencido(Date fechaVencimiento);
+    Boolean esGastoDelMesEnCurso(Date fechaAComparar);
+    Boolean guardarGasto(Integer userId, GastoDTO gastoDto);
 }

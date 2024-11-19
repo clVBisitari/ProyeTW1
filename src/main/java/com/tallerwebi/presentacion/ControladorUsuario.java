@@ -1,12 +1,10 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Gasto;
-import com.tallerwebi.dominio.GestorDeGastos;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -15,11 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Transactional
 @Controller
@@ -48,13 +44,16 @@ public class ControladorUsuario {
         // Obtener datos de usuario
         UsuarioDTO usuarioDto = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-        // Id de usuario se espera que sea igual que el gestor de gastos
-        Long idUsuarioDto = Long.valueOf(usuarioDto.getId());
+        Integer idUsuarioDto = usuarioDto.getId();
 
-        // Gastos del mes
-        Double totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(idUsuarioDto);
+        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(idUsuarioDto);
 
-        // Gastos por vencer
+//        GestorDeGastos gestorConectado = new GestorDeGastos();
+
+//        gestorConectado.setGastos(gastoList);
+
+        BigDecimal totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(idUsuarioDto);
+
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
 
         ModelMap modelo = new ModelMap();

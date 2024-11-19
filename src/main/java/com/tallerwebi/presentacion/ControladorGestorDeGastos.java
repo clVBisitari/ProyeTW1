@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -32,32 +34,18 @@ public class ControladorGestorDeGastos {
     @RequestMapping(path = "/crearGasto", method = RequestMethod.GET)
     public ModelAndView crearGasto(HttpServletRequest request) {
 
-        ModelMap model = new ModelMap();
-
-        model.put("gastoDTO", new GastoDTO());
-
-        return new ModelAndView("creacionGastos", model);
+        return new ModelAndView("creacionGastos", new ModelMap("gasto", new Gasto()));
     }
 
     @RequestMapping(path = "/registrarGasto", method = RequestMethod.POST)
     public ModelAndView registrarGasto(GastoDTO gastoDTO, HttpServletRequest request) {
 
         ModelMap model = new ModelMap();
-
-        // Buscar datos de usuario
-        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-
-        // Buscar gestor de usuarios
-        GestorDeGastos gestorConectado = servicioGestorGastos.buscarPorUsuario(usuarioConectado.getId());
-
-        // Convertir gastos y asignar gestor
-        Gasto gasto = GastoDTO.convertirDTOaGasto(gastoDTO);
-        gasto.setGestor(gestorConectado);
-
-        // Guardar gasto
-        this.servicioGestorGastos.guardarGasto(gasto);
-
-        return new ModelAndView("redirect:/dashboardGastos");
+        HttpSession session = request.getSession();
+        UsuarioDTO usuarioConectado = (UsuarioDTO) session.getAttribute("USUARIO");
+        boolean guardadoExitoso = this.servicioGestorGastos.guardarGasto(usuarioConectado.getId(), gastoDTO);
+        if(guardadoExitoso){model.addAttribute("gastoGuardado", true);}
+        return new ModelAndView("redirect:/dashboard", model);
     }
 
     @RequestMapping(path = "/dashboardGastos", method = RequestMethod.GET)
@@ -67,9 +55,7 @@ public class ControladorGestorDeGastos {
 
         UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-        GestorDeGastos gestorConectado = servicioGestorGastos.buscarPorUsuario(usuarioConectado.getId());
-
-        List<GastoDTO> gastos = servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(gestorConectado.getId());
+        List<Gasto> gastos = servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(usuarioConectado.getId());
 
         model.addAttribute("gastos", gastos);
 
