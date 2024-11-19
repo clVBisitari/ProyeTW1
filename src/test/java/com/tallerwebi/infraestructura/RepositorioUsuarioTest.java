@@ -91,11 +91,11 @@ public class RepositorioUsuarioTest {
 
         String hql = "SELECT u FROM Usuario u WHERE u.saldo = :saldo";
         Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
-        query.setParameter("saldo", 351.00);
+        query.setParameter("saldo", new BigDecimal(351.00));
 
         Usuario usuarioBD = (Usuario) query.getSingleResult();
 
-        assertThat(usuarioBD.getSaldo(), equalTo(351.00));
+        assertThat(usuarioBD.getSaldo(), equalTo(new BigDecimal(351.00)));
         assertThat(usuarioBD, equalTo(usuario));
 
     }
