@@ -46,13 +46,7 @@ public class ControladorUsuario {
 
         Integer idUsuarioDto = usuarioDto.getId();
 
-        List<Gasto> gastoList = servicioGastos.obtenerTodosLosGastosDeUnGestor(idUsuarioDto);
-
-//        GestorDeGastos gestorConectado = new GestorDeGastos();
-
-//        gestorConectado.setGastos(gastoList);
-
-        BigDecimal totalGastosMesEnCurso = servicioGastos.actualizarTotalGastosDelMesEnCursoPorId(idUsuarioDto);
+        BigDecimal totalGastosMesEnCurso = servicioGastos.obtenerGastosDelMes(idUsuarioDto);
 
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
 

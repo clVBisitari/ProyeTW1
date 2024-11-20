@@ -25,6 +25,15 @@ public class RepositorioGastoImpl {
         this.sessionFactory = sessionFactory;
     }
 
+    public Integer obtenerGastosDelMes(Integer usuarioId) {
+        String hql = "SELECT SUM(g.monto) FROM Gasto g WHERE g.usuario.id = :usuarioId AND MONTH(g.fecha) = MONTH(CURRENT_DATE) AND YEAR(g.fecha) = YEAR(CURRENT_DATE)";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("usuarioId", usuarioId);
+
+        Long total = (Long) query.uniqueResult();
+        return total != null ? total.intValue() : 0;
+    }
+
     public List<Gasto> buscarGastoPorDescripcion(String descripcion) {
         String hql = "FROM Gasto WHERE descripcion = :descripcion";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);

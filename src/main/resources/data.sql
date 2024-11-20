@@ -11,12 +11,12 @@ VALUES
 ON CONFLICT DO NOTHING;
 
 INSERT INTO Gasto(
-	id, descripcion, valor, fechaVencimiento)
+	id, descripcion, valor, fechaVencimiento, usuario_id)
 	VALUES
-	    (1,'Bicicleta', 230000, '1/11/2024'),
-	    (2,'Hamburguesa', 19700, '2/10/2024'),
-	    (3,'Linea celular', 16500, '3/10/2024'),
-	    (4,'Medialunas', 7000, '4/11/2024'),
-	    (5,'Viaje', 300400, '5/12/2024') ON CONFLICT DO NOTHING;
+	    (1,'Bicicleta', 230000, '1/11/2024', 1),
+	    (2,'Hamburguesa', 19700, '2/10/2024', 1),
+	    (3,'Linea celular', 16500, '3/10/2024', 1),
+	    (4,'Medialunas', 7000, '4/11/2024', 1),
+	    (5,'Viaje', 300400, '5/12/2024', 1) ON CONFLICT DO NOTHING;
 
 SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto));

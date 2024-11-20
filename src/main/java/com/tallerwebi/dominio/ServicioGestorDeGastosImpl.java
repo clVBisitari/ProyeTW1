@@ -5,7 +5,6 @@ import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import com.tallerwebi.presentacion.GastoDTO;
-import com.tallerwebi.presentacion.ProyeInversionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,6 @@ import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("LanguageDetectionInspection")
 @Service("servicioGestorDeGastos")
@@ -35,6 +33,11 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
     public Boolean guardarGasto(Integer userId, GastoDTO gastoDto){
         var gasto = GastoDTO.convertirDTOaGasto(gastoDto);
         return repositorioGasto.guardarGasto(userId, gasto);
+    }
+
+    @Override
+    public BigDecimal obtenerGastosDelMes(Integer usuarioId) {
+        return repositorioGestorDeGastos.obtenerGastosDelMes(usuarioId);
     }
 
     public BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer userId) {
