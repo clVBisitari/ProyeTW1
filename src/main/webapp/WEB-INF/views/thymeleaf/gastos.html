@@ -1,124 +1,144 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>AssistPyme - Gastos</title>
-    <!-- custom style -->
-    <link rel="stylesheet" th:href="@{/css/main.css}"/>
-    <link rel="stylesheet" th:href="@{/css/inversiones.css}"/>
-    // SDK MercadoPago.js
-    <script src="https://sdk.mercadopago.com/js/v2"></script>
-</head>
-<body class="body">
-<div th:include="fragments :: navegadorLateral"></div>
-<main class="investments__main">
-    <header class="investments__header">
-        <form class="investments__search">
-            <input class="investments__input" type="text" placeholder="Buscar gasto" />
-            <svg xmlns="http://www.w3.org/2000/svg" class="investments__icon" viewBox="0 0 16 16">
-                <path
-                        d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
-                />
-            </svg>
-        </form>
-        <div class="investments__button">
-            <a class="investments__link" th:href="@{/crearGasto}">
-                <button class="button__primary">Agregar Gasto</button>
-            </a>
-        </div>
-    </header>
-    <div id="wallet_container"></div>
-    <div class="investments__content">
-        <section class="investments__end">
-            <h2 class="investments__title">Gastos Recientes</h2>
-            <div th:if="${#lists.isEmpty(gastos)}">
-                <p>No tienes gastos registrados.</p>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>AssistPyme - Gastos</title>
+        <!-- custom style -->
+        <link rel="stylesheet" th:href="@{/css/main.css}" />
+        <link rel="stylesheet" th:href="@{/css/inversiones.css}" />
+        <script src="https://sdk.mercadopago.com/js/v2"></script>
+    </head>
+    <body class="body">
+        <div th:include="fragments :: navegadorLateral"></div>
+        <main class="investments__main">
+            <header class="investments__header">
+                <form class="investments__search">
+                    <input
+                        class="investments__input"
+                        type="text"
+                        placeholder="Buscar gasto"
+                    />
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="investments__icon"
+                        viewBox="0 0 16 16"
+                    >
+                        <path
+                            d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
+                        />
+                    </svg>
+                </form>
+                <div class="investments__button">
+                    <a class="investments__link" th:href="@{/crearGasto}">
+                        <button class="button__primary">Agregar Gasto</button>
+                    </a>
+                </div>
+            </header>
+            <div id="wallet_container"></div>
+            <div class="investments__content">
+                <section class="investments__end">
+                    <h2 class="investments__title">Gastos Recientes</h2>
+                    <div th:if="${#lists.isEmpty(gastos)}">
+                        <p>No tienes gastos registrados.</p>
+                    </div>
+                    <article class="investment" th:each="gasto : ${gastos}">
+                        <p class="investment__number">
+                            $<span th:text="${gasto.valor}"></span>
+                        </p>
+                        <p class="investment__text">
+                            <span th:text="${gasto.descripcion}"></span>
+                        </p>
+                    </article>
+                </section>
+                <section
+                    id="cardPaymentBrick_container"
+                    class="investments__end"
+                ></section>
             </div>
-            <article class="investment" th:each="gasto : ${gastos}">
-                <p class="investment__number">$<span th:text="${gasto.valor}"></span></p>
-                <p class="investment__text"><span th:text="${gasto.descripcion}"></span></p>
-            </article>
-        </section>
-    </div>
-</main>
-    <div id="cardPaymentBrick_container"></div>
-    <script>
-        const mp = new MercadoPago('TEST-371b5a27-0c64-4089-8aea-b04926e2c230', {
-            locale: 'es-AR'
-        });
-        const bricksBuilder = mp.bricks();
-        const renderCardPaymentBrick = async (bricksBuilder) => {
-            const settings = {
-                initialization: {
-                    amount: 100, // monto a ser pago
-                    payer: {
-                        email: "",
+        </main>
+        <script>
+            const mp = new MercadoPago(
+                'TEST-371b5a27-0c64-4089-8aea-b04926e2c230',
+                {
+                    locale: 'es-AR',
+                }
+            )
+            const bricksBuilder = mp.bricks()
+            const renderCardPaymentBrick = async bricksBuilder => {
+                const settings = {
+                    initialization: {
+                        amount: 100, // monto a ser pago
+                        payer: {
+                            email: '',
+                        },
                     },
-                },
-                customization: {
-                    visual: {
-                        style: {
-                            customVariables: {
-                                theme: 'default', // | 'dark' | 'bootstrap' | 'flat'
-                            }
-                        }
-                    },
-                    paymentMethods: {
-                        maxInstallments: 1,
-                    }
-                },
-                callbacks: {
-                    onReady: () => {
-                        // callback llamado cuando Brick esté listo
-                    },
-                    onSubmit: (cardFormData) => {
-                        //  callback llamado cuando el usuario haga clic en el botón enviar los datos
-                        //  ejemplo de envío de los datos recolectados por el Brick a su servidor
-                        return new Promise((resolve, reject) => {
-                            fetch("/process_payment", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json",
+                    customization: {
+                        visual: {
+                            style: {
+                                customVariables: {
+                                    theme: 'default', // | 'dark' | 'bootstrap' | 'flat'
                                 },
-                                body: JSON.stringify(cardFormData)
+                            },
+                        },
+                        paymentMethods: {
+                            maxInstallments: 1,
+                        },
+                    },
+                    callbacks: {
+                        onReady: () => {
+                            // callback llamado cuando Brick esté listo
+                        },
+                        onSubmit: cardFormData => {
+                            //  callback llamado cuando el usuario haga clic en el botón enviar los datos
+                            //  ejemplo de envío de los datos recolectados por el Brick a su servidor
+                            return new Promise((resolve, reject) => {
+                                fetch('/process_payment', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify(cardFormData),
+                                })
+                                    .then(response => {
+                                        // recibir el resultado del pago
+                                        resolve()
+                                    })
+                                    .catch(error => {
+                                        // tratar respuesta de error al intentar crear el pago
+                                        reject()
+                                    })
                             })
-                                .then((response) => {
-                                    // recibir el resultado del pago
-                                    resolve();
-                                })
-                                .catch((error) => {
-                                    // tratar respuesta de error al intentar crear el pago
-                                    reject();
-                                })
-                        });
+                        },
+                        onError: error => {
+                            // callback llamado para todos los casos de error de Brick
+                        },
                     },
-                    onError: (error) => {
-                        // callback llamado para todos los casos de error de Brick
-                    },
-                },
-            };
-            window.cardPaymentBrickController = await bricksBuilder.create('cardPayment', 'cardPaymentBrick_container', settings);
-        };
-        renderCardPaymentBrick(bricksBuilder);
-    </script>
-<!--<script>-->
+                }
+                window.cardPaymentBrickController = await bricksBuilder.create(
+                    'cardPayment',
+                    'cardPaymentBrick_container',
+                    settings
+                )
+            }
+            renderCardPaymentBrick(bricksBuilder)
+        </script>
+        <!--<script>-->
 
-<!--    const mp = new MercadoPago('TEST-371b5a27-0c64-4089-8aea-b04926e2c230');-->
-<!--    const bricksBuilder = mp.bricks();-->
+        <!--    const mp = new MercadoPago('TEST-371b5a27-0c64-4089-8aea-b04926e2c230');-->
+        <!--    const bricksBuilder = mp.bricks();-->
 
-<!--    mp.bricks().create("wallet", "wallet_container", {-->
-<!--        initialization: {-->
-<!--            preferenceId: "1234",-->
-<!--        },-->
-<!--        customization: {-->
-<!--            texts: {-->
-<!--                valueProp: 'smart_option',-->
-<!--            },-->
-<!--        },-->
-<!--    });-->
+        <!--    mp.bricks().create("wallet", "wallet_container", {-->
+        <!--        initialization: {-->
+        <!--            preferenceId: "1234",-->
+        <!--        },-->
+        <!--        customization: {-->
+        <!--            texts: {-->
+        <!--                valueProp: 'smart_option',-->
+        <!--            },-->
+        <!--        },-->
+        <!--    });-->
 
-<!--</script>-->
-
-</body>
+        <!--</script>-->
+    </body>
 </html>
