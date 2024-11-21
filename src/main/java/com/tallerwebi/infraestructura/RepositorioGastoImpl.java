@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -40,6 +41,14 @@ public class RepositorioGastoImpl {
         return query.getResultList();
     }
 
+    public List<Gasto> obtenerTodosLosGastosPorUsuarioId(Integer idUsuario) {
+        String hql = "FROM Gasto g WHERE g.usuario.id = :idUsuario";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("idUsuario", idUsuario);
+
+        return query.getResultList();
+    }
+
     public void eliminarGasto(Long id) {
         String hql = "DELETE FROM Gasto WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -48,8 +57,9 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
+    @Transactional
     public void modificarValorDeUnGasto(Long id, BigDecimal valor) {
-        String hql = "UPDATE Gasto SET valor = :valor WHERE id = :id";
+        String hql = "UPDATE Gasto g SET g.valor = :valor WHERE g.id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("valor", valor);
         query.setParameter("id", id);
