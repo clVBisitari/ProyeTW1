@@ -44,6 +44,9 @@ public class VistaDashboardE2E {
     @Test
     void sinEstarLogueadoDeberiaRedirigir() {
         String url = vistaDashboard.obtenerURLActual();
+
+        vistaDashboard.navegar("http://localhost:8080/spring/dashboard");
+
         assertThat(url, containsStringIgnoringCase("/spring/login"));
     }
 
@@ -85,7 +88,7 @@ public class VistaDashboardE2E {
         vistaDashboard.darClickEnIrAInversiones();
 
         String url = vistaDashboard.obtenerURLActual();
-        
+
         assertThat(url, containsStringIgnoringCase("/spring/inversiones"));
     }
 
