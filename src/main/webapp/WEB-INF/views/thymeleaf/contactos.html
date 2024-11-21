@@ -262,7 +262,7 @@
 
 
         <!---------------------------------------   Contactos   --------------------------------------->
-        <aside >
+        <aside id="contactos">
             <h3 class="contacts__atitle">Contactos</h3>
             <div th:each="contacto : ${contactos}" style="display:flex;justify-content: center; align-items: center">
                 <article class="contacts__article">
@@ -274,6 +274,7 @@
                     <p
                             class="contacts__text"
                             th:text="${contacto.nombre}"
+                            data-testid="contacto-name"
                     >
                         Usuario
                     </p>
@@ -352,6 +353,7 @@
         <aside
                 class="contacts__aside"
                 th:if="${contactosSugeridos != null}"
+                id="sugeridos"
         >
             <h3 class="contacts__atitle">Contactos Sugeridos</h3>
             <div th:each="contactoSugerido : ${contactosSugeridos}">
@@ -364,6 +366,7 @@
                     <p
                             class="contacts__text"
                             th:text="${contactoSugerido.nombre}"
+                            data-testid="sugest-name"
                     >
                         Usuario
                     </p>
@@ -371,7 +374,7 @@
                             th:action="@{/agregar/contacto/{id}(id=${contactoSugerido.id})}"
                             method="post"
                     >
-                        <button class="contacts__button" type="submit">
+                        <button class="contacts__button" type="submit" data-testid="sugest-add">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     class="contacts__svg"

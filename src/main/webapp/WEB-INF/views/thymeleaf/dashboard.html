@@ -17,7 +17,7 @@
             <h2 class="dashboard__usertext">Bienvenido, <span th:text="${usuario.nombre}"></span>!</h2>
         </div>
         <div class="dashboard__right">
-            <a class="dashboard__link" th:href="@{/inversiones}">Ir a Inversiones -></a>
+            <a class="dashboard__link" th:href="@{/inversiones}" id="linkInversiones">Ir a Inversiones -></a>
         </div>
     </nav>
     <header class="dashboard__header">
@@ -31,7 +31,7 @@
                         />
                     </svg>
                 </div>
-                <p class="box__number" th:text="${usuario.saldo}"></p>
+                <p class="box__number" th:text="${usuario.saldo}" id="saldoTotal"></p>
             </div>
         </a>
         <a class="box" th:href="@{/dashboardGastos}">
@@ -45,7 +45,7 @@
                         <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                     </svg>
                 </div>
-                <p class="box__number" th:text="${totalGastosMesEnCurso}"></p>
+                <p class="box__number" th:text="${totalGastosMesEnCurso}" id="gastosMes"></p>
             </div>
         </a>
         <a class="box" th:href="@{/inversiones}">
