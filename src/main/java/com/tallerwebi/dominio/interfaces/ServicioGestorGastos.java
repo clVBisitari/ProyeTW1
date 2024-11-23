@@ -4,7 +4,6 @@ import com.tallerwebi.dominio.Gasto;
 import com.tallerwebi.presentacion.GastoDTO;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -15,4 +14,5 @@ public interface ServicioGestorGastos {
     Boolean esGastoVencido(Date fechaVencimiento);
     Boolean esGastoDelMesEnCurso(Date fechaAComparar);
     Boolean guardarGasto(Integer userId, GastoDTO gastoDto);
+    BigDecimal obtenerGastosDelMes(Integer usuarioId);
 }

@@ -10,6 +10,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -23,6 +24,15 @@ public class RepositorioGastoImpl {
     @Autowired
     public RepositorioGastoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
+    }
+
+    public Integer obtenerGastosDelMes(Integer usuarioId) {
+        String hql = "SELECT SUM(g.monto) FROM Gasto g WHERE g.usuario.id = :usuarioId AND MONTH(g.fecha) = MONTH(CURRENT_DATE) AND YEAR(g.fecha) = YEAR(CURRENT_DATE)";
+        Query query = this.sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("usuarioId", usuarioId);
+
+        Long total = (Long) query.uniqueResult();
+        return total != null ? total.intValue() : 0;
     }
 
     public List<Gasto> buscarGastoPorDescripcion(String descripcion) {
@@ -40,6 +50,14 @@ public class RepositorioGastoImpl {
         return query.getResultList();
     }
 
+    public List<Gasto> obtenerTodosLosGastosPorUsuarioId(Integer idUsuario) {
+        String hql = "FROM Gasto g WHERE g.usuario.id = :idUsuario";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("idUsuario", idUsuario);
+
+        return query.getResultList();
+    }
+
     public void eliminarGasto(Long id) {
         String hql = "DELETE FROM Gasto WHERE id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
@@ -48,8 +66,9 @@ public class RepositorioGastoImpl {
         query.executeUpdate();
     }
 
+    @Transactional
     public void modificarValorDeUnGasto(Long id, BigDecimal valor) {
-        String hql = "UPDATE Gasto SET valor = :valor WHERE id = :id";
+        String hql = "UPDATE Gasto g SET g.valor = :valor WHERE g.id = :id";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("valor", valor);
         query.setParameter("id", id);
