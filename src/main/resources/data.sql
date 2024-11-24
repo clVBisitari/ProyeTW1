@@ -19,4 +19,12 @@ INSERT INTO Gasto(
 	    (4,'Medialunas', 7000, '4/11/2024', 1),
 	    (5,'Viaje', 300400, '5/12/2024', 1) ON CONFLICT DO NOTHING;
 
+-- ALTER TABLE proyecto_inversion ADD CONSTRAINT unique_proyecto UNIQUE (titulo, titular_id);
+--
+-- INSERT INTO proyecto_inversion(titulo, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titular_id)
+-- VALUES
+--         ('Zapatillas con materiales reciclados', 'Zapatillas construidas a partir de materiales reusables', false, 123456.75, 1400000.00, null, '2026-01-01', '2024-11-22', 1 ),
+--         ('App alquiler de carpas - Mendoza', 'Tenemos varios campings por todo Mendoza y alquilaremos con nuestra app', false, 145000.00, 1500000.00, '2026-01-01', null, '2024-11-22', 1 )
+-- ON CONFLICT DO NOTHING;
+
 SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto));

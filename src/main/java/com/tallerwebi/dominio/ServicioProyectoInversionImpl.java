@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,9 +53,9 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         proyeInversion.setInversores(new ArrayList<Usuario>());
         proyeInversion.setCantidadReportes(0);
         proyeInversion.setEnSuspension(false);
-        proyeInversion.setMontoRecaudado(0);
-//        proyeInversion.setPlazoParaInicio(LocalDate.of(proyeInversion.getPlazoParaInicio().cdate.getYear(), proyeInversion.getPlazoParaInicio().cdate.getMonth(), proyeInversion.getPlazoParaInicio().cdate.getDayOfMonth()));
-//        proyeInversion.setPlazoParaFinal(LocalDate.of(proyeInversion.getPlazoParaFinal().getYear(), proyeInversion.getPlazoParaFinal().getMonth(), proyeInversion.getPlazoParaFinal().getDayOfMonth()));
+        proyeInversion.setMontoRecaudado(new BigDecimal(0));
+        proyeInversion.setPlazoParaInicio(LocalDate.of(proyeInversion.getPlazoParaInicio().getYear(), proyeInversion.getPlazoParaInicio().getMonth(), proyeInversion.getPlazoParaInicio().getDayOfMonth()));
+        proyeInversion.setPlazoParaFinal(LocalDate.of(proyeInversion.getPlazoParaFinal().getYear(), proyeInversion.getPlazoParaFinal().getMonth(), proyeInversion.getPlazoParaFinal().getDayOfMonth()));
 
         return this.repoProyeInversion.saveProyectoInversion(proyeInversion);
     }

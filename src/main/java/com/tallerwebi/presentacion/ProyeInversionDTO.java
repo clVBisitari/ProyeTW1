@@ -3,6 +3,8 @@ package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -14,8 +16,8 @@ public class ProyeInversionDTO {
     public String description;
     public Usuario titular;
     public List<Usuario> inversores;
-    public Integer montoRequerido;
-    public Integer montoRecaudado;
+    public String montoRequerido;
+    public String montoRecaudado;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date plazoParaInicio;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -30,8 +32,12 @@ public class ProyeInversionDTO {
         proyectoInversion.setTitulo(titulo);
         proyectoInversion.setDescription(description);
         proyectoInversion.setTitular(titular);
-        proyectoInversion.setMontoRequerido(montoRequerido);
-        proyectoInversion.setMontoRecaudado(montoRecaudado);
+        proyectoInversion.setMontoRequerido(new BigDecimal(montoRequerido));
+        if (this.montoRecaudado != null) {
+            proyectoInversion.setMontoRecaudado(new BigDecimal(montoRecaudado));
+        } else {
+            proyectoInversion.setMontoRecaudado(new BigDecimal(0));
+        }
 
         // Convierte `Date` a `LocalDate`
         if (plazoParaInicio != null) {
@@ -82,15 +88,19 @@ public class ProyeInversionDTO {
         this.inversores = inversores;
     }
 
-    public void setMontoRequerido(Integer montoRequerido) {
-        this.montoRequerido = montoRequerido;
+    public void setMontoRequerido(BigDecimal montoRequerido) {
+        this.montoRequerido = montoRequerido.toString();
     }
-    public Integer getMontoRequerido() {
-        return montoRequerido;
+    public BigDecimal getMontoRequerido() {
+
+        if (montoRequerido != null) {
+            return new BigDecimal(montoRequerido);
+        }
+        return new BigDecimal(0);
     }
 
-    public void setMontoRecaudado(Integer montoRecaudado) {
-        this.montoRecaudado = montoRecaudado;
+    public void setMontoRecaudado(BigDecimal montoRecaudado) {
+        this.montoRecaudado = montoRecaudado.toString();
     }
 
     public void setPlazoParaInicio(Date plazoParaInicio) {
