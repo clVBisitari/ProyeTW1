@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Gasto;
+import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
@@ -17,7 +18,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-@Transactional
+//@Transactional
 @Controller
 public class ControladorUsuario {
 
@@ -26,10 +27,10 @@ public class ControladorUsuario {
     private ServicioProyectoInversion servicioProyectoInversion;
 
     @Autowired
-    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioGestorGastos servicioGastos, ServicioProyectoInversion servicioProyeInversion) {
+    public ControladorUsuario(ServicioUsuario servicioUsuario, ServicioGestorGastos servicioGastos, ServicioProyectoInversion servProyectoInversion) {
         this.servicioUsuario = servicioUsuario;
         this.servicioGastos = servicioGastos;
-        this.servicioProyectoInversion = servicioProyectoInversion;
+        this.servicioProyectoInversion = servProyectoInversion;
     }
 
     @Transactional
@@ -49,13 +50,15 @@ public class ControladorUsuario {
         BigDecimal totalGastosMesEnCurso = servicioGastos.obtenerGastosDelMes(idUsuarioDto);
 
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
+        List<ProyectoInversion> proyectosActivos = servicioProyectoInversion.getProyectosUsuario(idUsuarioDto);
 
         ModelMap modelo = new ModelMap();
-
         modelo.put("usuario", usuarioDto);
 
         modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
         modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
+        modelo.addAttribute("proyectosActivos", proyectosActivos);
+        modelo.addAttribute("ctdadProyesActivos", proyectosActivos.size());
 
         return new ModelAndView("dashboard", modelo);
     }

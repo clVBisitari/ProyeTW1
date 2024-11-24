@@ -2,6 +2,7 @@ package com.tallerwebi.dominio;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
@@ -22,8 +23,8 @@ public class ProyectoInversion {
     @JoinTable(name = "inversores")
     @JoinColumn(name = "inversor_id")
     private List<Usuario> inversores;
-    private Integer montoRequerido;
-    private Integer montoRecaudado;
+    private BigDecimal montoRequerido;
+    private BigDecimal montoRecaudado;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate plazoParaInicio;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -73,19 +74,19 @@ public class ProyectoInversion {
         this.inversores = inversores;
     }
 
-    public Integer getMontoRequerido() {
+    public BigDecimal getMontoRequerido() {
         return montoRequerido;
     }
 
-    public void setMontoRequerido(Integer montoRequerido) {
+    public void setMontoRequerido(BigDecimal montoRequerido) {
         this.montoRequerido = montoRequerido;
     }
 
-    public Integer getMontoRecaudado() {
+    public BigDecimal getMontoRecaudado() {
         return montoRecaudado;
     }
 
-    public void setMontoRecaudado(Integer montoRecaudado) {
+    public void setMontoRecaudado(BigDecimal montoRecaudado) {
         this.montoRecaudado = montoRecaudado;
     }
 

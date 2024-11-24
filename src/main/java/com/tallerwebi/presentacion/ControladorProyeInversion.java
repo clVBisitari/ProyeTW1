@@ -51,6 +51,7 @@ public class ControladorProyeInversion {
     @Transactional
     @RequestMapping(path = "/guardarproyeinversion", method = RequestMethod.POST)
     public ModelAndView guardarProyectoInversion(@ModelAttribute("proyeInversion") ProyeInversionDTO proyeInversion, HttpServletRequest request){
+
         ModelMap model = new ModelMap();
         UsuarioDTO user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
         var usuario = this.user;
