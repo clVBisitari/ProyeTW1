@@ -16,4 +16,5 @@ public interface ServicioProyectoInversion {
     boolean suspenderProyecto(Long idProyeInversion);
     List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
     List<ProyectoInversion> getProyectosMayorInversion();
+    ProyectoInversion getProyectoInversinPorId(Long id);
 }

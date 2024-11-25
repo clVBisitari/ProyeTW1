@@ -26,7 +26,7 @@ public class ControladorProyeInversion {
 
 
     @RequestMapping(path= "/inversiones", method = RequestMethod.GET)
-    public ModelAndView getListaProyectosPorUsuario(HttpServletRequest request){
+    public ModelAndView getAll(HttpServletRequest request){
 
         // Redirigir si no esta loggeado
         if (!Usuario.isUserLoggedIn(request)) {
@@ -41,6 +41,24 @@ public class ControladorProyeInversion {
 
         return new ModelAndView("inversiones", model);
     }
+
+    @RequestMapping(path= "/inversion/{id}", method = RequestMethod.GET)
+    public ModelAndView getInversion(HttpServletRequest request, @PathVariable("id") Long id){
+
+        // Redirigir si no esta loggeado
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        ModelMap model = new ModelMap();
+
+        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversinPorId(id);
+
+        model.put("proyecto", proyecto);
+
+        return new ModelAndView("inversion", model);
+    }
+
 
     @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
     public ModelAndView buscarProyectoInversion(@RequestParam("nombre") String nombre)

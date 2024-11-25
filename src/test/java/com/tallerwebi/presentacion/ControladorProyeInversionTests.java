@@ -95,7 +95,7 @@ public class ControladorProyeInversionTests {
 
         when(this.proyeInvServiceMock.getProyectosUsuario(userMock.getId())).thenReturn(proyeInvList);
         when(requestMock.getSession().getAttribute("idUsuario")).thenReturn(1234);
-        ModelAndView modelAndView = this.controlador.getListaProyectosPorUsuario(this.requestMock);
+        ModelAndView modelAndView = this.controlador.getAll(this.requestMock);
 
         assert modelAndView != null;
         var array = modelAndView.getModel().get("proyectos");

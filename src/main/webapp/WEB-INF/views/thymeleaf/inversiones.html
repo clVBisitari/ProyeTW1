@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AssistPyme - Inversiones</title>
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
@@ -13,7 +13,7 @@
 <main class="investments__main">
     <header class="investments__header">
         <form class="investments__search">
-            <input class="investments__input" type="text" placeholder="Buscar proyecto" />
+            <input class="investments__input" type="text" placeholder="Buscar proyecto"/>
             <svg xmlns="http://www.w3.org/2000/svg" class="investments__icon" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
@@ -30,19 +30,21 @@
         <section class="investments__start">
             <h2 class="investments__title">Poyectos con mayor recaudación:</h2>
             <div th:each="proyecto : ${mayorRecaudacion}">
-                <article class="proyect">
-                    <h5 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h5>
-                    <p class="proyect__number">
-                        Inicia el <span th:text="${proyecto.plazoParaInicio}">26/10</span>
-                    </p>
-                    <p class="proyect__description">
-                        Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
-                    </p>
-                    <p class="proyect__date">
-                        Recaudado <span th:text="${proyecto.montoRecaudado}">754.159</span>
-                        de <span th:text="${proyecto.montoRequerido}">1.000.000</span>
-                    </p>
-                </article>
+                <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
+                    <article class="proyect">
+                        <h5 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h5>
+                        <p class="proyect__number">
+                            Inicia el <span th:text="${proyecto.plazoParaInicio}">26/10</span>
+                        </p>
+                        <p class="proyect__description">
+                            Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
+                        </p>
+                        <p class="proyect__date">
+                            Recaudado <span th:text="${proyecto.montoRecaudado}">754.159</span>
+                            de <span th:text="${proyecto.montoRequerido}">1.000.000</span>
+                        </p>
+                    </article>
+                </a>
             </div>
         </section>
         <section class="investments__end">

@@ -28,12 +28,14 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
 
     @Override
     public ProyectoInversion getProyectoById(Long idProyeInversion) {
+
         final Session session = sessionFactory.getCurrentSession();
-        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, idProyeInversion);
-        if(proyeInversion != null) return proyeInversion;
-        else{
-            throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
-        }
+
+        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, Math.toIntExact(idProyeInversion));
+
+        if(proyeInversion == null) throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
+
+        return proyeInversion;
     }
 
     @Override

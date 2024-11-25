@@ -104,4 +104,9 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         return this.repoProyeInversion.getProyectosMayorInversion();
     }
 
+    @Override
+    public ProyectoInversion getProyectoInversinPorId(Long id) {
+        return this.repoProyeInversion.getProyectoById(id);
+    }
+
 }

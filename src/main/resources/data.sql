@@ -19,15 +19,28 @@ INSERT INTO Gasto(
 	    (4,'Medialunas', 7000, '4/11/2024', 1),
 	    (5,'Viaje', 300400, '5/12/2024', 1) ON CONFLICT DO NOTHING;
 
+SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto));
+
 INSERT INTO proyecto_inversion(id,
     cantidadreportes, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titulo, titular_id)
 VALUES
-    (1, 5, 'Compra de auto usado para refacción y reventa', false, 800000, 1000000, NULL, '2024-12-31', '2024-10-26', 'Compra de auto usado para refacción y reventa', 1),
-    (2, 3, 'Renovación y reventa de muebles antiguos', false, 900000, 1200000, NULL, '2024-11-30', '2024-10-26', 'Renovación y reventa de muebles antiguos', 2),
-    (3, 8, 'Desarrollo de una aplicación móvil', false, 950000, 1500000, NULL, '2024-12-15', '2024-10-26', 'Desarrollo de una aplicación móvil', 3),
-    (4, 6, 'Compra y alquiler de bicicletas eléctricas', false, 850000, 1300000, NULL, '2024-12-20', '2024-10-26', 'Compra y alquiler de bicicletas eléctricas', 4),
-    (5, 2, 'Construcción de viviendas sustentables', true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)  ON CONFLICT DO NOTHING;
+    (1, 5, 'Adquisición de un vehículo usado para realizar reparaciones exhaustivas, con el objetivo de ponerlo nuevamente en circulación y ofrecerlo en el mercado de reventa. Este proyecto busca revitalizar automóviles en desuso, fomentando la economía circular.',
+    false, 800000, 1000000, NULL, '2024-12-31', '2024-10-26', 'Compra de auto usado para refacción y reventa', 1),
 
+    (2, 3, 'Este proyecto consiste en la renovación y modernización de muebles antiguos mediante técnicas de restauración, con el propósito de maximizar su valor y ofrecerlos como piezas únicas en el mercado de artículos de diseño.',
+    false, 900000, 1200000, NULL, '2024-11-30', '2024-10-26', 'Renovación y reventa de muebles antiguos', 2),
+
+    (3, 8, 'Creación y desarrollo de una innovadora aplicación móvil que facilite la gestión de tareas y el seguimiento de objetivos personales. La propuesta se centra en ofrecer una interfaz intuitiva y funcionalidades avanzadas para el usuario.',
+    false, 950000, 1500000, NULL, '2024-12-15', '2024-10-26', 'Desarrollo de una aplicación móvil', 3),
+
+    (4, 6, 'Compra de bicicletas eléctricas para su posterior alquiler en centros urbanos y turísticos, promoviendo el uso de transporte sostenible y contribuyendo a la reducción de emisiones de carbono en las ciudades.',
+    false, 850000, 1300000, NULL, '2024-12-20', '2024-10-26', 'Compra y alquiler de bicicletas eléctricas', 4),
+
+    (5, 2, 'Construcción de viviendas económicas y ecológicamente sostenibles utilizando materiales reciclados y técnicas de construcción modernas, con el fin de ofrecer soluciones habitacionales accesibles para comunidades vulnerables.',
+    true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)
+ON CONFLICT DO NOTHING;
+
+SELECT setval(pg_get_serial_sequence('proyecto_inversion', 'id'), (SELECT MAX(id) FROM gasto));
 
 -- ALTER TABLE proyecto_inversion ADD CONSTRAINT unique_proyecto UNIQUE (titulo, titular_id);
 --
@@ -36,5 +49,3 @@ VALUES
 --         ('Zapatillas con materiales reciclados', 'Zapatillas construidas a partir de materiales reusables', false, 123456.75, 1400000.00, null, '2026-01-01', '2024-11-22', 1 ),
 --         ('App alquiler de carpas - Mendoza', 'Tenemos varios campings por todo Mendoza y alquilaremos con nuestra app', false, 145000.00, 1500000.00, '2026-01-01', null, '2024-11-22', 1 )
 -- ON CONFLICT DO NOTHING;
-
-SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto));
