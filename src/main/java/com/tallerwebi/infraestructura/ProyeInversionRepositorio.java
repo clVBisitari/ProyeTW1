@@ -122,6 +122,24 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
+    public List<ProyectoInversion> getProyectosMayorInversion() {
+
+        final Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ProyectoInversion> query = builder.createQuery(ProyectoInversion.class);
+
+        Root<ProyectoInversion> root = query.from(ProyectoInversion.class);
+
+        query.where(builder.equal(root.get("enSuspension"), false));
+
+        query.orderBy(builder.desc(root.get("montoRecaudado")));
+
+        // Limitar 5
+        return session.createQuery(query).setMaxResults(5).getResultList();
+    }
+
+    @Override
     public List<ProyectoInversion> getPublicacionesSuspendidas(Integer id){
         final Session session = sessionFactory.getCurrentSession();
         CriteriaBuilder builder = session.getCriteriaBuilder();

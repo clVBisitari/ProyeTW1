@@ -98,4 +98,10 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         List<ProyectoInversion> publisSuspendidas = this.repoProyeInversion.getPublicacionesSuspendidas(idUsuario);
         return publisSuspendidas;
     }
+
+    @Override
+    public List<ProyectoInversion> getProyectosMayorInversion() {
+        return this.repoProyeInversion.getProyectosMayorInversion();
+    }
+
 }

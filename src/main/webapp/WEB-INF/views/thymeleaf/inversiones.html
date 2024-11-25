@@ -29,36 +29,21 @@
     <div class="investments__content">
         <section class="investments__start">
             <h2 class="investments__title">Poyectos con mayor recaudación:</h2>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra de auto usado para refacción y reventa</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Renovación y reventa de muebles antiguos</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Desarrollo de una aplicación móvil</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra y alquiler de bicicletas eléctricas</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra de auto usado para refacción y reventa</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
+            <div th:each="proyecto : ${mayorRecaudacion}">
+                <article class="proyect">
+                    <h5 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h5>
+                    <p class="proyect__number">
+                        Inicia el <span th:text="${proyecto.plazoParaInicio}">26/10</span>
+                    </p>
+                    <p class="proyect__description">
+                        Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
+                    </p>
+                    <p class="proyect__date">
+                        Recaudado <span th:text="${proyecto.montoRecaudado}">754.159</span>
+                        de <span th:text="${proyecto.montoRequerido}">1.000.000</span>
+                    </p>
+                </article>
+            </div>
         </section>
         <section class="investments__end">
             <h2 class="investments__title">Inversiones</h2>

@@ -19,6 +19,16 @@ INSERT INTO Gasto(
 	    (4,'Medialunas', 7000, '4/11/2024', 1),
 	    (5,'Viaje', 300400, '5/12/2024', 1) ON CONFLICT DO NOTHING;
 
+INSERT INTO proyecto_inversion(id,
+    cantidadreportes, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titulo, titular_id)
+VALUES
+    (1, 5, 'Compra de auto usado para refacción y reventa', false, 800000, 1000000, NULL, '2024-12-31', '2024-10-26', 'Compra de auto usado para refacción y reventa', 1),
+    (2, 3, 'Renovación y reventa de muebles antiguos', false, 900000, 1200000, NULL, '2024-11-30', '2024-10-26', 'Renovación y reventa de muebles antiguos', 2),
+    (3, 8, 'Desarrollo de una aplicación móvil', false, 950000, 1500000, NULL, '2024-12-15', '2024-10-26', 'Desarrollo de una aplicación móvil', 3),
+    (4, 6, 'Compra y alquiler de bicicletas eléctricas', false, 850000, 1300000, NULL, '2024-12-20', '2024-10-26', 'Compra y alquiler de bicicletas eléctricas', 4),
+    (5, 2, 'Construcción de viviendas sustentables', true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)  ON CONFLICT DO NOTHING;
+
+
 -- ALTER TABLE proyecto_inversion ADD CONSTRAINT unique_proyecto UNIQUE (titulo, titular_id);
 --
 -- INSERT INTO proyecto_inversion(titulo, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titular_id)

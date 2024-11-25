@@ -1,6 +1,7 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,7 @@ public class ControladorProyeInversion {
 
     private ServicioProyectoInversion servicioProyectoInversion;
     private UsuarioDTO user;
+
     @Autowired
     public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion) {
         this.servicioProyectoInversion = proyectoInversion;
@@ -25,19 +27,31 @@ public class ControladorProyeInversion {
 
     @RequestMapping(path= "/inversiones", method = RequestMethod.GET)
     public ModelAndView getListaProyectosPorUsuario(HttpServletRequest request){
+
+        // Redirigir si no esta loggeado
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
         ModelMap model = new ModelMap();
-        Integer userId = (Integer) request.getSession().getAttribute("idUsuario");
-        List<ProyectoInversion> proyectosResult = this.servicioProyectoInversion.getProyectosUsuario(userId);
-        model.put("proyectos", proyectosResult);
+
+        List<ProyectoInversion> mayorRecaudacion = this.servicioProyectoInversion.getProyectosMayorInversion();
+
+        model.put("mayorRecaudacion", mayorRecaudacion);
+
         return new ModelAndView("inversiones", model);
     }
 
     @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
     public ModelAndView buscarProyectoInversion(@RequestParam("nombre") String nombre)
     {
+
         ModelMap model = new ModelMap();
+
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.buscarProyectoInversion(nombre);
+
         model.put("response", proyectos);
+
         return new ModelAndView("redirect:inversiones", model);
     }
 
@@ -54,7 +68,6 @@ public class ControladorProyeInversion {
 
         ModelMap model = new ModelMap();
         UsuarioDTO user = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-        var usuario = this.user;
         Integer proyectoResponse = this.servicioProyectoInversion.guardarProyectoInversion(proyeInversion, user);
         model.put("response", proyectoResponse);
         return new ModelAndView("redirect:inversiones", model);
