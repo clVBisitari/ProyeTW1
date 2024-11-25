@@ -18,7 +18,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.util.List;
 
-//@Transactional
+@Transactional
 @Controller
 public class ControladorUsuario {
 

@@ -102,7 +102,34 @@
                 </form>
             </div>
 
-            <div th:if="${contactoEncontrado?.enSuspension == true}">
+            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista != null && contactoEncontrado?.enSuspension == true}" style="display:flex;justify-content: center; align-items: center">
+                <form th:action="@{/eliminar/contacto/{id}(id=${contactoEncontrado.id})}" method="post">
+                    <button class="button__primary" type="submit">Eliminar Usuario</button>
+                </form>
+                <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
+            </div>
+
+            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista == null && contactoEncontrado?.enSuspension == true}" style="display:flex;justify-content: center; align-items: center">
+                <form
+                        th:action="@{/agregar/contacto/{id}(id=${contactoEncontrado.id})}"
+                        method="post"
+                >
+                    <button class="contacts__button" type="submit">
+                        <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                class="contacts__svg"
+                                viewBox="0 0 16 16"
+                        >
+                            <title>Agregar</title>
+                            <path
+                                    d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m1.679-4.493-1.335 2.226a.75.75 0 0 1-1.174.144l-.774-.773a.5.5 0 0 1 .708-.708l.547.548 1.17-1.951a.5.5 0 1 1 .858.514M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"
+                            />
+                            <path
+                                    d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"
+                            />
+                        </svg>
+                    </button>
+                </form>
                 <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
             </div>
 
@@ -222,7 +249,7 @@
                 </article>
 
                 <div
-                        th:if="${usuarioActual.esAdmin && !contactoSugerido.enSuspension}"
+                        th:if="${!contactoSugerido.enSuspension}"
                 >
                     <form
                             th:action="@{/suspender/usuario/{id}(id=${contactoSugerido.id})}"
@@ -252,33 +279,14 @@
                     </form>
                 </div>
                 <div
-                        th:if="${usuarioActual.esAdmin && contactoSugerido.enSuspension}"
+                        th:if="${ contactoSugerido.enSuspension}"
                 >
-                    <form
-                            th:action="@{/revertir-suspension/usuario/{id}(id=${contactoSugerido.id})}"
-                            method="post"
-                    >
-                        <button class="contacts__button" type="submit">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    class="contacts__svg"
-                                    viewBox="0 0 16 16"
-                            >
-                                <title>Revertir</title>
-                                <path
-                                        d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.354-5.854 1.5 1.5a.5.5 0 0 1-.708.708L13 11.707V14.5a.5.5 0 0 1-1 0v-2.793l-.646.647a.5.5 0 0 1-.708-.708l1.5-1.5a.5.5 0 0 1 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"
-                                />
-                                <path
-                                        d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"
-                                />
-                            </svg>
-                        </button>
+
                         <p
                                 class="error"
                                 th:if="${contactoSugerido.enSuspension}"
                                 th:text="${mensaje}"
                         ></p>
-                    </form>
                 </div>
             </div>
         </aside>
