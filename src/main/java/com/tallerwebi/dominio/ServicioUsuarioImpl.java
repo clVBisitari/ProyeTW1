@@ -65,7 +65,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
 
         // Guardar la entidad Usuario con la relación actualizada
         repositorioUsuario.modificar(usuario);
-        repositorioUsuario.agregarContacto((usuarioQueGuarda.getId()),(usuarioAGuardar.getId()));
+      //  repositorioUsuario.agregarContacto((usuarioQueGuarda.getId()),(usuarioAGuardar.getId()));
 
         return true;
     }
