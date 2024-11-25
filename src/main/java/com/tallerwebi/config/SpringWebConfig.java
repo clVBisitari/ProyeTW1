@@ -96,9 +96,9 @@ public class SpringWebConfig implements WebMvcConfigurer {
 //
 //        return new ServicioMercadoPagoImpl(preferenceClient, prefItemRequest);
 //    }
-    @Bean
-    public ControladorMercadoPago controladorMercadoPago() {
-        return new ControladorMercadoPago(this.mercadopagoService);
-    }
+//    @Bean
+//    public ControladorMercadoPago controladorMercadoPago() {
+//        return new ControladorMercadoPago(this.mercadopagoService);
+//    }
 
 }

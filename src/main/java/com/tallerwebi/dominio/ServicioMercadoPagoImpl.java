@@ -3,10 +3,9 @@ import com.mercadopago.MercadoPagoConfig;
 import com.mercadopago.client.common.AddressRequest;
 import com.mercadopago.client.common.IdentificationRequest;
 import com.mercadopago.client.common.PhoneRequest;
-import com.mercadopago.client.payment.PaymentClient;
-import com.mercadopago.client.payment.PaymentCreateRequest;
-import com.mercadopago.client.payment.PaymentPayerRequest;
+import com.mercadopago.client.payment.*;
 import com.mercadopago.client.preference.*;
+import com.mercadopago.core.MPRequestOptions;
 import com.mercadopago.exceptions.MPApiException;
 import com.mercadopago.exceptions.MPException;
 import com.mercadopago.resources.payment.Payment;
@@ -20,13 +19,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Level;
 
 @Service
 public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
 
-    @Value("${mercadopago.access.token}")
+    @Value("APP_USR-6820296144818196-110423-32be5774b8b8e7be4d67075dfa0ca4b5-3143139")
     private String accessToken;
     private PreferenceClient preferenceClient;
     private PreferenceItemRequest.PreferenceItemRequestBuilder preferenceItemRequest;
@@ -34,6 +33,8 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
     @Autowired
     public ServicioMercadoPagoImpl(PreferenceClient prefClient, PreferenceItemRequest.PreferenceItemRequestBuilder prefItemReq) throws MPException {
         // Inicializa MercadoPago con el Access Token
+        //public-key : TEST-371b5a27-0c64-4089-8aea-b04926e2c230
+        //access-token: TEST-6820296144818196-110423-e17c0175f97ce1e9f30b8039da94cae7-3143139
         com.mercadopago.MercadoPagoConfig.setAccessToken(accessToken);
         preferenceClient = prefClient;
         preferenceItemRequest = prefItemReq;
@@ -131,30 +132,78 @@ public class ServicioMercadoPagoImpl implements ServicioMercadoPago {
         return preferenceClient.create(preferenceRequest);
     }
 
-    public PaymentResponseDTO processPayment(CardPaymentDTO cardPaymentDTO) {
+    public PaymentResponseDTO processPayment(CardPaymentDTO request) {
         try {
             MercadoPagoConfig.setAccessToken(accessToken);
+            Map<String, String> customHeaders = new HashMap<>();
+            customHeaders.put("x-idempotency-key", UUID.randomUUID().toString());
 
-            PaymentClient paymentClient = new PaymentClient();
+            MPRequestOptions requestOptions = MPRequestOptions.builder()
+                    .customHeaders(customHeaders)
+                    .build();
 
-            PaymentCreateRequest paymentCreateRequest =
-                    PaymentCreateRequest.builder()
-                            .transactionAmount(cardPaymentDTO.getTransactionAmount())
-                            .token(cardPaymentDTO.getToken())
-                            .installments(cardPaymentDTO.getInstallments())
-                            .paymentMethodId(cardPaymentDTO.getPaymentMethodId())
-                            .payer(
-                                    PaymentPayerRequest.builder()
-                                            .email(cardPaymentDTO.getPayer().getEmail())
-                                            .identification(
-                                                    IdentificationRequest.builder()
-                                                            .type(cardPaymentDTO.getPayer().getIdentification().getType())
-                                                            .number(cardPaymentDTO.getPayer().getIdentification().getNumber())
-                                                            .build())
-                                            .build())
+            PaymentClient client = new PaymentClient();
+
+            List<PaymentItemRequest> items = new ArrayList<>();
+
+            PaymentItemRequest item =
+                    PaymentItemRequest.builder()
+                            .id("MLB2907679857")
+                            .title("Point Mini")
+                            .description("Point product for card payments via Bluetooth.")
+                            .pictureUrl(
+                                    "https://http2.mlstatic.com/resources/frontend/statics/growth-sellers-landings/device-mlb-point-i_medium2x.png")
+                            .categoryId("electronics")
+                            .quantity(1)
+                            .unitPrice(new BigDecimal("58.8"))
                             .build();
 
-            Payment createdPayment = paymentClient.create(paymentCreateRequest);
+            items.add(item);
+
+            PaymentCreateRequest createRequest =
+                    PaymentCreateRequest.builder()
+                            .additionalInfo(
+                                    PaymentAdditionalInfoRequest.builder()
+                                            .items(items)
+                                            .payer(
+                                                    PaymentAdditionalInfoPayerRequest.builder()
+                                                            .firstName("Test")
+                                                            .lastName("Test")
+                                                            .phone(
+                                                                    PhoneRequest.builder().areaCode("11").number("987654321").build())
+                                                            .build())
+                                            .shipments(
+                                                    PaymentShipmentsRequest.builder()
+                                                            .receiverAddress(
+                                                                    PaymentReceiverAddressRequest.builder()
+                                                                            .zipCode("12312-123")
+                                                                            .stateName("Rio de Janeiro")
+                                                                            .cityName("Buzios")
+                                                                            .streetName("Av das Nacoes Unidas")
+                                                                            .streetNumber("3003")
+                                                                            .build())
+                                                            .build())
+                                            .build())
+                            .binaryMode(false)
+                            .capture(false)
+                            .description("Payment for product")
+                            .externalReference("MP0001")
+                            .installments(1)
+//                            .order(PaymentOrderRequest.builder().type("mercadolibre").id(1234L).build())
+                            .payer(PaymentPayerRequest.builder()
+                                    .entityType("individual")
+                                    .type("customer")
+                                    .email("test_user_123@testuser.com")
+                                    .identification(IdentificationRequest.builder()
+                                            .type("CPF")
+                                            .number("01234567890")
+                                            .build())
+                                    .build())
+                            .paymentMethodId("master")
+                            .token("ff8080814c11e237014c1ff593b57b4d")
+                            .transactionAmount(new BigDecimal("58.8"))
+                            .build();
+            var createdPayment = client.create(createRequest, requestOptions);
 
             return new PaymentResponseDTO(
                     createdPayment.getId(),

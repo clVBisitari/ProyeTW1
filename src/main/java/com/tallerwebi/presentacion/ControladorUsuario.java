@@ -59,6 +59,7 @@ public class ControladorUsuario {
         modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
         modelo.addAttribute("proyectosActivos", proyectosActivos);
         modelo.addAttribute("ctdadProyesActivos", proyectosActivos.size());
+        modelo.addAttribute("cardFormData", new CardPaymentDTO());
 
         return new ModelAndView("dashboard", modelo);
     }

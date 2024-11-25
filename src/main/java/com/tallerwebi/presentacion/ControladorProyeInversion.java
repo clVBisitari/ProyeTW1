@@ -1,8 +1,12 @@
 package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.excepcion.PagoException;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +20,12 @@ import java.util.List;
 public class ControladorProyeInversion {
 
     private ServicioProyectoInversion servicioProyectoInversion;
+    private final ServicioMercadoPago mercadoPagoService;
     private UsuarioDTO user;
     @Autowired
-    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion) {
+    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion, ServicioMercadoPago serviceMp) {
         this.servicioProyectoInversion = proyectoInversion;
+        this.mercadoPagoService = serviceMp;
     }
 
 
@@ -99,4 +105,5 @@ public class ControladorProyeInversion {
         model.put("response", proyectos);
         return new ModelAndView("redirect:inversiones", model);
     }
+
 }
