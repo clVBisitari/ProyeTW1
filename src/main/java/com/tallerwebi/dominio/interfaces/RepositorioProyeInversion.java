@@ -13,4 +13,5 @@ import java.util.List;
     boolean deleteProyeInversion(Long idProyeInversion);
     boolean reportProyeInversion(Long idProyeInversion);
     boolean suspenderProyecto(Long idProyeInversion);
+    List<ProyectoInversion> getProyectosMayorInversion();
 }

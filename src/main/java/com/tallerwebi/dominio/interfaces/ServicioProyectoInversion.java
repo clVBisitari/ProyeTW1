@@ -7,12 +7,14 @@ import com.tallerwebi.presentacion.UsuarioDTO;
 import java.util.List;
 
 public interface ServicioProyectoInversion {
-    public List<ProyectoInversion> buscarProyectoInversion(String name);
-    public List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
-    public Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario);
-    public ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
-    public boolean borrarProyectoInversion(Long idProyeInversion);
-    public boolean reportarProyecto(Long idProyeInversion);
-    public boolean suspenderProyecto(Long idProyeInversion);
-    public List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
+    List<ProyectoInversion> buscarProyectoInversion(String name);
+    List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
+    Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario);
+    ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
+    boolean borrarProyectoInversion(Long idProyeInversion);
+    boolean reportarProyecto(Long idProyeInversion);
+    boolean suspenderProyecto(Long idProyeInversion);
+    List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
+    List<ProyectoInversion> getProyectosMayorInversion();
+    ProyectoInversion getProyectoInversinPorId(Long id);
 }
