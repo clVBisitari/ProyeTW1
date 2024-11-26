@@ -31,11 +31,12 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     @Override
     public ProyectoInversion getProyectoById(Integer idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
-        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, idProyeInversion);
-        if(proyeInversion != null) return proyeInversion;
-        else{
-            throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
-        }
+
+        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, Math.toIntExact(idProyeInversion));
+
+        if(proyeInversion == null) throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
+
+        return proyeInversion;
     }
 
     @Override
@@ -121,6 +122,24 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         }else{
             throw new ProyeInversionException("El proyecto con ID " + idProyeInversion + " no existe.");
         }
+    }
+
+    @Override
+    public List<ProyectoInversion> getProyectosMayorInversion() {
+
+        final Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ProyectoInversion> query = builder.createQuery(ProyectoInversion.class);
+
+        Root<ProyectoInversion> root = query.from(ProyectoInversion.class);
+
+        query.where(builder.equal(root.get("enSuspension"), false));
+
+        query.orderBy(builder.desc(root.get("montoRecaudado")));
+
+        // Limitar 5
+        return session.createQuery(query).setMaxResults(5).getResultList();
     }
 
     @Override

@@ -15,4 +15,5 @@ import java.util.List;
     boolean reportProyeInversion(Integer idProyeInversion);
     boolean suspenderProyecto(Integer idProyeInversion);
     Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion);
+    List<ProyectoInversion> getProyectosMayorInversion();
 }
