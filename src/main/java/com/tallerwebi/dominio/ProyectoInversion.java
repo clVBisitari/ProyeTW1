@@ -19,10 +19,8 @@ public class ProyectoInversion {
     @ManyToOne
     @JoinColumn(name = "titular_id")
     private Usuario titular;
-    @ManyToMany
-    @JoinTable(name = "inversores")
-    @JoinColumn(name = "inversor_id")
-    private List<Usuario> inversores;
+    @OneToOne
+    private InversorDeProyecto inversor;
     private BigDecimal montoRequerido;
     private BigDecimal montoRecaudado;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -66,12 +64,12 @@ public class ProyectoInversion {
         this.description = description;
     }
 
-    public List<Usuario> getInversores() {
-        return inversores;
+    public InversorDeProyecto getInversores() {
+        return inversor;
     }
 
-    public void setInversores(List<Usuario> inversores) {
-        this.inversores = inversores;
+    public void setInversores(InversorDeProyecto inversores) {
+        this.inversor = inversores;
     }
 
     public BigDecimal getMontoRequerido() {

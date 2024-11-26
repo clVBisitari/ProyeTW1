@@ -1,4 +1,5 @@
 package com.tallerwebi.infraestructura;
+import com.tallerwebi.dominio.InversorDeProyecto;
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
@@ -27,7 +28,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public ProyectoInversion getProyectoById(Long idProyeInversion) {
+    public ProyectoInversion getProyectoById(Integer idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
         ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, idProyeInversion);
         if(proyeInversion != null) return proyeInversion;
@@ -78,7 +79,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean deleteProyeInversion(Long idProyeInversion) {
+    public boolean deleteProyeInversion(Integer idProyeInversion) {
         try {
             final Session session = sessionFactory.getCurrentSession();
             session.delete(idProyeInversion);
@@ -89,7 +90,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean reportProyeInversion(Long idProyeInversion) {
+    public boolean reportProyeInversion(Integer idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
 
         ProyectoInversion proyectoInversion = session.get(ProyectoInversion.class, idProyeInversion);
@@ -109,7 +110,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean suspenderProyecto(Long idProyeInversion) {
+    public boolean suspenderProyecto(Integer idProyeInversion) {
         final Session session =  sessionFactory.getCurrentSession();
         ProyectoInversion proye = session.get(ProyectoInversion.class, idProyeInversion);
         if(proye != null && proye.getCantidadReportes() >= 3){
@@ -133,5 +134,11 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         return session.createQuery(query).getResultList();
     }
 
+    @Override
+    public Integer saveInversor(InversorDeProyecto inversor){
+        final Session session = sessionFactory.getCurrentSession();
+        Serializable idInversor = session.save(inversor);
+        return (Integer) idInversor;
+    }
 
 }

@@ -69,7 +69,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/borrarProyeInversion", method = RequestMethod.DELETE)
-    public ModelAndView borrarProyectoInversion(@RequestParam Long idProyeInversion){
+    public ModelAndView borrarProyectoInversion(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean deleteResponse = this.servicioProyectoInversion.borrarProyectoInversion(idProyeInversion);
         model.put("response", deleteResponse);
@@ -77,7 +77,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/reportarProyecto", method = RequestMethod.POST)
-    public ModelAndView reportarProyecto(@RequestParam Long idProyeInversion){
+    public ModelAndView reportarProyecto(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean reportarFueExitoso = this.servicioProyectoInversion.reportarProyecto(idProyeInversion);
         model.put("response", reportarFueExitoso);
@@ -85,7 +85,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/suspenderProyecto", method = RequestMethod.POST)
-    public ModelAndView suspenderProyecto(@RequestParam Long idProyeInversion){
+    public ModelAndView suspenderProyecto(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean suspensionExitosa = this.servicioProyectoInversion.suspenderProyecto(idProyeInversion);
         model.put("response", suspensionExitosa);
@@ -97,6 +97,13 @@ public class ControladorProyeInversion {
         ModelMap model = new ModelMap();
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.listarPublicacionesSupendidas(idUsuario);
         model.put("response", proyectos);
+        return new ModelAndView("redirect:inversiones", model);
+    }
+    @RequestMapping(path="/invertirEnProyecto", method=RequestMethod.POST)
+    public ModelAndView invertirEnProyecto(@RequestBody InversorDeProyectoDTO inversorDto){
+        ModelMap model = new ModelMap();
+        Integer idInversor = this.servicioProyectoInversion.invertirEnProyecto(inversorDto);
+        model.put("idInversor", idInversor);
         return new ModelAndView("redirect:inversiones", model);
     }
 }
