@@ -14,6 +14,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -135,10 +136,18 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public Integer saveInversor(InversorDeProyecto inversor){
+    public Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion){
         final Session session = sessionFactory.getCurrentSession();
-        Serializable idInversor = session.save(inversor);
-        return (Integer) idInversor;
+        try {
+            Serializable idInversor = session.save(inversor);
+            BigDecimal montoFinal = proyectoInversion.getMontoRecaudado().add(inversor.getMonto());
+            proyectoInversion.setMontoRecaudado(montoFinal);
+            ProyectoInversion proyeActualizado = this.updateProyeInversion(proyectoInversion);
+
+            return (Integer) idInversor;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

@@ -14,5 +14,5 @@ import java.util.List;
     boolean deleteProyeInversion(Integer idProyeInversion);
     boolean reportProyeInversion(Integer idProyeInversion);
     boolean suspenderProyecto(Integer idProyeInversion);
-    Integer saveInversor(InversorDeProyecto inversor);
+    Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion);
 }

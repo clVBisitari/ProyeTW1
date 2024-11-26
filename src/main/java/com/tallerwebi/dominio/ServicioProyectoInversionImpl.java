@@ -115,7 +115,7 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
             inversor.setProyecto(proyectoInversion);
             inversor.setUsuario(usuarioValidado);
         }
-        Integer idInversor = this.repoProyeInversion.saveInversor(inversor);
+        Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion);
 
         return idInversor;
     }
