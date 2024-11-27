@@ -1,9 +1,8 @@
 .investment__main{
     padding: 5%;
-    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
-    min-height: 90vh;
+    min-height: 100vh;
     gap: 2rem;
 }
 
@@ -21,16 +20,31 @@
 
 .investment__h1{
     font-size: 2rem;
+    font-weight: 500;
 }
 
 .investment__h2{
-    margin-top: 1rem;
-    font-size: 1.7rem;
+    margin-top: .5rem;
+    font-size: 1.5rem;
+    font-weight: 400;
 }
 
 .investment__link{
     color: unset;
     text-decoration: none;
+}
+
+.investment__button{
+    transition: all 1s;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: unset;
+    text-decoration: none;
+    background: none;
+}
+
+.investment__button:hover{
+    text-decoration: underline;
 }
 
 .investment__section{
@@ -42,15 +56,34 @@
 }
 
 .investment__top{
-
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
 }
 
 .investment__text{
     font-size: 1rem;
 }
 
+.investment__descr{
+    font-size: 1rem;
+    width: 50%;
+}
+
 .investment__bottom{
 
+}
+
+.investment__form{
+    width: 200px;
+}
+
+.investment__input{
+    width: 100%;
+    border-radius: 5px;
+    padding: .25rem;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
 }
 
 .investment__flex{
@@ -102,7 +135,4 @@
         flex-direction: row;
     }
 
-    .investment__top{
-        max-width: 50%;
-    }
 }
