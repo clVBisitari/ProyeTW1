@@ -43,28 +43,12 @@
                         <p>No tienes gastos registrados.</p>
                     </div>
                     <article class="investment" th:each="gasto : ${gastos}">
-                        <div class="investment__info">
-                            <p class="investment__number">
-                                $<span th:text="${gasto.valor}"></span>
-                            </p>
-                            <p class="investment__text">
-                                <span th:text="${gasto.descripcion}"></span>
-                            </p>
-                        </div>
-                        <div class="investment__actions">
-                            <button
-                                    class="button__delete"
-                                    th:onclick="'deleteGasto(' + ${gasto.id} + ')'"
-                            >
-                                Eliminar
-                            </button>
-                            <button
-                                    class="button__edit"
-                                    th:onclick="'editGasto(' + ${gasto.id} + ')'"
-                            >
-                                Modificar
-                            </button>
-                        </div>
+                        <p class="investment__number">
+                            $<span th:text="${gasto.valor}"></span>
+                        </p>
+                        <p class="investment__text">
+                            <span th:text="${gasto.descripcion}"></span>
+                        </p>
                     </article>
                 </section>
                 <section

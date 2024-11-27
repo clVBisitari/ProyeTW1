@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
 import com.tallerwebi.infraestructura.RepositorioGastoImpl;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
+import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,12 +36,14 @@ public class ServicioProyeInversionTests {
     private Usuario usuarioMock;
     private ProyeInversionRepositorio repositorioProyeInversionMock;
     private ServicioProyectoInversionImpl servicioProyectoInversion;
+    private RepositorioUsuarioImpl repositorioUsuarioMock;
 
     @BeforeEach
     public void init(){
         usuarioMock = mock(Usuario.class);
         repositorioProyeInversionMock = mock(ProyeInversionRepositorio.class);
-        this.servicioProyectoInversion = new ServicioProyectoInversionImpl(repositorioProyeInversionMock);
+        repositorioUsuarioMock = mock(RepositorioUsuarioImpl.class);
+        this.servicioProyectoInversion = new ServicioProyectoInversionImpl(repositorioProyeInversionMock, repositorioUsuarioMock);
     }
 
     @Test
@@ -50,11 +53,10 @@ public class ServicioProyeInversionTests {
         ProyectoInversion proyectoInversion = dadoQueExisteUnProyecto();
         proyectoInversion.setCantidadReportes(3);
         Integer idProyecto = this.repositorioProyeInversionMock.saveProyectoInversion(proyectoInversion);
-        Long idProyectoLong = idProyecto.longValue();
         when(repositorioProyeInversionMock.getProyectoById(idProyecto)).thenReturn(proyectoInversion);
         when(repositorioProyeInversionMock.suspenderProyecto(idProyecto)).thenReturn(true);
 
-        boolean suspensionExitosa = this.servicioProyectoInversion.suspenderProyecto(idProyectoLong);
+        boolean suspensionExitosa = this.servicioProyectoInversion.suspenderProyecto(idProyecto);
 
         assertThat(suspensionExitosa, equalTo(true));
     }
@@ -67,7 +69,7 @@ public class ServicioProyeInversionTests {
         proyectoInversion.setTitulo("Autos Usados");
         proyectoInversion.setTitular(usuarioMock);
         proyectoInversion.setDescription("Compra y venta de autos usados.");
-        proyectoInversion.setMontoRequerido(25000);
+        proyectoInversion.setMontoRequerido(BigDecimal.valueOf(25000));
         proyectoInversion.setPlazoParaInicio(fechaInicioProye);
 
         return proyectoInversion;

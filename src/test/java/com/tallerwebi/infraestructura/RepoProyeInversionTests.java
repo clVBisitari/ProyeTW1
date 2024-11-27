@@ -2,6 +2,7 @@ package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import org.hamcrest.Matchers;
 import org.hibernate.SessionFactory;
@@ -17,12 +18,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.mock;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {HibernateTestConfig.class})
@@ -35,12 +38,12 @@ public class RepoProyeInversionTests {
     private Usuario usuarioMock;
 
     private ProyeInversionRepositorio repositorioProyeInversion;
-
+    private RepositorioUsuarioImpl repositorioUsuarioMock;
 
     @BeforeEach
     public void init(){
-
-        this.repositorioProyeInversion = new ProyeInversionRepositorio(sessionFactory);
+        repositorioUsuarioMock = mock(RepositorioUsuarioImpl.class);
+        this.repositorioProyeInversion = new ProyeInversionRepositorio(sessionFactory, repositorioUsuarioMock);
         this.usuarioMock = new Usuario();
         this.usuarioMock.setId(12345678);
         this.usuarioMock.setNombre("Usuario");
@@ -67,11 +70,11 @@ public class RepoProyeInversionTests {
         ProyectoInversion proyectoInversion = dadoQueExisteUnProyecto();
         Integer proyeId = this.repositorioProyeInversion.saveProyectoInversion(proyectoInversion);
 
-        proyectoInversion.setMontoRequerido(50000);
+        proyectoInversion.setMontoRequerido(BigDecimal.valueOf(50000));
         this.repositorioProyeInversion.updateProyeInversion(proyectoInversion);
         ProyectoInversion proyeResultado = this.repositorioProyeInversion.getProyectoById(proyeId);
 
-        assertThat(proyeResultado.getMontoRequerido(), equalTo(50000));
+        assertThat(proyeResultado.getMontoRequerido(), equalTo(BigDecimal.valueOf(50000)));
     }
 
     @Test
@@ -127,7 +130,7 @@ public class RepoProyeInversionTests {
         proyectoInversion2.setTitulo("Autos nuevos");
         proyectoInversion2.setTitular(usuarioMock);
         proyectoInversion2.setDescription("Compra y venta de autos 0km.");
-        proyectoInversion2.setMontoRequerido(75000);
+        proyectoInversion2.setMontoRequerido(BigDecimal.valueOf(75000));
         proyectoInversion2.setPlazoParaInicio(fechaInicioProye);
         this.repositorioProyeInversion.saveProyectoInversion(proyectoInversion2);
 
@@ -159,7 +162,7 @@ public class RepoProyeInversionTests {
         proyectoInversion.setTitulo("Autos Usados");
         proyectoInversion.setTitular(usuarioMock);
         proyectoInversion.setDescription("Compra y venta de autos usados.");
-        proyectoInversion.setMontoRequerido(25000);
+        proyectoInversion.setMontoRequerido(BigDecimal.valueOf(25000));
         proyectoInversion.setPlazoParaInicio(fechaInicioProye);
 
         return proyectoInversion;
