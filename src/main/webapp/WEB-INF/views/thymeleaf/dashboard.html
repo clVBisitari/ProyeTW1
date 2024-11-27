@@ -94,9 +94,9 @@
             </header>
             <article class="activity" th:each="gasto : ${gastos}">
                 <h5 class="activity__subtitle" th:text="${gasto.descripcion}">Servicios de electricidad</h5>
-                <p class="activity__number" th:text="${#numbers.formatDecimal(gasto.valor, 0, 'POINT', 2, 'COMMA')}">$3.450</p>
+                <p class="activity__number" th:text="'$' + ${#numbers.formatDecimal(gasto.valor, 0, 'POINT', 2, 'COMMA')}">$3.450</p>
                 <p class="activity__description" th:text="${gasto.frecuencia}">Gasto</p>
-                <p class="activity__date" th:text="${gasto.fechaVencimiento}">18/09</p>
+                <p class="activity__date" th:text="${#dates.format(gasto.fechaVencimiento, 'dd/MM/YYYY')}">18/09</p>
             </article>
         </section>
         <section class="content__section">
