@@ -11,6 +11,8 @@ public interface ServicioGestorGastos {
     BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer usuarioId);
     Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId);
     List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id);
+    List<Gasto> obtenerLosGastosDelMesEnCursoDeUnUsuario(Integer id);
+    List<Gasto> obtenerLosGastosNoVencidosDeUnUsuario(Integer id);
     Boolean esGastoVencido(Date fechaVencimiento);
     Boolean esGastoDelMesEnCurso(Date fechaAComparar);
     Boolean guardarGasto(Integer userId, GastoDTO gastoDto);
