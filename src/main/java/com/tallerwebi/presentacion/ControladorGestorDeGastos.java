@@ -61,6 +61,27 @@ public class ControladorGestorDeGastos {
         return new ModelAndView("gastos", model);
     }
 
+    @RequestMapping(path= "/eliminarGasto/{id}", method = RequestMethod.GET)
+    public ModelAndView eliminarGasto(HttpServletRequest request, @PathVariable("id") Integer id){
+
+        // Redirigir si no esta loggeado
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+        }
+
+        ModelMap model = new ModelMap();
+
+        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        this.servicioGestorGastos.eliminarGasto(id.longValue());
+
+        List<Gasto> gastos = servicioGestorGastos.obtenerTodosLosGastosDeUnGestor(usuarioConectado.getId());
+
+        model.addAttribute("gastos", gastos);
+
+        return new ModelAndView("gastos", model);
+    }
+
     @RequestMapping(path = "/vencimientos", method = RequestMethod.GET)
     public ModelAndView getVencimientos(HttpServletRequest request){
         return new ModelAndView("servicios");

@@ -14,5 +14,6 @@ public interface ServicioGestorGastos {
     Boolean esGastoVencido(Date fechaVencimiento);
     Boolean esGastoDelMesEnCurso(Date fechaAComparar);
     Boolean guardarGasto(Integer userId, GastoDTO gastoDto);
+    void eliminarGasto(Long id);
     BigDecimal obtenerGastosDelMes(Integer usuarioId);
 }
