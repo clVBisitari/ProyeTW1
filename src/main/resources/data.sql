@@ -26,19 +26,19 @@ SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto)
 INSERT INTO proyecto_inversion(id,
     cantidadreportes, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titulo, titular_id)
 VALUES
-    (1, 5, 'Adquisición de un vehículo usado para realizar reparaciones exhaustivas, con el objetivo de ponerlo nuevamente en circulación y ofrecerlo en el mercado de reventa. Este proyecto busca revitalizar automóviles en desuso, fomentando la economía circular.',
+    (1, 5, 'Adquisición de un vehículo usado para realizar reparaciones exhalizar automóviles en desuso, fomentando la economía circular.',
     false, 800000, 1000000, NULL, '2024-12-31', '2024-10-26', 'Compra de auto usado para refacción y reventa', 1),
 
-    (2, 3, 'Este proyecto consiste en la renovación y modernización de muebles antiguos mediante técnicas de restauración, con el propósito de maximizar su valor y ofrecerlos como piezas únicas en el mercado de artículos de diseño.',
+    (2, 3, 'Este proyecto consiste en la renovación y n el mercado de artículos de diseño.',
     false, 900000, 1200000, NULL, '2024-11-30', '2024-10-26', 'Renovación y reventa de muebles antiguos', 2),
 
-    (3, 8, 'Creación y desarrollo de una innovadora aplicación móvil que facilite la gestión de tareas y el seguimiento de objetivos personales. La propuesta se centra en ofrecer una interfaz intuitiva y funcionalidades avanzadas para el usuario.',
+    (3, 8, 'Creación y desarrollo de una innovadora aplicación móvil que facilite uitiva y funcionalidades avanzadas para el usuario.',
     false, 950000, 1500000, NULL, '2024-12-15', '2024-10-26', 'Desarrollo de una aplicación móvil', 3),
 
-    (4, 6, 'Compra de bicicletas eléctricas para su posterior alquiler en centros urbanos y turísticos, promoviendo el uso de transporte sostenible y contribuyendo a la reducción de emisiones de carbono en las ciudades.',
+    (4, 6, 'Compra de bicicletas eléctricas para su posterior alquiler en de carbono en las ciudades.',
     false, 850000, 1300000, NULL, '2024-12-20', '2024-10-26', 'Compra y alquiler de bicicletas eléctricas', 4),
 
-    (5, 2, 'Construcción de viviendas económicas y ecológicamente sostenibles utilizando materiales reciclados y técnicas de construcción modernas, con el fin de ofrecer soluciones habitacionales accesibles para comunidades vulnerables.',
+    (5, 2, 'Construcción de viviendas económicas y ecológicamente sostenibles utilizando materiales reciclados y técnicas de construcción modernatacionales accesibles para comunidades vulnerables.',
     true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)
 ON CONFLICT DO NOTHING;
 

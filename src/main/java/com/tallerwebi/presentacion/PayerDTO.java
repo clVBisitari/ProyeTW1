@@ -7,6 +7,9 @@ public class PayerDTO {
     private String email;
 
     @NotNull
+    private String name;
+
+    @NotNull
     private PayerIdentificationDTO identification;
 
     public PayerDTO() {
@@ -26,5 +29,10 @@ public class PayerDTO {
 
     public void setIdentification(PayerIdentificationDTO identification) {
         this.identification = identification;
+    }
+
+    @NotNull
+    public String getName() {
+        return name;
     }
 }

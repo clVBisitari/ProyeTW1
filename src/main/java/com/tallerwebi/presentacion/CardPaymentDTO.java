@@ -10,12 +10,15 @@ public class CardPaymentDTO {
     @NotNull
     private String token;
 
+    @JsonProperty("issuer_id")
     private String issuerId;
 
     @NotNull
+    @JsonProperty("payment_method_id")
     private String paymentMethodId;
 
     @NotNull
+    @JsonProperty("transaction_amount")
     private BigDecimal transactionAmount;
 
     @NotNull
