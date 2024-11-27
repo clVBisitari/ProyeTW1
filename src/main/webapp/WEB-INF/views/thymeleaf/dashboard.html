@@ -78,7 +78,7 @@
         </a>
     </header>
     <div class="content">
-        <section class="content__section">
+        <section class="content__section" >
             <header class="content__header">
                 <div class="content__div">
                     <h4 class="content__title">Tu última actividad:</h4>
@@ -89,29 +89,11 @@
                     </a>
                 </div>
             </header>
-            <article class="activity">
-                <h5 class="activity__subtitle">Servicios de electricidad</h5>
-                <p class="activity__number">$3.450</p>
-                <p class="activity__description">Gasto</p>
-                <p class="activity__date">18/09</p>
-            </article>
-            <article class="activity">
-                <h5 class="activity__subtitle">Cafetería Jorge</h5>
-                <p class="activity__number">$65.200</p>
-                <p class="activity__description">Inversion</p>
-                <p class="activity__date">17/09</p>
-            </article>
-            <article class="activity">
-                <h5 class="activity__subtitle">Jugueteria</h5>
-                <p class="activity__number">$26.900</p>
-                <p class="activity__description">Gasto</p>
-                <p class="activity__date">15/09</p>
-            </article>
-            <article class="activity">
-                <h5 class="activity__subtitle">Bar Miguel</h5>
-                <p class="activity__number">$13.500</p>
-                <p class="activity__description">Gasto compartido</p>
-                <p class="activity__date">14/09</p>
+            <article class="activity" th:each="gasto : ${gastos}">
+                <h5 class="activity__subtitle" th:text="${gasto.descripcion}">Servicios de electricidad</h5>
+                <p class="activity__number" th:text="${#numbers.formatDecimal(gasto.valor, 0, 'POINT', 2, 'COMMA')}">$3.450</p>
+                <p class="activity__description" th:text="${gasto.frecuencia}">Gasto</p>
+                <p class="activity__date" th:text="${gasto.fechaVencimiento}">18/09</p>
             </article>
         </section>
         <section class="content__section">

@@ -133,12 +133,12 @@ public class ProyectoInversion {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         ProyectoInversion that = (ProyectoInversion) o;
-        return enSuspension == that.enSuspension && Objects.equals(id, that.id) && Objects.equals(titulo, that.titulo) && Objects.equals(description, that.description) && Objects.equals(titular, that.titular) && Objects.equals(inversores, that.inversores) && Objects.equals(montoRequerido, that.montoRequerido) && Objects.equals(montoRecaudado, that.montoRecaudado) && Objects.equals(plazoParaInicio, that.plazoParaInicio) && Objects.equals(plazoParaFinal, that.plazoParaFinal) && Objects.equals(cantidadReportes, that.cantidadReportes) && Objects.equals(motivoSuspension, that.motivoSuspension);
+        return enSuspension == that.enSuspension && Objects.equals(id, that.id) && Objects.equals(titulo, that.titulo) && Objects.equals(description, that.description) && Objects.equals(titular, that.titular) && Objects.equals(inversor, that.inversor) && Objects.equals(montoRequerido, that.montoRequerido) && Objects.equals(montoRecaudado, that.montoRecaudado) && Objects.equals(plazoParaInicio, that.plazoParaInicio) && Objects.equals(plazoParaFinal, that.plazoParaFinal) && Objects.equals(cantidadReportes, that.cantidadReportes) && Objects.equals(motivoSuspension, that.motivoSuspension);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, titulo, description, titular, inversores, montoRequerido, montoRecaudado, plazoParaInicio, plazoParaFinal, cantidadReportes, enSuspension, motivoSuspension);
+        return Objects.hash(id, titulo, description, titular, inversor, montoRequerido, montoRecaudado, plazoParaInicio, plazoParaFinal, cantidadReportes, enSuspension, motivoSuspension);
     }
 
     @Override
@@ -148,7 +148,6 @@ public class ProyectoInversion {
                 ", titulo='" + titulo + '\'' +
                 ", description='" + description + '\'' +
                 ", titular=" + titular.getId() +
-                ", inversores=" + inversores.size() +
                 ", montoRequerido=" + montoRequerido +
                 ", montoRecaudado=" + montoRecaudado +
                 ", plazoParaInicio=" + plazoParaInicio +

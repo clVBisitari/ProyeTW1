@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 import com.tallerwebi.dominio.InversorDeProyecto;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
 
@@ -14,6 +15,6 @@ import java.util.List;
     boolean deleteProyeInversion(Integer idProyeInversion);
     boolean reportProyeInversion(Integer idProyeInversion);
     boolean suspenderProyecto(Integer idProyeInversion);
-    Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion);
+    Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion, Usuario usuario);
     List<ProyectoInversion> getProyectosMayorInversion();
 }

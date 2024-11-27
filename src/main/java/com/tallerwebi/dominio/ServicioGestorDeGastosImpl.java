@@ -66,8 +66,8 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return cantidad;
     }
 
-    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer id){
-        return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(id);
+    public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer usuarioId){
+        return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
     }
 
     public Boolean esGastoVencido(Date fechaVencimiento) {

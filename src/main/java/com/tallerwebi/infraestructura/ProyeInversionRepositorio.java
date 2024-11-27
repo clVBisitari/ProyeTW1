@@ -1,8 +1,10 @@
 package com.tallerwebi.infraestructura;
 import com.tallerwebi.dominio.InversorDeProyecto;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -22,10 +24,12 @@ import java.util.List;
 public class ProyeInversionRepositorio implements RepositorioProyeInversion
 {
     private final SessionFactory sessionFactory;
+    private RepositorioUsuario repoUsuario;
 
     @Autowired
-    public ProyeInversionRepositorio(SessionFactory sessionFactory){
+    public ProyeInversionRepositorio(SessionFactory sessionFactory, RepositorioUsuario repoUser){
         this.sessionFactory = sessionFactory;
+        this.repoUsuario = repoUser;
     }
 
     @Override
@@ -155,11 +159,13 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion){
+    public Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion, Usuario usuario){
         final Session session = sessionFactory.getCurrentSession();
         try {
             Serializable idInversor = session.save(inversor);
             BigDecimal montoFinal = proyectoInversion.getMontoRecaudado().add(inversor.getMonto());
+            //actualizar el saldo del usuario
+            this.repoUsuario.modificar(usuario);
             proyectoInversion.setMontoRecaudado(montoFinal);
             ProyectoInversion proyeActualizado = this.updateProyeInversion(proyectoInversion);
 

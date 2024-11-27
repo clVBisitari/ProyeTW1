@@ -111,22 +111,29 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public ProyectoInversion getProyectoInversinPorId(Long id) {
+    public ProyectoInversion getProyectoInversionPorId(Integer id) {
         return this.repoProyeInversion.getProyectoById(id);
     }
 
     @Override
     public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto){
         InversorDeProyecto inversor = InversorDeProyecto.convertToInversorDeProyecto(inversorDto);
+
         Integer idUsuario = Integer.parseInt(inversorDto.idUsuario);
-        Integer idProye = Integer.parseInt(inversorDto.idProyecto);
+//        Integer idProye = Integer.parseInt(inversorDto.idProyecto);
+        BigDecimal monto = new BigDecimal(inversorDto.monto);
         Usuario usuarioValidado = this.repoUsuario.buscarUsuarioPorId(idUsuario);
-        ProyectoInversion proyectoInversion = this.repoProyeInversion.getProyectoById(idProye);
-        if(Objects.equals(usuarioValidado.getId(), idUsuario) && Objects.equals(proyectoInversion.getId(), idProye)){
+        //si el monto del usuario que quiere es menor a su saldo
+        if(monto.compareTo(usuarioValidado.getSaldo()) > 0) return 0;
+
+        usuarioValidado.setSaldo(usuarioValidado.getSaldo().subtract(monto));
+
+        ProyectoInversion proyectoInversion = this.repoProyeInversion.getProyectoById(inversorDto.idProyecto);
+        if(Objects.equals(usuarioValidado.getId(), idUsuario) && Objects.equals(proyectoInversion.getId(), inversorDto.idProyecto)){
             inversor.setProyecto(proyectoInversion);
             inversor.setUsuario(usuarioValidado);
         }
-        Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion);
+        Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion, usuarioValidado);
 
         return idInversor;
     }

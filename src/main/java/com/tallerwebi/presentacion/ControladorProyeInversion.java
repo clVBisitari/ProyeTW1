@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path= "/inversion/{id}", method = RequestMethod.GET)
-    public ModelAndView getInversion(HttpServletRequest request, @PathVariable("id") Long id){
+    public ModelAndView getInversion(HttpServletRequest request, @PathVariable("id") Integer id){
 
         // Redirigir si no esta loggeado
         if (!Usuario.isUserLoggedIn(request)) {
@@ -52,8 +53,8 @@ public class ControladorProyeInversion {
 
         ModelMap model = new ModelMap();
 
-        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversinPorId(id);
-
+        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversionPorId(id);
+        model.put("InversorDeProyectoDTO", new InversorDeProyectoDTO());
         model.put("proyecto", proyecto);
 
         return new ModelAndView("inversion", model);
@@ -130,11 +131,23 @@ public class ControladorProyeInversion {
         model.put("response", proyectos);
         return new ModelAndView("redirect:inversiones", model);
     }
-    @RequestMapping(path="/invertirEnProyecto", method=RequestMethod.POST)
-    public ModelAndView invertirEnProyecto(@RequestBody InversorDeProyectoDTO inversorDto){
+
+    @RequestMapping(path="/invertirEnProyecto/{id}", method=RequestMethod.POST)
+    public String invertirEnProyecto(@ModelAttribute InversorDeProyectoDTO inversorDto, HttpServletRequest request, @PathVariable("id") Integer idProyecto){
         ModelMap model = new ModelMap();
+        HttpSession session = request.getSession();
+        UsuarioDTO usuarioDto = (UsuarioDTO)session.getAttribute("USUARIO");
+        if(inversorDto.idUsuario == null){
+            inversorDto.setIdUsuario(usuarioDto.getId().toString());
+        }
+        if(inversorDto.idProyecto == null){
+            inversorDto.setIdProyecto(idProyecto);
+        }
         Integer idInversor = this.servicioProyectoInversion.invertirEnProyecto(inversorDto);
-        model.put("idInversor", idInversor);
-        return new ModelAndView("redirect:inversiones", model);
+        if(idInversor == 0 ){
+            model.put("error", "Tu saldo es menor que el monto con el que queres colaborar.");
+        }
+        model.addAttribute("idInversor", idInversor);
+        return "redirect:/inversiones";
     }
 }

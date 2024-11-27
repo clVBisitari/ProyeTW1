@@ -45,6 +45,9 @@
                         </p>
                     </article>
                 </a>
+                <a class="investment__link" th:href="@{/inversion/{id}(id=${proyecto.id})}">
+                    <button class="button__primary">Invertir</button>
+                </a>
             </div>
         </section>
         <section class="investments__end">
@@ -52,18 +55,6 @@
             <article class="investment">
                 <p class="investment__number">$9.000</p>
                 <p class="investment__text">Compra de auto usado para refacción y reventa</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Renovación y reventa de muebles antiguos</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Desarrollo de una aplicación móvil</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra y alquiler de bicicletas eléctricas</p>
             </article>
         </section>
     </div>

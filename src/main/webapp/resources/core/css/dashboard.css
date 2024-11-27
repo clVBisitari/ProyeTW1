@@ -54,7 +54,9 @@
     border-radius: 5px;
     flex-grow: 1;
     transition: all 1s;
-    cursor: default;
+    cursor: pointer;
+    text-decoration: none;
+    color: unset;
 }
 
 .box:hover {
@@ -97,6 +99,7 @@
 }
 
 .content__section {
+    justify-content: top;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -128,7 +131,7 @@
     color: var(--dark);
     grid-template-columns: repeat(3, auto);
     grid-template-rows: repeat(2, 1fr);
-    justify-content: space-between;
+    justify-content: top;
 }
 
 .activity__subtitle {
@@ -201,7 +204,7 @@
 
     .content__section {
         width: 50%;
-        justify-content: space-between;
+        justify-content: top;
     }
 
     .box {
@@ -213,7 +216,7 @@
     .activity {
         grid-template-columns: repeat(2, auto);
         grid-template-rows: repeat(2, 1fr);
-        justify-content: space-between;
+        justify-content: top;
         align-items: center;
         gap: 0;
     }
