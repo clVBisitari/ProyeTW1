@@ -4,16 +4,14 @@ import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Rubro;
 import com.tallerwebi.dominio.Usuario;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface ServicioUsuario {
 
     Usuario getUsuarioById(Integer Id);
-    Boolean cargarSaldo(int valor);
-    Boolean registrarIngresoMensual(int valor);
-    Boolean modificarIngresoMensual(int valor);
+    Boolean cargarSaldo(BigDecimal valor, int idUser) throws Exception;
    /* ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio);*/
-    Boolean eliminarProyectoPropio(String motivo, int idProyecto);
     List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
     Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception;
   /*  Boolean invertirEnProyecto(int valor, int idProyecto);*/

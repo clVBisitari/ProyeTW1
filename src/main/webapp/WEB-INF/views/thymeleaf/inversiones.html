@@ -37,16 +37,13 @@
                             Inicia el <b th:text="${proyecto.plazoParaInicio}">26/10</b>
                         </p>
                         <p class="proyect__description">
-                            Llevado por <b th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</b>
+                            Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
                         </p>
                         <p class="proyect__date">
                             Recaudado <b th:text="${#numbers.formatDecimal(proyecto.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">754.159</b>
                             de <b th:text="${#numbers.formatDecimal(proyecto.montoRequerido, 0, 'POINT', 2, 'COMMA')}">1.000.000</b>
                         </p>
                     </article>
-                </a>
-                <a class="investment__link" th:href="@{/inversion/{id}(id=${proyecto.id})}">
-                    <button class="button__primary">Invertir</button>
                 </a>
             </div>
         </section>

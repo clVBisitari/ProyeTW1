@@ -16,31 +16,32 @@
             <h1 class="investment__h1" th:text="${proyecto.titulo}">Compra de auto usado para refacción y reventa</h1>
             <h2 class="investment__h2">Llevado por <span th:text="${proyecto.titular.nombre}">Jorge Gómez</span></h2>
         </div>
-        <p th:text="${proyecto.id}"></p>
         <div class="investment__div">
             <a class="investment__link" th:href="@{/inversiones}">
-                <button class="button__primary">Volver</button>
+                <button class="investment__button">Volver -></button>
             </a>
-            <form class="investment__link" action=# th:action="@{/invertirEnProyecto/{id}(id=${proyecto.id})}" th:object="${InversorDeProyectoDTO}" method="POST">
-                <button class="button__primary">Invertir</button>
-                <input type="text" th:field="*{monto}" placeholder="Monto a Invertir" />
-                <input type="hidden" th:field="*{idProyecto}" th:value="${proyecto.id}" th:text="${proyecto.id}" />
-            </form>
-            <p class="error" th:if="${error != null}" th:text="'Error: ' + ${error}"></p>
         </div>
     </header>
     <section class="investment__section">
         <div class="investment__top">
-            <p class="investment__text" th:text="${proyecto.description}">Este proyecto consiste en la adquisición de un
+            <p class="investment__descr" th:text="${proyecto.description}">Este proyecto consiste en la adquisición de un
                 vehículo usado, su reparación o
                 mejora estética, y posterior reventa a un precio superior. La inversión se destinará a la compra del
                 auto, los costos de refacción (mecánica, chapa, pintura, etc.), y la comercialización del vehículo. Este
                 tipo de negocio permite obtener un retorno relativamente rápido, especialmente en el mercado de autos
                 usados que tienen demanda por parte de particulares.</p>
+            <aside class="investment__aside">
+                <form class="investment__form" action=# th:action="@{/invertirEnProyecto/{id}(id=${proyecto.id})}" th:object="${InversorDeProyectoDTO}" method="POST">
+                    <input class="investment__input" type="text" th:field="*{monto}" placeholder="Monto a Invertir" />
+                    <input type="hidden" th:field="*{idProyecto}" th:value="${proyecto.id}" />
+                    <button class="button__primary">Invertir</button>
+                </form>
+                <p class="error" th:if="${error != null}" th:text="'Error: ' + ${error}"></p>
+            </aside>
         </div>
         <footer class="investment__bottom">
             <div class="investment__flex">
-                <p class="investment__text">Inicia el <span th:text="${proyecto.plazoParaFinal}">26/10</span></p>
+                <p class="investment__text">Finaliza el <span th:text="${proyecto.plazoParaFinal}">26/10</span></p>
                 <p class="investment__text"><span>15</span> participantes</p>
                 <p class="investment__text">$<span th:text="${proyecto.montoRequerido}">1.000.000</span></p>
             </div>
