@@ -1,6 +1,8 @@
 package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
 import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
@@ -45,7 +47,10 @@ public class ControladorProyeInversionTests {
 
     @Mock
     private ServicioProyectoInversion proyeInvServiceMock;
+
+    private ServicioMercadoPago mpServiceMock;
     private HttpServletRequest requestMock = mock(HttpServletRequest.class);
+
     private Usuario userMock;
     private HttpSession sessionMock = mock(HttpSession.class);
     @InjectMocks
@@ -73,7 +78,8 @@ public class ControladorProyeInversionTests {
         userMock.setPassword("123456");
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
-        controlador = new ControladorProyeInversion(proyeInvServiceMock);
+        mpServiceMock = mock(ServicioMercadoPagoImpl.class);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock, mpServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
 

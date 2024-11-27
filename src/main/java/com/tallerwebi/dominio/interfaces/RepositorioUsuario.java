@@ -1,7 +1,9 @@
 package com.tallerwebi.dominio.interfaces;
 
+import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.Usuario;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public interface RepositorioUsuario {
@@ -18,6 +20,7 @@ public interface RepositorioUsuario {
     List<Usuario> getUsuariosSuspendidos();
 
     void agregarContacto(Integer idUsuario, Integer idContacto);
+    List<ProyectoInversion> getProyectosRecomendados(Integer usuarioId, BigDecimal saldo);
 }
 
 
