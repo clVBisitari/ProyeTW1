@@ -32,7 +32,6 @@ public class ProyectoInversion {
     private boolean enSuspension;
     private String motivoSuspension;
 
-
     public void setId(Integer id) {
         this.id = id;
     }

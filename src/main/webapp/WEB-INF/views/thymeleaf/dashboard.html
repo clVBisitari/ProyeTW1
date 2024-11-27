@@ -44,7 +44,8 @@
                         <path d="M2 10a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v1a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1z" />
                     </svg>
                 </div>
-                <p class="box__number" th:text="${#numbers.formatDecimal(totalGastosMesEnCurso, 0, 'POINT', 2, 'COMMA')}" id="gastosMes"></p>
+                
+                <p class="box__number" th:text="totalGastosMesEnCurso == 0 ? '$0,00' : ${#numbers.formatDecimal(totalGastosMesEnCurso, 0, 'POINT', 2, 'COMMA')}" id="gastosMes">0,00</p>
             </div>
         </a>
         <a class="box" th:href="@{/inversiones}">
@@ -111,21 +112,6 @@
                 <h5 class="proyect__subtitle">Compra de auto usado para refacción y reventa</h5>
                 <p class="proyect__part"><span>42</span> participantes</p>
                 <p class="proyect__total">Recaudado <span>$754.159</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Renovación y reventa de muebles antiguos</h5>
-                <p class="proyect__part"><span>15</span> participantes</p>
-                <p class="proyect__total">Recaudado <span>$944.091</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Desarrollo de una aplicación móvil</h5>
-                <p class="proyect__part"><span>73</span> participantes</p>
-                <p class="proyect__total">Recaudado <span>$628.253</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra y alquiler de bicicletas eléctricas</h5>
-                <p class="proyect__part"><span>86</span> participantes</p>
-                <p class="proyect__total">Recaudado <span>$1.251.863</span></p>
             </article>
         </section>
     </div>
