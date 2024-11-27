@@ -68,22 +68,25 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
 
     @Override
     public boolean borrarProyectoInversion(Long idProyeInversion) {
-        boolean deleteExitoso = this.repoProyeInversion.deleteProyeInversion(idProyeInversion);
+        Integer idProyeInteger = idProyeInversion.intValue();
+        boolean deleteExitoso = this.repoProyeInversion.deleteProyeInversion(idProyeInteger);
         return deleteExitoso;
     }
 
     @Override
     public boolean reportarProyecto(Long idProyeInversion) {
-        boolean reportExitoso = this.repoProyeInversion.reportProyeInversion(idProyeInversion);
+        Integer idProyeInteger = idProyeInversion.intValue();
+        boolean reportExitoso = this.repoProyeInversion.reportProyeInversion(idProyeInteger);
         return reportExitoso;
     }
 
     @Override
     public boolean suspenderProyecto(Long idProyeInversion) {
+        Integer idProyeInteger = idProyeInversion.intValue();
         try {
-            ProyectoInversion proyePorSuspender = this.repoProyeInversion.getProyectoById(idProyeInversion);
+            ProyectoInversion proyePorSuspender = this.repoProyeInversion.getProyectoById(idProyeInteger);
             if(proyePorSuspender.getCantidadReportes() >= 3){
-                boolean suspensionExitosa = this.repoProyeInversion.suspenderProyecto(idProyeInversion);
+                boolean suspensionExitosa = this.repoProyeInversion.suspenderProyecto(idProyeInteger);
                 return suspensionExitosa;
             }
         } catch (ProyeInversionException e) {

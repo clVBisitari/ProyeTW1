@@ -7,10 +7,10 @@ import java.util.List;
     List<ProyectoInversion> getMatchProyes(String name);
     List<ProyectoInversion> getPublicacionesSuspendidas(Integer idUsuario);
     List<ProyectoInversion>getProyectosInversion(Integer idUsuario);
-    ProyectoInversion getProyectoById(Long idProyeInversion);
+    ProyectoInversion getProyectoById(Integer idProyeInversion);
     Integer saveProyectoInversion(ProyectoInversion proyeInversion);
     ProyectoInversion updateProyeInversion(ProyectoInversion proyeInversion);
-    boolean deleteProyeInversion(Long idProyeInversion);
-    boolean reportProyeInversion(Long idProyeInversion);
-    boolean suspenderProyecto(Long idProyeInversion);
+    boolean deleteProyeInversion(Integer idProyeInversion);
+    boolean reportProyeInversion(Integer idProyeInversion);
+    boolean suspenderProyecto(Integer idProyeInversion);
 }
