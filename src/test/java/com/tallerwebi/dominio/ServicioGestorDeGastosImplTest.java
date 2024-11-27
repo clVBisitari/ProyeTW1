@@ -12,11 +12,14 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.transaction.Transactional;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -27,65 +30,61 @@ import static org.hamcrest.Matchers.equalTo;
 @ContextConfiguration(classes = {HibernateTestConfig.class})
 public class ServicioGestorDeGastosImplTest {
 
-    private ServicioGestorDeGastosImpl servicioGestorDeGastos;
+    private Usuario usuarioMock;
     private RepositorioGestorDeGastosImpl repositorioGestorDeGastosMock;
     private RepositorioGastoImpl repositorioGastoMock;
+    private ServicioGestorDeGastosImpl servicioGestorDeGastos;
 
     @BeforeEach
     public void init(){
-        repositorioGestorDeGastosMock = mock(RepositorioGestorDeGastosImpl.class);
+        usuarioMock = mock(Usuario.class);
         repositorioGastoMock = mock(RepositorioGastoImpl.class);
+        repositorioGestorDeGastosMock = mock(RepositorioGestorDeGastosImpl.class);
         this.servicioGestorDeGastos = new ServicioGestorDeGastosImpl(repositorioGestorDeGastosMock, repositorioGastoMock);
     }
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void queElSaldoComprometidoEnGastosDelMesSeGenereCorrrectamente() throws ParseException {
-//        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos();
-//        when(repositorioGestorDeGastosMock.obtenerTodosLosGastosDeUnGestor(1L)).thenReturn(gestor.getGastos());
-//
-//        Double totalGastosDelMes = servicioGestorDeGastos.actualizarTotalGastosDelMesEnCursoPorId(1L);
-//
-//        assertThat(totalGastosDelMes, equalTo(50000.0));
-//    }
+    @Test
+    @Transactional
+    @Rollback
+    public void queElSaldoComprometidoEnGastosDelMesSeGenereCorrrectamente() throws ParseException {
+        List<Gasto> gastos = dadoQueExisteUnUsuarioConUnGastoDelDiaActualYDosGastosFuturos();
+        when(repositorioGastoMock.obtenerTodosLosGastosPorUsuarioId(1)).thenReturn(gastos);
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void queLaCantidadDeGastosPorVencerDelMesEnCursoSeGenereCorrrectamente() throws ParseException {
-//        GestorDeGastos gestor = dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos();
-//        when(repositorioGestorDeGastosMock.obtenerTodosLosGastosDeUnGestor(gestor.getId())).thenReturn(gestor.getGastos());
-//
-//        int cantidadGastosPorVencer = servicioGestorDeGastos.actualizarCantidadServiciosPorVencerMesEnCurso(gestor.getId());
-//
-//        assertThat(cantidadGastosPorVencer, equalTo(1));
-//    }
+        BigDecimal totalGastosDelMes = servicioGestorDeGastos.actualizarTotalGastosDelMesEnCursoPorId(1);
 
-//    private static GestorDeGastos dadoQueExisteUnGestorConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
-//
-//        DateTimeFormatter formatoFechas = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-//
-//        Gasto primerGasto = new Gasto("impuesto", 50000, Date.from(Instant.now()), Frecuencia.MENSUAL);
-//
-//        String fechaSegundoGastoString = "2099-10-10";
-//        Date fechaSegundoGastoVencimiento = new Date(fechaSegundoGastoString);
-//        Gasto segundoGasto = new Gasto("impuesto", 60000, fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
-//
-//        String fechaTercerGastoString = "2099-10-10";
-//        Date fechaTercerGastoVencimiento = new Date(fechaTercerGastoString);
-//        Gasto tercerGasto = new Gasto("impuesto", 70000, fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
-//
-//        return new GestorDeGastos();
-//    }
+        assertThat(totalGastosDelMes, equalTo(BigDecimal.valueOf(50000)));
+    }
 
-//    @Test
-//    @Transactional
-//    @Rollback
-//    public void busacarGestorDeGastosPorUsuario() {
-//
-//        GestorDeGastos gestor = servicioGestorDeGastos.buscarPorUsuario(1);
-//
-//        assertThat(gestor.getId(), equalTo(1));
-//    }
+    @Test
+    @Transactional
+    @Rollback
+    public void queLaCantidadDeGastosPorVencerDelMesEnCursoSeGenereCorrrectamente() throws ParseException {
+        List<Gasto> gastos = dadoQueExisteUnUsuarioConUnGastoDelDiaActualYDosGastosFuturos();
+        when(repositorioGastoMock.obtenerTodosLosGastosPorUsuarioId(1)).thenReturn(gastos);
+
+        int cantidadGastosPorVencer = servicioGestorDeGastos.actualizarCantidadServiciosPorVencerMesEnCurso(1);
+
+        assertThat(cantidadGastosPorVencer, equalTo(1));
+    }
+
+    private List<Gasto> dadoQueExisteUnUsuarioConUnGastoDelDiaActualYDosGastosFuturos() throws ParseException {
+
+        LocalDate fechaActual = LocalDate.now();
+        Date fechaDeHoy = Date.from(fechaActual.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Gasto primerGasto = new Gasto("impuesto", new BigDecimal(50000), fechaDeHoy, Frecuencia.MENSUAL);
+
+        String fechaSegundoGastoString = "2099-10-10";
+        Date fechaSegundoGastoVencimiento = Date.from(LocalDate.parse(fechaSegundoGastoString).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Gasto segundoGasto = new Gasto("Impuesto", new BigDecimal(60000), fechaSegundoGastoVencimiento, Frecuencia.MENSUAL);
+
+        String fechaTercerGastoString = "2099-10-10";
+        Date fechaTercerGastoVencimiento = Date.from(LocalDate.parse(fechaTercerGastoString).atStartOfDay(ZoneId.systemDefault()).toInstant());
+        Gasto tercerGasto = new Gasto("impuesto", new BigDecimal(70000), fechaTercerGastoVencimiento, Frecuencia.MENSUAL);
+
+        List<Gasto> gastos = new ArrayList<>();
+        gastos.add(primerGasto);
+        gastos.add(segundoGasto);
+        gastos.add(tercerGasto);
+        return gastos;
+    }
 }

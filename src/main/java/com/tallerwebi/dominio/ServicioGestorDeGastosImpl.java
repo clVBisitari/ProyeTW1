@@ -41,20 +41,21 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
     }
 
     public BigDecimal actualizarTotalGastosDelMesEnCursoPorId(Integer userId) {
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(userId);
+        List<Gasto> gastos = this.repositorioGasto.obtenerTodosLosGastosPorUsuarioId(userId);
 
         BigDecimal gastoTotal = new BigDecimal(0.0);
-
         for (Gasto gasto : gastos) {
-            if (esGastoDelMesEnCurso(gasto.getFechaVencimiento()))
-                gastoTotal.add(gasto.getValor());
+
+            if (esGastoDelMesEnCurso(gasto.getFechaVencimiento())) {
+                gastoTotal  = gastoTotal.add(gasto.getValor());
+            }
         }
 
         return gastoTotal;
     }
 
     public Integer actualizarCantidadServiciosPorVencerMesEnCurso(Integer usuarioId){
-        List<Gasto> gastos = this.repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
+        List<Gasto> gastos = this.repositorioGasto.obtenerTodosLosGastosPorUsuarioId(usuarioId);
         int cantidad = 0;
 
         for (Gasto gasto : gastos) {
