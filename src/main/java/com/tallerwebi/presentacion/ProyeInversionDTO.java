@@ -11,28 +11,37 @@ import java.util.Date;
 import java.util.List;
 
 public class ProyeInversionDTO {
+
     private Integer id;
     public String titulo;
     public String description;
+
     public Usuario titular;
-    public List<Usuario> inversores;
+    public Integer inversores;
+
     public String montoRequerido;
     public String montoRecaudado;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date plazoParaInicio;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     public Date plazoParaFinal;
+
     public Integer cantidadReportes;
+
     public boolean enSuspension;
     public String motivoSuspension;
 
     public ProyectoInversion convertToProyectoInversion(){
+
         ProyectoInversion proyectoInversion = new ProyectoInversion();
         proyectoInversion.setId(id);
         proyectoInversion.setTitulo(titulo);
         proyectoInversion.setDescription(description);
         proyectoInversion.setTitular(titular);
         proyectoInversion.setMontoRequerido(new BigDecimal(montoRequerido));
+
         if (this.montoRecaudado != null) {
             proyectoInversion.setMontoRecaudado(new BigDecimal(montoRecaudado));
         } else {
@@ -46,15 +55,16 @@ public class ProyeInversionDTO {
         if (plazoParaFinal != null) {
             proyectoInversion.setPlazoParaFinal(convertToLocalDate(plazoParaFinal));
         }
+
         proyectoInversion.setCantidadReportes(cantidadReportes);
         proyectoInversion.setEnSuspension(enSuspension);
         proyectoInversion.setMotivoSuspension(motivoSuspension);
+
         return proyectoInversion;
     }
 
     private LocalDate convertToLocalDate(Date dateToConvert) {
-        LocalDate fechaConvertida = dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return fechaConvertida;
+        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
     }
 
     public void setTitulo(String titulo) {
@@ -77,14 +87,14 @@ public class ProyeInversionDTO {
         return titular;
     }
 
-    public List<Usuario> getInversores() {
+    public Integer getInversores() {
         return inversores;
     }
     public Integer getId() {
         return id;
     }
 
-    public void setInversores(List<Usuario> inversores) {
+    public void setInversores(Integer inversores) {
         this.inversores = inversores;
     }
 

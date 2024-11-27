@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
+import com.tallerwebi.dominio.InversorDeProyecto;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Usuario;
 
 import java.util.List;
 
@@ -7,10 +9,12 @@ import java.util.List;
     List<ProyectoInversion> getMatchProyes(String name);
     List<ProyectoInversion> getPublicacionesSuspendidas(Integer idUsuario);
     List<ProyectoInversion>getProyectosInversion(Integer idUsuario);
-    ProyectoInversion getProyectoById(Long idProyeInversion);
+    ProyectoInversion getProyectoById(Integer idProyeInversion);
     Integer saveProyectoInversion(ProyectoInversion proyeInversion);
     ProyectoInversion updateProyeInversion(ProyectoInversion proyeInversion);
-    boolean deleteProyeInversion(Long idProyeInversion);
-    boolean reportProyeInversion(Long idProyeInversion);
-    boolean suspenderProyecto(Long idProyeInversion);
+    boolean deleteProyeInversion(Integer idProyeInversion);
+    boolean reportProyeInversion(Integer idProyeInversion);
+    boolean suspenderProyecto(Integer idProyeInversion);
+    Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion, Usuario usuario);
+    List<ProyectoInversion> getProyectosMayorInversion();
 }

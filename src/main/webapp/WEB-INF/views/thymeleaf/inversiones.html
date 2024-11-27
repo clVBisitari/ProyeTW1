@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>AssistPyme - Inversiones</title>
     <!-- custom style -->
     <link rel="stylesheet" th:href="@{/css/main.css}"/>
@@ -13,7 +13,7 @@
 <main class="investments__main">
     <header class="investments__header">
         <form class="investments__search">
-            <input class="investments__input" type="text" placeholder="Buscar proyecto" />
+            <input class="investments__input" type="text" placeholder="Buscar proyecto"/>
             <svg xmlns="http://www.w3.org/2000/svg" class="investments__icon" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
@@ -28,55 +28,33 @@
     </header>
     <div class="investments__content">
         <section class="investments__start">
-            <h2 class="investments__title">Poyectos con mayor recaudación:</h2>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra de auto usado para refacción y reventa</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Renovación y reventa de muebles antiguos</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Desarrollo de una aplicación móvil</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra y alquiler de bicicletas eléctricas</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
-            <article class="proyect">
-                <h5 class="proyect__subtitle">Compra de auto usado para refacción y reventa</h5>
-                <p class="proyect__number">Inicia el <span>26/10</span></p>
-                <p class="proyect__description">Llevado por <span>Jorge Gómez</span></p>
-                <p class="proyect__date">Recaudado <span>754.159</span> de <span>1.000.000</span></p>
-            </article>
+            <h2 class="investments__title">Proyectos con mayor recaudación:</h2>
+            <div th:each="proyecto : ${mayorRecaudacion}">
+                <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
+                    <article class="proyect">
+                        <h3 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h3>
+                        <p class="proyect__number">
+                            Inicia el <b th:text="${proyecto.plazoParaInicio}">26/10</b>
+                        </p>
+                        <p class="proyect__description">
+                            Llevado por <b th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</b>
+                        </p>
+                        <p class="proyect__date">
+                            Recaudado <b th:text="${#numbers.formatDecimal(proyecto.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">754.159</b>
+                            de <b th:text="${#numbers.formatDecimal(proyecto.montoRequerido, 0, 'POINT', 2, 'COMMA')}">1.000.000</b>
+                        </p>
+                    </article>
+                </a>
+                <a class="investment__link" th:href="@{/inversion/{id}(id=${proyecto.id})}">
+                    <button class="button__primary">Invertir</button>
+                </a>
+            </div>
         </section>
         <section class="investments__end">
             <h2 class="investments__title">Inversiones</h2>
             <article class="investment">
                 <p class="investment__number">$9.000</p>
                 <p class="investment__text">Compra de auto usado para refacción y reventa</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Renovación y reventa de muebles antiguos</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Desarrollo de una aplicación móvil</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra y alquiler de bicicletas eléctricas</p>
             </article>
         </section>
     </div>

@@ -6,11 +6,13 @@ import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,28 +25,43 @@ import static org.mockito.Mockito.*;
 
 public class ControladorUsuarioTest {
 
-    private ServicioUsuario servicioUsuarioMock;
-    private ServicioGestorGastos servicioGestorGastosMock;
-    private ServicioProyectoInversion servicioProyectionInversionMock;
-    private UsuarioDTO usuarioDTOMock;
+    @Mock
+    private ServicioUsuario servicioUsuarioMock = mock(ServicioUsuario.class);
+    @Mock
+    private ServicioGestorGastos servicioGestorGastosMock = mock(ServicioGestorGastos.class);
+    @Mock
+    private ServicioProyectoInversion servicioProyectionInversionMock  = mock(ServicioProyectoInversion.class);
+    @Mock
+    private UsuarioDTO usuarioDTOMock = mock(UsuarioDTO.class);
+    @Mock
+    private Usuario usuarioMock = mock(Usuario.class);
+    @Mock
+    private HttpServletRequest requestMock = mock(HttpServletRequest.class);
+    @Mock
+    private HttpSession sessionMock = mock(HttpSession.class);
+    @Mock
+    private RedirectAttributes redirectAttributesMock = mock(RedirectAttributes.class);
+
     private ControladorUsuario controladorUsuario;
-    private HttpServletRequest requestMock;
-    private HttpSession sessionMock;
-    private RedirectAttributes redirectAttributesMock;
 
     @BeforeEach
     public void init() {
-        redirectAttributesMock = mock(RedirectAttributes.class);
-        usuarioDTOMock = mock(UsuarioDTO.class);
-        when(usuarioDTOMock.getEmail()).thenReturn("test@unlam.edu.ar");
 
-        servicioUsuarioMock = mock(ServicioUsuario.class);
-        servicioGestorGastosMock = mock(ServicioGestorGastos.class);
-        servicioProyectionInversionMock = mock(ServicioProyectoInversion.class);
+        when(this.usuarioMock.getId()).thenReturn(2);
+        when(this.usuarioMock.getDni()).thenReturn(12345678);
+        when(this.usuarioMock.getEmail()).thenReturn("email@email.com");
+        when(this.usuarioMock.getNombre()).thenReturn("Nombre");
+        when(this.usuarioMock.getApellido()).thenReturn("Apellido");
+        when(this.usuarioMock.getEnSuspension()).thenReturn(false);
+        when(this.usuarioMock.getEsAdmin()).thenReturn(false);
+        when(this.usuarioMock.getSaldo()).thenReturn(new BigDecimal(123));
+
+        when(requestMock.getSession(false)).thenReturn(sessionMock);
+        when(requestMock.getSession()).thenReturn(sessionMock);
+        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
+        when(sessionMock.getAttribute("idUsuario")).thenReturn(2);
+//        when(requestMock.getSession(true)).thenReturn(sessionMock);
         controladorUsuario = new ControladorUsuario(servicioUsuarioMock, servicioGestorGastosMock, servicioProyectionInversionMock);
-
-        requestMock = mock(HttpServletRequest.class);
-        sessionMock = mock(HttpSession.class);
     }
 
     @Test
@@ -85,7 +102,7 @@ public class ControladorUsuarioTest {
         when(requestMock.getSession(false)).thenReturn(sessionMock);
         when(requestMock.getSession()).thenReturn(sessionMock);
         when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
-        when(sessionMock.getAttribute("idUsuario")).thenReturn(2);
+//        when(sessionMock.getAttribute("idUsuario")).thenReturn(2);
         List<Usuario> contactos = new ArrayList<>();
 
         when(servicioUsuarioMock.getContactos(usuarioDTOMock.getEmail())).thenReturn(contactos);
@@ -110,15 +127,20 @@ public class ControladorUsuarioTest {
 
     @Test
     public void dadoQueExisteUnUsuarioLogueadoAlIrADashBoardEntoncesSeRenderizaLaVistaCorrectamenteConLosDatos() {
-        when(requestMock.getSession(false)).thenReturn(sessionMock);
-        when(requestMock.getSession()).thenReturn(sessionMock);
-        when(sessionMock.getAttribute("USUARIO")).thenReturn(usuarioDTOMock);
-        when(sessionMock.getAttribute("idUsuario")).thenReturn(2);
-
+        when(this.servicioUsuarioMock.getUsuarioById(2)).thenReturn(this.usuarioMock);
         ModelAndView mav = controladorUsuario.irADashboard(requestMock);
+        UsuarioDTO usuarioDTO = new UsuarioDTO();
+        usuarioDTO.setId(2);
+        usuarioDTO.setDni(12345678);
+        usuarioDTO.setNombre("Nombre");
+        usuarioDTO.setApellido("Apellido");
+        usuarioDTO.setEmail("email@email.com");
+        usuarioDTO.setEnSuspension(false);
+        usuarioDTO.setEsAdmin(false);
+        usuarioDTO.setSaldo(new BigDecimal(123));
 
         assertThat(mav.getViewName(), equalToIgnoringCase("dashboard"));
-        assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTOMock));
+        assertThat(mav.getModel().get("usuario"), equalTo(usuarioDTO));
     }
 
     @Test

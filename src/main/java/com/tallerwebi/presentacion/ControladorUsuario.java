@@ -43,24 +43,29 @@ public class ControladorUsuario {
         }
 
         // Obtener datos de usuario
-        UsuarioDTO usuarioDto = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
-        Integer idUsuarioDto = usuarioDto.getId();
+        Integer idUsuarioDto = (Integer) request.getSession().getAttribute("idUsuario");
+        Usuario usuario = servicioUsuario.getUsuarioById(idUsuarioDto);
+
+        UsuarioDTO usuarioDtoParaSerGuardado = UsuarioDTO.convertUsuarioToDTO(usuario);
+
+        request.getSession().setAttribute("USUARIO", usuarioDtoParaSerGuardado);
 
         BigDecimal totalGastosMesEnCurso = servicioGastos.obtenerGastosDelMes(idUsuarioDto);
 
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
         List<ProyectoInversion> proyectosActivos = servicioProyectoInversion.getProyectosUsuario(idUsuarioDto);
 
+        List<Gasto> gastos = servicioGastos.obtenerTodosLosGastosDeUnGestor(idUsuarioDto);
+
         ModelMap modelo = new ModelMap();
-        modelo.put("usuario", usuarioDto);
+        modelo.put("usuario", usuarioDtoParaSerGuardado);
 
         modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
         modelo.addAttribute("cantidadGastosPorVencer", cantidadGastosPorVencer);
         modelo.addAttribute("proyectosActivos", proyectosActivos);
         modelo.addAttribute("ctdadProyesActivos", proyectosActivos.size());
-        modelo.addAttribute("cardFormData", new CardPaymentDTO());
-
+        modelo.addAttribute("gastos", gastos);
         return new ModelAndView("dashboard", modelo);
     }
 

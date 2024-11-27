@@ -7,6 +7,7 @@ import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
+import org.hibernate.Session;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -46,9 +47,13 @@ public class ControladorProyeInversionTests {
 
     @Mock
     private ServicioProyectoInversion proyeInvServiceMock;
+
     private ServicioMercadoPago mpServiceMock;
-    private HttpServletRequest requestMock;
+    private HttpServletRequest requestMoc
+    private HttpServletRequest requestMock = mock(HttpServletRequest.class);
+
     private Usuario userMock;
+    private HttpSession sessionMock = mock(HttpSession.class);
     @InjectMocks
     private ControladorProyeInversion controlador;
 
@@ -58,6 +63,7 @@ public class ControladorProyeInversionTests {
 
     @BeforeEach
     public void init(){
+        when(requestMock.getSession(false)).thenReturn(this.sessionMock);
         proye1.setTitulo("Proyecto 1");
         proye1.setId(1);
         proye2.setTitulo("Proyecto 2");
@@ -97,14 +103,17 @@ public class ControladorProyeInversionTests {
     @Test
     public void DadosDatosValidos_CuandoGetProyectosSugeridos_RetornaListaDeProyectos(){
 
-        when(this.proyeInvServiceMock.getProyectosUsuario(userMock.getId())).thenReturn(proyeInvList);
-        when(requestMock.getSession().getAttribute("idUsuario")).thenReturn(1234);
-        ModelAndView modelAndView = this.controlador.getListaProyectosPorUsuario(this.requestMock);
+        when(this.proyeInvServiceMock.getProyectosMayorInversion()).thenReturn(proyeInvList);
+        when(requestMock.getSession(false)).thenReturn(this.sessionMock);
+        when(this.sessionMock.getAttribute("idUsuario")).thenReturn(1234);
+        when(this.sessionMock.getAttribute("USUARIO")).thenReturn(this.userMock);
+
+        ModelAndView modelAndView = this.controlador.getAll(this.requestMock);
 
         assert modelAndView != null;
-        var array = modelAndView.getModel().get("proyectos");
+        var array = modelAndView.getModel().get("mayorRecaudacion");
 
-        assertThat("inversiones", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
+        assertThat(modelAndView.getViewName(), equalToIgnoringCase("inversiones"));
         assertThat(false, is(modelAndView.getModel().isEmpty()));
         assertThat(((ArrayList<ProyectoInversion>) array).size(), is(2));
     }

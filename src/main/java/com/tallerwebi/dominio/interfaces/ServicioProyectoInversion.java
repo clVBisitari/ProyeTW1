@@ -1,18 +1,22 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
 
 import java.util.List;
 
 public interface ServicioProyectoInversion {
-    public List<ProyectoInversion> buscarProyectoInversion(String name);
-    public List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
-    public Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario);
-    public ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
-    public boolean borrarProyectoInversion(Long idProyeInversion);
-    public boolean reportarProyecto(Long idProyeInversion);
-    public boolean suspenderProyecto(Long idProyeInversion);
-    public List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
+    List<ProyectoInversion> buscarProyectoInversion(String name);
+    List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
+    Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario);
+    ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
+    boolean borrarProyectoInversion(Integer idProyeInversion);
+    boolean reportarProyecto(Integer idProyeInversion);
+    boolean suspenderProyecto(Integer idProyeInversion);
+    List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
+    public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto);
+    List<ProyectoInversion> getProyectosMayorInversion();
+    ProyectoInversion getProyectoInversionPorId(Integer id);
 }

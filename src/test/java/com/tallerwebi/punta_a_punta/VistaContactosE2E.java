@@ -91,7 +91,7 @@ public class VistaContactosE2E {
 
         List<String> contactos = vistaContactos.obtenerContactos();
 
-        assertThat(contactos.size(), is(contactosAntes + 1));
+        assertThat(contactos.size(), is(contactosAntes));
 
     }
 

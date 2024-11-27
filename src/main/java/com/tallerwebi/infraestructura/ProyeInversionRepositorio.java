@@ -1,7 +1,10 @@
 package com.tallerwebi.infraestructura;
+import com.tallerwebi.dominio.InversorDeProyecto;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,6 +16,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Transactional
@@ -20,20 +24,23 @@ import java.util.List;
 public class ProyeInversionRepositorio implements RepositorioProyeInversion
 {
     private final SessionFactory sessionFactory;
+    private RepositorioUsuario repoUsuario;
 
     @Autowired
-    public ProyeInversionRepositorio(SessionFactory sessionFactory){
+    public ProyeInversionRepositorio(SessionFactory sessionFactory, RepositorioUsuario repoUser){
         this.sessionFactory = sessionFactory;
+        this.repoUsuario = repoUser;
     }
 
     @Override
-    public ProyectoInversion getProyectoById(Long idProyeInversion) {
+    public ProyectoInversion getProyectoById(Integer idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
-        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, idProyeInversion);
-        if(proyeInversion != null) return proyeInversion;
-        else{
-            throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
-        }
+
+        ProyectoInversion  proyeInversion = session.get(ProyectoInversion.class, Math.toIntExact(idProyeInversion));
+
+        if(proyeInversion == null) throw new ProyeInversionException("la entidad con id " + idProyeInversion + " no existe");
+
+        return proyeInversion;
     }
 
     @Override
@@ -78,7 +85,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean deleteProyeInversion(Long idProyeInversion) {
+    public boolean deleteProyeInversion(Integer idProyeInversion) {
         try {
             final Session session = sessionFactory.getCurrentSession();
             session.delete(idProyeInversion);
@@ -89,7 +96,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean reportProyeInversion(Long idProyeInversion) {
+    public boolean reportProyeInversion(Integer idProyeInversion) {
         final Session session = sessionFactory.getCurrentSession();
 
         ProyectoInversion proyectoInversion = session.get(ProyectoInversion.class, idProyeInversion);
@@ -109,7 +116,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     }
 
     @Override
-    public boolean suspenderProyecto(Long idProyeInversion) {
+    public boolean suspenderProyecto(Integer idProyeInversion) {
         final Session session =  sessionFactory.getCurrentSession();
         ProyectoInversion proye = session.get(ProyectoInversion.class, idProyeInversion);
         if(proye != null && proye.getCantidadReportes() >= 3){
@@ -119,6 +126,24 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         }else{
             throw new ProyeInversionException("El proyecto con ID " + idProyeInversion + " no existe.");
         }
+    }
+
+    @Override
+    public List<ProyectoInversion> getProyectosMayorInversion() {
+
+        final Session session = sessionFactory.getCurrentSession();
+
+        CriteriaBuilder builder = session.getCriteriaBuilder();
+        CriteriaQuery<ProyectoInversion> query = builder.createQuery(ProyectoInversion.class);
+
+        Root<ProyectoInversion> root = query.from(ProyectoInversion.class);
+
+        query.where(builder.equal(root.get("enSuspension"), false));
+
+        query.orderBy(builder.desc(root.get("montoRecaudado")));
+
+        // Limitar 5
+        return session.createQuery(query).setMaxResults(5).getResultList();
     }
 
     @Override
@@ -133,5 +158,21 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         return session.createQuery(query).getResultList();
     }
 
+    @Override
+    public Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion, Usuario usuario){
+        final Session session = sessionFactory.getCurrentSession();
+        try {
+            Serializable idInversor = session.save(inversor);
+            BigDecimal montoFinal = proyectoInversion.getMontoRecaudado().add(inversor.getMonto());
+            //actualizar el saldo del usuario
+            this.repoUsuario.modificar(usuario);
+            proyectoInversion.setMontoRecaudado(montoFinal);
+            ProyectoInversion proyeActualizado = this.updateProyeInversion(proyectoInversion);
+
+            return (Integer) idInversor;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
