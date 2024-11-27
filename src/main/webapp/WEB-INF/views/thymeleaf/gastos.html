@@ -42,13 +42,14 @@
                     <div th:if="${#lists.isEmpty(gastos)}">
                         <p>No tienes gastos registrados.</p>
                     </div>
-                    <article class="investment" th:each="gasto : ${gastos}">
-                        <p class="investment__number">
-                            $<span th:text="${gasto.valor}"></span>
-                        </p>
-                        <p class="investment__text">
-                            <span th:text="${gasto.descripcion}"></span>
-                        </p>
+                    <article class="activity" th:each="gasto : ${gastos}">
+                        <h5 class="activity__subtitle" th:text="${gasto.descripcion}">Servicios de electricidad</h5>
+                        <p class="activity__number" th:text="'$' + ${#numbers.formatDecimal(gasto.valor, 0, 'POINT', 2, 'COMMA')}">$3.450</p>
+                        <p class="activity__description" th:text="${gasto.frecuencia}">Gasto</p>
+                        <p class="activity__date" th:text="${#dates.format(gasto.fechaVencimiento, 'dd/MM/YYYY')}">18/09</p>
+                        <a class="investment__link" th:href="@{/eliminarGasto/{id}(id=${gasto.id})}">
+                            <button class="button__primary">Eliminar</button>
+                        </a>
                     </article>
                 </section>
                 <section

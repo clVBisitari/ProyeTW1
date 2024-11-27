@@ -70,6 +70,10 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
     }
 
+    public void eliminarGasto(Long id){
+        this.repositorioGasto.eliminarGasto(id);
+    }
+
     public Boolean esGastoVencido(Date fechaVencimiento) {
         Calendar fechaActualSinHora = Calendar.getInstance();
         fechaActualSinHora.set(Calendar.HOUR_OF_DAY, 0);
