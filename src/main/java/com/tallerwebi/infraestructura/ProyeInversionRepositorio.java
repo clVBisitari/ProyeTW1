@@ -13,6 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.transaction.Transactional;
 
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import java.io.Serializable;
@@ -58,14 +59,11 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     public List<ProyectoInversion> getMatchProyes(String name){
         final Session session = sessionFactory.getCurrentSession();
 
-        CriteriaBuilder builder = session.getCriteriaBuilder();
-        CriteriaQuery<ProyectoInversion> query = builder.createQuery(ProyectoInversion.class);
+        String hql = "FROM ProyectoInversion WHERE titulo LIKE CONCAT('%', :descripcion, '%')";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("descripcion", name);
 
-        Root<ProyectoInversion> root = query.from(ProyectoInversion.class);
-
-        query.select(root).where(builder.equal(root.get("titulo"), name));
-
-        return session.createQuery(query).getResultList();
+        return query.getResultList();
     }
 
     @Override
@@ -88,7 +86,11 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     public boolean deleteProyeInversion(Integer idProyeInversion) {
         try {
             final Session session = sessionFactory.getCurrentSession();
-            session.delete(idProyeInversion);
+            String hql = "DELETE FROM ProyectoInversion WHERE id = :id";
+            Query query = sessionFactory.getCurrentSession().createQuery(hql);
+            query.setParameter("id", idProyeInversion);
+
+            query.executeUpdate();
         } catch (HibernateException e) {
             return false;
         }
