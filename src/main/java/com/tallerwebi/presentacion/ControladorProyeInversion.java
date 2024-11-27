@@ -55,7 +55,7 @@ public class ControladorProyeInversion {
 
         ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversionPorId(id);
         model.put("InversorDeProyectoDTO", new InversorDeProyectoDTO());
-        model.put("proyecto", proyecto);
+        model.put("proyecto", ProyeInversionDTO.convertToDTO(proyecto));
 
         return new ModelAndView("inversion", model);
     }

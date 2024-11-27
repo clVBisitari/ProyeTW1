@@ -1,4 +1,4 @@
--- Insertar múltiples usuarios en una sola línea con ON CONFLICT DO NOTHING
+-- USUARIOS
 INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password,estaActivo, esAdmin, enSuspension)
 VALUES
    ('test@unlam.edu.ar', 'Juan', 'Perez', 38498777, 10500.0, 'test',true, true, false),
@@ -10,6 +10,7 @@ VALUES
    ('contacto6@unlam.edu.ar', 'Ivan', 'Seis', 34567666, 7888.0, 'password6',true, false, false)
 ON CONFLICT DO NOTHING;
 
+-- GASTOS
 INSERT INTO Gasto(
 	id, descripcion, valor, fechaVencimiento, usuario_id)
 	VALUES
@@ -21,6 +22,7 @@ INSERT INTO Gasto(
 
 SELECT setval(pg_get_serial_sequence('gasto', 'id'), (SELECT MAX(id) FROM gasto));
 
+-- PROYECTOS
 INSERT INTO proyecto_inversion(id,
     cantidadreportes, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titulo, titular_id)
 VALUES
@@ -40,12 +42,33 @@ VALUES
     true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)
 ON CONFLICT DO NOTHING;
 
-SELECT setval(pg_get_serial_sequence('proyecto_inversion', 'id'), (SELECT MAX(id) FROM gasto));
+SELECT setval(pg_get_serial_sequence('proyecto_inversion', 'id'), (SELECT MAX(id) FROM proyecto_inversion));
 
--- ALTER TABLE proyecto_inversion ADD CONSTRAINT unique_proyecto UNIQUE (titulo, titular_id);
---
--- INSERT INTO proyecto_inversion(titulo, description, ensuspension, montorecaudado, montorequerido, motivosuspension, plazoparafinal, plazoparainicio, titular_id)
--- VALUES
---         ('Zapatillas con materiales reciclados', 'Zapatillas construidas a partir de materiales reusables', false, 123456.75, 1400000.00, null, '2026-01-01', '2024-11-22', 1 ),
---         ('App alquiler de carpas - Mendoza', 'Tenemos varios campings por todo Mendoza y alquilaremos con nuestra app', false, 145000.00, 1500000.00, '2026-01-01', null, '2024-11-22', 1 )
--- ON CONFLICT DO NOTHING;
+-- INVERSIONES
+
+INSERT INTO public.inversor_proyecto(
+    id, monto, id_proyecto, id_usuario)
+VALUES
+    (1, 150000, 1, 1),
+    (2, 120000, 1, 2),
+    (3, 180000, 2, 3),
+    (4, 90000, 2, 4),
+    (5, 200000, 3, 5),
+    (6, 130000, 3, 6),
+    (7, 110000, 4, 7),
+    (8, 95000, 4, 1),
+    (9, 125000, 5, 2),
+    (10, 145000, 5, 3),
+    (11, 175000, 1, 4),
+    (12, 105000, 2, 5),
+    (13, 90000, 3, 6),
+    (14, 135000, 4, 7),
+    (15, 115000, 5, 1),
+    (16, 155000, 1, 2),
+    (17, 85000, 2, 3),
+    (18, 185000, 3, 4),
+    (19, 95000, 4, 5),
+    (20, 125000, 5, 6),
+    (21, 145000, 1, 7)
+ON CONFLICT DO NOTHING;
+SELECT setval(pg_get_serial_sequence('inversor_proyecto', 'id'), (SELECT MAX(id) FROM inversor_proyecto));
