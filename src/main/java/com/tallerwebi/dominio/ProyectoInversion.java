@@ -2,9 +2,11 @@ package com.tallerwebi.dominio;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "proyecto_inversion")
@@ -18,12 +20,10 @@ public class ProyectoInversion {
     @ManyToOne
     @JoinColumn(name = "titular_id")
     private Usuario titular;
-    @ManyToMany
-    @JoinTable(name = "inversores")
-    @JoinColumn(name = "inversor_id")
-    private List<Usuario> inversores;
-    private Integer montoRequerido;
-    private Integer montoRecaudado;
+    @OneToOne
+    private InversorDeProyecto inversor;
+    private BigDecimal montoRequerido;
+    private BigDecimal montoRecaudado;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate plazoParaInicio;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -31,7 +31,6 @@ public class ProyectoInversion {
     private Integer cantidadReportes;
     private boolean enSuspension;
     private String motivoSuspension;
-
 
     public void setId(Integer id) {
         this.id = id;
@@ -65,27 +64,27 @@ public class ProyectoInversion {
         this.description = description;
     }
 
-    public List<Usuario> getInversores() {
-        return inversores;
+    public InversorDeProyecto getInversores() {
+        return inversor;
     }
 
-    public void setInversores(List<Usuario> inversores) {
-        this.inversores = inversores;
+    public void setInversores(InversorDeProyecto inversores) {
+        this.inversor = inversores;
     }
 
-    public Integer getMontoRequerido() {
+    public BigDecimal getMontoRequerido() {
         return montoRequerido;
     }
 
-    public void setMontoRequerido(Integer montoRequerido) {
+    public void setMontoRequerido(BigDecimal montoRequerido) {
         this.montoRequerido = montoRequerido;
     }
 
-    public Integer getMontoRecaudado() {
+    public BigDecimal getMontoRecaudado() {
         return montoRecaudado;
     }
 
-    public void setMontoRecaudado(Integer montoRecaudado) {
+    public void setMontoRecaudado(BigDecimal montoRecaudado) {
         this.montoRecaudado = montoRecaudado;
     }
 
@@ -127,5 +126,34 @@ public class ProyectoInversion {
 
     public void setCantidadReportes(Integer cantidadReportes) {
         this.cantidadReportes = cantidadReportes;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ProyectoInversion that = (ProyectoInversion) o;
+        return enSuspension == that.enSuspension && Objects.equals(id, that.id) && Objects.equals(titulo, that.titulo) && Objects.equals(description, that.description) && Objects.equals(titular, that.titular) && Objects.equals(inversor, that.inversor) && Objects.equals(montoRequerido, that.montoRequerido) && Objects.equals(montoRecaudado, that.montoRecaudado) && Objects.equals(plazoParaInicio, that.plazoParaInicio) && Objects.equals(plazoParaFinal, that.plazoParaFinal) && Objects.equals(cantidadReportes, that.cantidadReportes) && Objects.equals(motivoSuspension, that.motivoSuspension);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, titulo, description, titular, inversor, montoRequerido, montoRecaudado, plazoParaInicio, plazoParaFinal, cantidadReportes, enSuspension, motivoSuspension);
+    }
+
+    @Override
+    public String toString() {
+        return "ProyectoInversion{" +
+                "id=" + id +
+                ", titulo='" + titulo + '\'' +
+                ", description='" + description + '\'' +
+                ", titular=" + titular.getId() +
+                ", montoRequerido=" + montoRequerido +
+                ", montoRecaudado=" + montoRecaudado +
+                ", plazoParaInicio=" + plazoParaInicio +
+                ", plazoParaFinal=" + plazoParaFinal +
+                ", cantidadReportes=" + cantidadReportes +
+                ", enSuspension=" + enSuspension +
+                ", motivoSuspension='" + motivoSuspension + '\'' +
+                '}';
     }
 }

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AssistPyme - Inversion</title>
+    <!-- custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/inversion.css}"/>
+</head>
+<body class="body">
+<div th:include="fragments :: navegadorLateral"></div>
+<main class="investment__main">
+    <header class="investment__header">
+        <div class="investment__div">
+            <h1 class="investment__h1" th:text="${proyecto.titulo}">Compra de auto usado para refacción y reventa</h1>
+            <h2 class="investment__h2">Llevado por <span th:text="${proyecto.titular.nombre}">Jorge Gómez</span></h2>
+        </div>
+        <p th:text="${proyecto.id}"></p>
+        <div class="investment__div">
+            <a class="investment__link" th:href="@{/inversiones}">
+                <button class="button__primary">Volver</button>
+            </a>
+            <form class="investment__link" action=# th:action="@{/invertirEnProyecto/{id}(id=${proyecto.id})}" th:object="${InversorDeProyectoDTO}" method="POST">
+                <button class="button__primary">Invertir</button>
+                <input type="text" th:field="*{monto}" placeholder="Monto a Invertir" />
+                <input type="hidden" th:field="*{idProyecto}" th:value="${proyecto.id}" th:text="${proyecto.id}" />
+            </form>
+            <p class="error" th:if="${error != null}" th:text="'Error: ' + ${error}"></p>
+        </div>
+    </header>
+    <section class="investment__section">
+        <div class="investment__top">
+            <p class="investment__text" th:text="${proyecto.description}">Este proyecto consiste en la adquisición de un
+                vehículo usado, su reparación o
+                mejora estética, y posterior reventa a un precio superior. La inversión se destinará a la compra del
+                auto, los costos de refacción (mecánica, chapa, pintura, etc.), y la comercialización del vehículo. Este
+                tipo de negocio permite obtener un retorno relativamente rápido, especialmente en el mercado de autos
+                usados que tienen demanda por parte de particulares.</p>
+        </div>
+        <footer class="investment__bottom">
+            <div class="investment__flex">
+                <p class="investment__text">Inicia el <span th:text="${proyecto.plazoParaFinal}">26/10</span></p>
+                <p class="investment__text"><span>15</span> participantes</p>
+                <p class="investment__text">$<span th:text="${proyecto.montoRequerido}">1.000.000</span></p>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-bar-filled"
+                         th:style="'width: ' + (${proyecto.montoRecaudado} / ${proyecto.montoRequerido}) * 100 + '%;'">
+                        <span class="progress-label" th:text="${proyecto.montoRecaudado}">$754.159</span>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </section>
+</main>
+</body>
+</html>
