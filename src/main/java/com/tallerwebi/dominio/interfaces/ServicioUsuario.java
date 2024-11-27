@@ -11,10 +11,7 @@ public interface ServicioUsuario {
 
     Usuario getUsuarioById(Integer Id);
     Boolean cargarSaldo(BigDecimal valor, int idUser) throws Exception;
-    Boolean registrarIngresoMensual(int valor);
-    Boolean modificarIngresoMensual(int valor);
    /* ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio);*/
-    Boolean eliminarProyectoPropio(String motivo, int idProyecto);
     List<Usuario> buscarUsuarioPorNombre(String nombreUsuario);
     Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception;
   /*  Boolean invertirEnProyecto(int valor, int idProyecto);*/

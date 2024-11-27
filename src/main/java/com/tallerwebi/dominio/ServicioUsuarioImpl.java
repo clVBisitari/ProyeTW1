@@ -45,21 +45,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
     } 
 
-    @Override
-    public Boolean registrarIngresoMensual(int valor) {
-        return null;
-    } ////
-
-    @Override
-    public Boolean modificarIngresoMensual(int valor) {
-        return null;
-    } ////
-
-
-    @Override
-    public Boolean eliminarProyectoPropio(String motivo, int idProyecto) {
-        return null;
-    }
 
     @Override
     public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception {
