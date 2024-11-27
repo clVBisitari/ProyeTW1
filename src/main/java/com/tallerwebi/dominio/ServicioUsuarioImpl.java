@@ -30,9 +30,20 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public Boolean cargarSaldo(int valor) {
-        return null;
-    } /////
+    public Boolean cargarSaldo(BigDecimal valor, int idUser) throws Exception {
+        try {
+            Usuario usuario = this.repositorioUsuario.buscarUsuarioPorId(idUser);
+            if (usuario == null) {
+                throw new Exception("Usuario no encontrado en la base de datos");
+            }
+            usuario.setSaldo(usuario.getSaldo().add(valor));
+            this.repositorioUsuario.modificar(usuario);
+
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    } 
 
     @Override
     public Boolean registrarIngresoMensual(int valor) {
