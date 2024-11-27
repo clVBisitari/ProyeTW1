@@ -1,5 +1,6 @@
 package com.tallerwebi.infraestructura;
 
+import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
@@ -8,11 +9,10 @@ import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -135,6 +135,21 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
                     .setParameter("contactoId", contactoId)
                     .executeUpdate();
 
+    }
+    @Override
+    public List<ProyectoInversion> getProyectosRecomendados(Integer usuarioId, BigDecimal saldo) {
+        String hql = "SELECT * FROM proyecto_inversion p " +
+                "WHERE p.titular_id != :usuarioId " +
+                "AND :saldo >= p.montorequerido * 0.1";
+
+        Session session = sessionFactory.getCurrentSession();
+
+        List<ProyectoInversion> proyectos = session.createNativeQuery(hql, ProyectoInversion.class)
+                .setParameter("usuarioId", usuarioId)
+                .setParameter("saldo", saldo)
+                .getResultList();
+
+        return proyectos;
     }
 
 }

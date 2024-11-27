@@ -201,16 +201,21 @@ public class ControladorUsuario {
 
     @Transactional
     @RequestMapping(path = "/perfil", method = RequestMethod.GET)
-    public ModelAndView irAPerfil(HttpServletRequest request) {
+    public ModelAndView irAPerfil(HttpServletRequest request) throws Exception {
 
         if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
 
         UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        List<ProyectoInversion>recomendados = servicioUsuario.obtenerProyectosRecomendados(usuarioDTO.getId());
+
         ModelMap modelo = new ModelMap();
 
         modelo.put("usuario", usuarioDTO);
+        modelo.put("recomendados", recomendados);
+
+        System.out.println(recomendados);
 
         return new ModelAndView("perfil", modelo);
     }

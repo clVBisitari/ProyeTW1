@@ -4,10 +4,12 @@ import com.tallerwebi.dominio.excepcion.ContactoExistente;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
+import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service("servicioUsuario")
@@ -15,6 +17,7 @@ import java.util.*;
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private RepositorioUsuario repositorioUsuario;
+    private ProyeInversionRepositorio proyectoInversionRepository;
 
     @Autowired
     public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
@@ -29,28 +32,23 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public Boolean cargarSaldo(int valor) {
         return null;
-    }
+    } /////
 
     @Override
     public Boolean registrarIngresoMensual(int valor) {
         return null;
-    }
+    } ////
 
     @Override
     public Boolean modificarIngresoMensual(int valor) {
         return null;
-    }
+    } ////
 
-    @Override
-    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
-        return null;
-    }
 
     @Override
     public Boolean eliminarProyectoPropio(String motivo, int idProyecto) {
         return null;
     }
-
 
     @Override
     public Boolean agregarUsuarioAContactos(Usuario usuarioQueGuarda, Usuario usuarioAGuardar) throws Exception {
@@ -70,29 +68,22 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return true;
     }
 
+
     @Override
-    public Boolean invertirEnProyecto(int valor, int idProyecto) {
+    public Boolean reportarProyectoSospechoso(String motivo, int idProyect, int idUser2, int idUserQueReporta) { ///
         return null;
     }
 
     @Override
-    public void activarRecomendacionesAutomaticas(Double valor, int idUser) {
-
-    }
-
-    @Override
-    public Boolean reportarProyectoSospechoso(String motivo, int idProyect, int idUser2, int idUserQueReporta) {
-        return null;
-    }
-
-    @Override
-    public Boolean reportarUsuarioSospechoso(String motivo, int idUserReportado, int idUserQueReporta) {
-        return null;
-    }
-
-    @Override
-    public Boolean suspenderPublicacion(String motivo, int proyect) {
-        return null;
+    public Boolean suspenderPublicacion(String motivo, int idProyectoInversion) {
+        ProyectoInversion proyecto = proyectoInversionRepository.getProyectoById(idProyectoInversion);
+        if (proyecto != null) {
+            proyecto.setEnSuspension(true);
+            proyecto.setMotivoSuspension(motivo);
+            proyectoInversionRepository.updateProyeInversion(proyecto);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -116,7 +107,14 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public Boolean revertirSuspensionProyecto(int idProyectoInversion) {
 
-        return null;
+        ProyectoInversion proyecto = proyectoInversionRepository.getProyectoById(idProyectoInversion);
+        if (proyecto != null) {
+            proyecto.setEnSuspension(false);
+            proyecto.setMotivoSuspension("");
+            proyectoInversionRepository.updateProyeInversion(proyecto);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -132,12 +130,7 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public Boolean eliminarPublicacion(int idProyectoInver) {
-        return null;
-    }
-
-    @Override
-    public Boolean eliminarUsuario(int idUser) {
+    public Boolean eliminarPublicacion(int idProyectoInver) { /// de la lista no ?
         return null;
     }
 
@@ -211,4 +204,33 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
         repositorioUsuario.modificar(usuarioCambio);
     }
+    @Override
+    public List<ProyectoInversion> obtenerProyectosRecomendados(Integer usuarioId) throws Exception {
+        Usuario usuario = repositorioUsuario.buscarUsuarioPorId(usuarioId);
+        if (usuario == null) {
+            throw new Exception("Usuario no encontrado con id: " + usuario.getId());
+        }
+        BigDecimal saldo = usuario.getSaldo();
+        return repositorioUsuario.getProyectosRecomendados(usuarioId, saldo);
+    }
+
+       /* @Override
+    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
+        return null;
+    }*/
+  /*  @Override
+    public void activarRecomendacionesAutomaticas(Double valor, int idUser) {
+
+    }*/
+      /* @Override
+    public Boolean reportarUsuarioSospechoso(String motivo, int idUserReportado, int idUserQueReporta) {
+        return null;
+    }*/
+       /* @Override
+    public Boolean invertirEnProyecto(int valor, int idProyecto) { ///
+        return null;
+    }*/
+
+
+
 }
