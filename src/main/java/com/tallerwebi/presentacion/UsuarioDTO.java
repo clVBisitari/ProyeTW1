@@ -54,7 +54,6 @@ public class UsuarioDTO {
         usuarioDTO.setSaldo(usuario.getSaldo());
         usuarioDTO.setContactos(Usuario.mapToUsuarioDTOList(usuario.getContactos()));
         usuarioDTO.setEstaActivo(usuario.getEstaActivo());
-//        usuarioDTO.setGestorGastos(usuario.getGestorDeGastos());
         return usuarioDTO;
     }
 

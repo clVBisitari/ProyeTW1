@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,7 @@ public class RepoProyeInversionTests {
 
     @Mock
     private SessionFactory sessionFactory;
+    private RepositorioUsuario repoUser;
 
     @InjectMocks
     private RepositorioProyeInversion repositorioProyeInversion;
@@ -23,7 +25,8 @@ public class RepoProyeInversionTests {
     @BeforeEach
     public void setUp() {
         this.sessionFactory = mock(SessionFactory.class);
-        this.repositorioProyeInversion = new ProyeInversionRepositorio(sessionFactory);
+        this.repoUser = mock(RepositorioUsuario.class);
+        this.repositorioProyeInversion = new ProyeInversionRepositorio(sessionFactory, repoUser);
     }
 
     @Test

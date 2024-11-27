@@ -2,7 +2,9 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
+import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Service("servicioProyectoInversion")
 @Transactional
@@ -21,10 +24,13 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
 {
 
     private RepositorioProyeInversion repoProyeInversion;
+    private RepositorioUsuario repoUsuario;
+
 
     @Autowired
-    public ServicioProyectoInversionImpl(RepositorioProyeInversion repoProyeInversion) {
+    public ServicioProyectoInversionImpl(RepositorioProyeInversion repoProyeInversion, RepositorioUsuario repoUsuario) {
         this.repoProyeInversion = repoProyeInversion;
+        this.repoUsuario = repoUsuario;
     }
 
     @Override
@@ -50,7 +56,7 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         Usuario user = usuario.convertToUsuario();
         ProyectoInversion proyeInversion = proyeInversionDTO.convertToProyectoInversion();
         proyeInversion.setTitular(user);
-        proyeInversion.setInversores(new ArrayList<Usuario>());
+//        proyeInversion.setInversores(new InversorDeProyecto());
         proyeInversion.setCantidadReportes(0);
         proyeInversion.setEnSuspension(false);
         proyeInversion.setMontoRecaudado(new BigDecimal(0));
@@ -68,19 +74,19 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public boolean borrarProyectoInversion(Long idProyeInversion) {
+    public boolean borrarProyectoInversion(Integer idProyeInversion) {
         boolean deleteExitoso = this.repoProyeInversion.deleteProyeInversion(idProyeInversion);
         return deleteExitoso;
     }
 
     @Override
-    public boolean reportarProyecto(Long idProyeInversion) {
+    public boolean reportarProyecto(Integer idProyeInversion) {
         boolean reportExitoso = this.repoProyeInversion.reportProyeInversion(idProyeInversion);
         return reportExitoso;
     }
 
     @Override
-    public boolean suspenderProyecto(Long idProyeInversion) {
+    public boolean suspenderProyecto(Integer idProyeInversion) {
         try {
             ProyectoInversion proyePorSuspender = this.repoProyeInversion.getProyectoById(idProyeInversion);
             if(proyePorSuspender.getCantidadReportes() >= 3){
@@ -105,8 +111,30 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public ProyectoInversion getProyectoInversinPorId(Long id) {
+    public ProyectoInversion getProyectoInversionPorId(Integer id) {
         return this.repoProyeInversion.getProyectoById(id);
     }
 
+    @Override
+    public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto){
+        InversorDeProyecto inversor = InversorDeProyecto.convertToInversorDeProyecto(inversorDto);
+
+        Integer idUsuario = Integer.parseInt(inversorDto.idUsuario);
+//        Integer idProye = Integer.parseInt(inversorDto.idProyecto);
+        BigDecimal monto = new BigDecimal(inversorDto.monto);
+        Usuario usuarioValidado = this.repoUsuario.buscarUsuarioPorId(idUsuario);
+        //si el monto del usuario que quiere es menor a su saldo
+        if(monto.compareTo(usuarioValidado.getSaldo()) > 0) return 0;
+
+        usuarioValidado.setSaldo(usuarioValidado.getSaldo().subtract(monto));
+
+        ProyectoInversion proyectoInversion = this.repoProyeInversion.getProyectoById(inversorDto.idProyecto);
+        if(Objects.equals(usuarioValidado.getId(), idUsuario) && Objects.equals(proyectoInversion.getId(), inversorDto.idProyecto)){
+            inversor.setProyecto(proyectoInversion);
+            inversor.setUsuario(usuarioValidado);
+        }
+        Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion, usuarioValidado);
+
+        return idInversor;
+    }
 }

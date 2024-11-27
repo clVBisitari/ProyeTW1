@@ -28,22 +28,25 @@
     </header>
     <div class="investments__content">
         <section class="investments__start">
-            <h2 class="investments__title">Poyectos con mayor recaudación:</h2>
+            <h2 class="investments__title">Proyectos con mayor recaudación:</h2>
             <div th:each="proyecto : ${mayorRecaudacion}">
                 <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
                     <article class="proyect">
-                        <h5 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h5>
+                        <h3 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h3>
                         <p class="proyect__number">
-                            Inicia el <span th:text="${proyecto.plazoParaInicio}">26/10</span>
+                            Inicia el <b th:text="${proyecto.plazoParaInicio}">26/10</b>
                         </p>
                         <p class="proyect__description">
-                            Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
+                            Llevado por <b th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</b>
                         </p>
                         <p class="proyect__date">
-                            Recaudado <span th:text="${proyecto.montoRecaudado}">754.159</span>
-                            de <span th:text="${proyecto.montoRequerido}">1.000.000</span>
+                            Recaudado <b th:text="${#numbers.formatDecimal(proyecto.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">754.159</b>
+                            de <b th:text="${#numbers.formatDecimal(proyecto.montoRequerido, 0, 'POINT', 2, 'COMMA')}">1.000.000</b>
                         </p>
                     </article>
+                </a>
+                <a class="investment__link" th:href="@{/inversion/{id}(id=${proyecto.id})}">
+                    <button class="button__primary">Invertir</button>
                 </a>
             </div>
         </section>
@@ -52,18 +55,6 @@
             <article class="investment">
                 <p class="investment__number">$9.000</p>
                 <p class="investment__text">Compra de auto usado para refacción y reventa</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Renovación y reventa de muebles antiguos</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Desarrollo de una aplicación móvil</p>
-            </article>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra y alquiler de bicicletas eléctricas</p>
             </article>
         </section>
     </div>

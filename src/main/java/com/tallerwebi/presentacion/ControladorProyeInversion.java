@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path= "/inversion/{id}", method = RequestMethod.GET)
-    public ModelAndView getInversion(HttpServletRequest request, @PathVariable("id") Long id){
+    public ModelAndView getInversion(HttpServletRequest request, @PathVariable("id") Integer id){
 
         // Redirigir si no esta loggeado
         if (!Usuario.isUserLoggedIn(request)) {
@@ -52,8 +53,8 @@ public class ControladorProyeInversion {
 
         ModelMap model = new ModelMap();
 
-        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversinPorId(id);
-
+        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversionPorId(id);
+        model.put("InversorDeProyectoDTO", new InversorDeProyectoDTO());
         model.put("proyecto", proyecto);
 
         return new ModelAndView("inversion", model);
@@ -100,7 +101,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/borrarProyeInversion", method = RequestMethod.DELETE)
-    public ModelAndView borrarProyectoInversion(@RequestParam Long idProyeInversion){
+    public ModelAndView borrarProyectoInversion(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean deleteResponse = this.servicioProyectoInversion.borrarProyectoInversion(idProyeInversion);
         model.put("response", deleteResponse);
@@ -108,7 +109,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/reportarProyecto", method = RequestMethod.POST)
-    public ModelAndView reportarProyecto(@RequestParam Long idProyeInversion){
+    public ModelAndView reportarProyecto(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean reportarFueExitoso = this.servicioProyectoInversion.reportarProyecto(idProyeInversion);
         model.put("response", reportarFueExitoso);
@@ -116,7 +117,7 @@ public class ControladorProyeInversion {
     }
 
     @RequestMapping(path = "/suspenderProyecto", method = RequestMethod.POST)
-    public ModelAndView suspenderProyecto(@RequestParam Long idProyeInversion){
+    public ModelAndView suspenderProyecto(@RequestParam Integer idProyeInversion){
         ModelMap model = new ModelMap();
         boolean suspensionExitosa = this.servicioProyectoInversion.suspenderProyecto(idProyeInversion);
         model.put("response", suspensionExitosa);
@@ -129,5 +130,24 @@ public class ControladorProyeInversion {
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.listarPublicacionesSupendidas(idUsuario);
         model.put("response", proyectos);
         return new ModelAndView("redirect:inversiones", model);
+    }
+
+    @RequestMapping(path="/invertirEnProyecto/{id}", method=RequestMethod.POST)
+    public String invertirEnProyecto(@ModelAttribute InversorDeProyectoDTO inversorDto, HttpServletRequest request, @PathVariable("id") Integer idProyecto){
+        ModelMap model = new ModelMap();
+        HttpSession session = request.getSession();
+        UsuarioDTO usuarioDto = (UsuarioDTO)session.getAttribute("USUARIO");
+        if(inversorDto.idUsuario == null){
+            inversorDto.setIdUsuario(usuarioDto.getId().toString());
+        }
+        if(inversorDto.idProyecto == null){
+            inversorDto.setIdProyecto(idProyecto);
+        }
+        Integer idInversor = this.servicioProyectoInversion.invertirEnProyecto(inversorDto);
+        if(idInversor == 0 ){
+            model.put("error", "Tu saldo es menor que el monto con el que queres colaborar.");
+        }
+        model.addAttribute("idInversor", idInversor);
+        return "redirect:/inversiones";
     }
 }

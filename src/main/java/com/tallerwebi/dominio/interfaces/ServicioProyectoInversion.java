@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
 
@@ -11,10 +12,11 @@ public interface ServicioProyectoInversion {
     List<ProyectoInversion> getProyectosUsuario(Integer idUsuario);
     Integer guardarProyectoInversion(ProyeInversionDTO proyeInversionDTO, UsuarioDTO usuario);
     ProyectoInversion editarProyectoInversion(ProyectoInversion proyeInversion);
-    boolean borrarProyectoInversion(Long idProyeInversion);
-    boolean reportarProyecto(Long idProyeInversion);
-    boolean suspenderProyecto(Long idProyeInversion);
+    boolean borrarProyectoInversion(Integer idProyeInversion);
+    boolean reportarProyecto(Integer idProyeInversion);
+    boolean suspenderProyecto(Integer idProyeInversion);
     List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
+    public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto);
     List<ProyectoInversion> getProyectosMayorInversion();
-    ProyectoInversion getProyectoInversinPorId(Long id);
+    ProyectoInversion getProyectoInversionPorId(Integer id);
 }

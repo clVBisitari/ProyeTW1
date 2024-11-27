@@ -16,10 +16,17 @@
             <h1 class="investment__h1" th:text="${proyecto.titulo}">Compra de auto usado para refacción y reventa</h1>
             <h2 class="investment__h2">Llevado por <span th:text="${proyecto.titular.nombre}">Jorge Gómez</span></h2>
         </div>
+        <p th:text="${proyecto.id}"></p>
         <div class="investment__div">
             <a class="investment__link" th:href="@{/inversiones}">
                 <button class="button__primary">Volver</button>
             </a>
+            <form class="investment__link" action=# th:action="@{/invertirEnProyecto/{id}(id=${proyecto.id})}" th:object="${InversorDeProyectoDTO}" method="POST">
+                <button class="button__primary">Invertir</button>
+                <input type="text" th:field="*{monto}" placeholder="Monto a Invertir" />
+                <input type="hidden" th:field="*{idProyecto}" th:value="${proyecto.id}" th:text="${proyecto.id}" />
+            </form>
+            <p class="error" th:if="${error != null}" th:text="'Error: ' + ${error}"></p>
         </div>
     </header>
     <section class="investment__section">
