@@ -49,7 +49,6 @@ public class ControladorProyeInversionTests {
     private ServicioProyectoInversion proyeInvServiceMock;
 
     private ServicioMercadoPago mpServiceMock;
-    private HttpServletRequest requestMoc
     private HttpServletRequest requestMock = mock(HttpServletRequest.class);
 
     private Usuario userMock;
