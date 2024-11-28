@@ -14,7 +14,7 @@ public class ProyeInversionDTO {
     private Integer id;
     public String titulo;
     public String description;
-
+    public Integer participantes;
     public Usuario titular;
     public Integer inversores;
 
@@ -189,5 +189,9 @@ public class ProyeInversionDTO {
     public void setMotivoSuspension(String motivoSuspension) {
         this.motivoSuspension = motivoSuspension;
     }
+
+    public Integer getParticipantes() {return participantes;}
+
+    public void setParticipantes(Integer participantes) {this.participantes = participantes;}
 
 }

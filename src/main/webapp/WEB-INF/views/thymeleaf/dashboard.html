@@ -129,11 +129,16 @@
             <article th:if="${proyesRecomendados == null}">
                 <h5>No se encontraron proyectos para recomendar segun tu saldo.</h5>
             </article>
-            <article class="proyect" th:if="${proyesRecomendados != null and !#lists.isEmpty(proyesRecomendados)}" th:each="proye : ${proyesRecomendados}">
-                <h5 class="proyect__subtitle" th:text="${proye.titulo}">Compra de auto usado para refacción y reventa</h5>
-                <p class="proyect__part" ><span>42</span> participantes</p>
-                <p class="proyect__total" th:text="'$' + ${#numbers.formatDecimal(proye.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">Recaudado <span>$754.159</span></p>
-            </article>
+            <div th:if="${proyesRecomendados != null and !#lists.isEmpty(proyesRecomendados)}" th:each="proye : ${proyesRecomendados}">
+                <a th:href="@{/inversion/{id}(id=${proye.id})}" style="color: unset;text-decoration: none;">
+                    <article class="proyect">
+                        <h5 class="proyect__subtitle" th:text="${proye.titulo}">Compra de auto usado para refacción y reventa</h5>
+                        <p class="proyect__part"><span th:text="${proye.participantes}">42</span> participantes</p>
+                        <p class="proyect__total" th:text="'$' + ${#numbers.formatDecimal(proye.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">Recaudado <span>$754.159</span></p>
+                    </article>
+                </a>
+            </div>
+            
         </section>
     </div>
 </main>

@@ -115,8 +115,13 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     }
 
     @Override
-    public ProyectoInversion getProyectoInversionPorId(Integer id) {
-        return this.repoProyeInversion.getProyectoById(id);
+    public ProyeInversionDTO getProyectoInversionPorId(Integer id) {
+        ProyectoInversion proye =  this.repoProyeInversion.getProyectoById(id);
+        ProyeInversionDTO proyeDTO = ProyeInversionDTO.convertToDTO(proye);
+        Integer participantes = this.repoProyeInversion.getParticipantesFromProyecto(id);
+
+        proyeDTO.setParticipantes(participantes);
+        return proyeDTO;
     }
 
     @Override

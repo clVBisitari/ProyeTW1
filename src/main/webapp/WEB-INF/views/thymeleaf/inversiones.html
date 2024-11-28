@@ -84,9 +84,9 @@
                 <h4>No se encontraron proyectos propios creados</h4>
             </article>
             <div th:if="${inversionesPropias != null and !#lists.isEmpty(inversionesPropias)}" th:each="inversion : ${inversionesPropias}">
-                <a th:href="@{/inversion/{id}(id=${inversion.proyectoId})}" style="color: unset; text-decoration: none;"></a>
+                <a th:href="@{/inversion/{id}(id=${inversion.proyectoId})}" style="color: unset; text-decoration: none;">
                     <article class="investment" >
-                        <p class="investment__number" th:text="${#numbers.formatDecimal(inversion.monto, 0, 'POINT', 2, 'COMMA')}">$9.000</p>
+                        <p class="investment__number" th:text="'$'+ ${#numbers.formatDecimal(inversion.monto, 0, 'POINT', 2, 'COMMA')}">$9.000</p>
                         <p class="investment__text" th:text="${inversion.titulo}">Compra de auto usado para refacción y reventa</p>
                     </article>
                 </a>

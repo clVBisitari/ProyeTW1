@@ -2,9 +2,11 @@ package com.tallerwebi.dominio;
 
 import com.tallerwebi.dominio.excepcion.ContactoExistente;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
+import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
+import com.tallerwebi.presentacion.ProyeInversionDTO;
 import org.hibernate.type.ZonedDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,11 +22,12 @@ import java.util.*;
 public class ServicioUsuarioImpl implements ServicioUsuario {
 
     private RepositorioUsuario repositorioUsuario;
-    private ProyeInversionRepositorio proyectoInversionRepository;
+    private RepositorioProyeInversion proyectoInversionRepository;
 
     @Autowired
-    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario) {
+    public ServicioUsuarioImpl(RepositorioUsuario repositorioUsuario, RepositorioProyeInversion proyeInvRepo) {
         this.repositorioUsuario = repositorioUsuario;
+        this.proyectoInversionRepository = proyeInvRepo;
     }
 
     @Override
@@ -206,13 +209,26 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     }
 
     @Override
-    public List<ProyectoInversion> obtenerProyectosRecomendados(Integer usuarioId) throws Exception {
+    public List<ProyeInversionDTO> obtenerProyectosRecomendados(Integer usuarioId) throws Exception {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(usuarioId);
+
+        List<ProyeInversionDTO> proyesDTO = new ArrayList<>();
         if (usuario == null) {
             throw new Exception("Usuario no encontrado con id: " + usuario.getId());
         }
         BigDecimal saldo = usuario.getSaldo();
-        return repositorioUsuario.getProyectosRecomendados(usuarioId, saldo);
+        //los trae con tipo ProyectoInversion
+        List<ProyectoInversion> proyesInv =  repositorioUsuario.getProyectosRecomendados(usuarioId, saldo);
+
+        //y aca los convertimos para obtener la ctdad de participantes
+        for(ProyectoInversion proye : proyesInv){
+            ProyeInversionDTO proyeInvDTO = ProyeInversionDTO.convertToDTO(proye);
+            Integer participantes = this.proyectoInversionRepository.getParticipantesFromProyecto(proye.getId());
+
+            proyeInvDTO.setParticipantes(participantes);
+            proyesDTO.add(proyeInvDTO);
+        }
+        return proyesDTO;
     }
 
     @Override
