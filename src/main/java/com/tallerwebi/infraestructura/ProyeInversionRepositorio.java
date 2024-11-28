@@ -59,7 +59,7 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
     public List<ProyectoInversion> getMatchProyes(String name){
         final Session session = sessionFactory.getCurrentSession();
 
-        String hql = "FROM ProyectoInversion WHERE titulo LIKE CONCAT('%', :descripcion, '%')";
+        String hql = "FROM ProyectoInversion WHERE LOWER(titulo) LIKE LOWER(CONCAT('%', :descripcion, '%'))";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("descripcion", name);
 

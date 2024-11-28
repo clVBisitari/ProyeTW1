@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -104,6 +105,19 @@ public class ControladorGastos {
         UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
 
         List<Gasto> gastos = servicioGestorGastos.obtenerLosGastosDelMesEnCursoDeUnUsuario(usuarioConectado.getId());
+
+        model.addAttribute("gastos", gastos);
+
+        return new ModelAndView("gastos", model);
+    }
+
+    @RequestMapping(path = "/buscar/gasto", method = RequestMethod.POST)
+    public ModelAndView buscarGasto(@RequestParam("descripcion") String descripcion, HttpServletRequest request) {
+
+        ModelMap model = new ModelMap();
+
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        List<Gasto> gastos = servicioGestorGastos.buscarGastosPorDescripcion(usuarioDTO.getId(), descripcion);
 
         model.addAttribute("gastos", gastos);
 

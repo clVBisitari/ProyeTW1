@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.Gasto;
+import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.presentacion.GastoDTO;
 
 import java.math.BigDecimal;
@@ -18,4 +19,5 @@ public interface ServicioGestorGastos {
     Boolean guardarGasto(Integer userId, GastoDTO gastoDto);
     void eliminarGasto(Long id);
     BigDecimal obtenerGastosDelMes(Integer usuarioId);
+    List<Gasto> buscarGastosPorDescripcion(Integer usuarioId, String descripcion);
 }
