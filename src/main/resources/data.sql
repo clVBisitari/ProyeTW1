@@ -1,13 +1,13 @@
 -- USUARIOS
 INSERT INTO Usuario(email, nombre, apellido, dni, saldo, password,estaActivo, esAdmin, enSuspension, cvu)
 VALUES
-   ('test@unlam.edu.ar', 'Juan', 'Perez', 38498777, 10500.0, 'test',true, true, false, '2207564271651164172813'),
-   ('contacto1@unlam.edu.ar', 'Diego', 'Uno', 23456789, 500.0, 'password1',true, false, false, '2224574062660953377369'),
-   ('contacto2@unlam.edu.ar', 'Mariano', 'Dos', 34567890, 700.0, 'password2',true, false, false, '4710823829582240715700'),
-   ('contacto3@unlam.edu.ar', 'Marcos', 'Tres', 16558244, 8000.0, 'password3',true, false, false, '6458445127453427589072'),
-   ('contacto4@unlam.edu.ar', 'Pedro', 'Cuatro', 38498798, 9888.0, 'password4',true, false, false, '7745993172934245125706'),
-   ('contacto5@unlam.edu.ar', 'Alejandro', 'Cinco', 2345644, 745.0, 'password5',true, false, false, '3301912629345218283634'),
-   ('contacto6@unlam.edu.ar', 'Ivan', 'Seis', 34567666, 7888.0, 'password6',true, false, false, '7182926101066164331365')
+   ('test@unlam.edu.ar', 'Juan', 'Perez', 38498777, 180500.0, 'test',true, true, false, '2207564271651164172813'),
+   ('contacto1@unlam.edu.ar', 'Diego', 'Gomez', 23456789, 575000.0, 'password1',true, false, false, '2224574062660953377369'),
+   ('contacto2@unlam.edu.ar', 'Mariano', 'Lopez', 34567890, 63700.0, 'password2',true, false, false, '4710823829582240715700'),
+   ('contacto3@unlam.edu.ar', 'Marcos', 'Gutierrez', 16558244, 5967000.8, 'password3',true, false, false, '6458445127453427589072'),
+   ('contacto4@unlam.edu.ar', 'Pedro', 'Rodriguez', 38498798, 9888.5, 'password4',true, false, false, '7745993172934245125706'),
+   ('contacto5@unlam.edu.ar', 'Alejandro', 'Diaz', 2345644, 18000.0, 'password5',true, false, false, '3301912629345218283634'),
+   ('contacto6@unlam.edu.ar', 'Ivan', 'Martinez', 34567666, 4050000.0, 'password6',true, false, false, '7182926101066164331365')
 ON CONFLICT DO NOTHING;
 
 -- GASTOS

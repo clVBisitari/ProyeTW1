@@ -141,7 +141,7 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
     public List<ProyectoInversion> getProyectosRecomendados(Integer usuarioId, BigDecimal saldo) {
         String hql = "SELECT * FROM proyecto_inversion p " +
                 "WHERE p.titular_id != :usuarioId " +
-                "AND :saldo >= p.montorequerido * 0.1";
+                "AND :saldo > p.montorequerido * 0.1";
 
         Session session = sessionFactory.getCurrentSession();
 
