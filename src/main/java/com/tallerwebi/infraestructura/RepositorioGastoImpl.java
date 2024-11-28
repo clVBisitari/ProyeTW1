@@ -36,7 +36,7 @@ public class RepositorioGastoImpl {
     }
 
     public List<Gasto> buscarGastoPorDescripcion(String descripcion) {
-        String hql = "FROM Gasto WHERE descripcion = :descripcion";
+        String hql = "FROM Gasto WHERE descripcion LIKE CONCAT('%', :descripcion, '%')";
         Query query = sessionFactory.getCurrentSession().createQuery(hql);
         query.setParameter("descripcion", descripcion);
 
@@ -124,5 +124,14 @@ public class RepositorioGastoImpl {
         Serializable gastoId = session.save(gasto);
         if(gastoId != null) return true;
         return false;
+    }
+
+    public List<Gasto> buscarGastosDeUnUsuarioPorDescripcion(Integer usuarioId, String descripcion) {
+        String hql = "FROM Gasto g WHERE g.usuario.id = :idUsuario AND LOWER(g.descripcion) LIKE LOWER(CONCAT('%', :descripcion, '%'))";
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.setParameter("idUsuario", usuarioId);
+        query.setParameter("descripcion", descripcion);
+
+        return query.getResultList();
     }
 }

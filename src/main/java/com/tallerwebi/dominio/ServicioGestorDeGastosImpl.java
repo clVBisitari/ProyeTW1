@@ -98,6 +98,12 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
         return gastoNoVencidos;
     }
 
+    @Override
+    public List<Gasto> buscarGastosPorDescripcion(Integer usuarioId, String descripcion){
+        List<Gasto> gastosEncontrados = repositorioGasto.buscarGastosDeUnUsuarioPorDescripcion(usuarioId, descripcion);
+        return gastosEncontrados;
+    }
+
     public void eliminarGasto(Long id){
         this.repositorioGasto.eliminarGasto(id);
     }
