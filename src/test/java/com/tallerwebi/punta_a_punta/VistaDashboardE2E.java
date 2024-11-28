@@ -67,7 +67,7 @@ public class VistaDashboardE2E {
 
         String texto = vistaDashboard.obtenerSaldo();
 
-        assertThat("10.500,00", equalToIgnoringCase(texto));
+        assertThat("$180.500,00", equalToIgnoringCase(texto));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class VistaDashboardE2E {
 
         String texto = vistaDashboard.obtenerGastos();
 
-        assertThat("237.000,00", equalToIgnoringCase(texto));
+        assertThat("$237.000,00", equalToIgnoringCase(texto));
     }
 
     @Test
