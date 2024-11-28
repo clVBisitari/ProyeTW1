@@ -51,7 +51,7 @@
                         th:action="@{/suspender/usuario/{id}(id=${contactoEncontrado.id})}"
                         method="post" style="display:flex;justify-content: center; align-items: center"
                 >
-                    <textarea name="motivo" id="contactoEncontrado" cols="30" rows="2.5" placeholder="motivo de suspension"></textarea>
+                    <input class="contacts__input" name="motivo" id="contactoEncontrado" placeholder="Motivo de suspensión" />
 
                     <button class="contacts__button" type="submit">
                         <svg
@@ -102,14 +102,16 @@
                 </form>
             </div>
 
-            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista != null && contactoEncontrado?.enSuspension == true}" style="display:flex;justify-content: center; align-items: center">
+            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista != null && contactoEncontrado?.enSuspension == true}"
+                 style="display:flex;justify-content: center; align-items: center">
                 <form th:action="@{/eliminar/contacto/{id}(id=${contactoEncontrado.id})}" method="post">
                     <button class="button__primary" type="submit">Eliminar Usuario</button>
                 </form>
                 <p class="error" th:text="'Usuario suspendido'">Usuario suspendido</p>
             </div>
 
-            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista == null && contactoEncontrado?.enSuspension == true}" style="display:flex;justify-content: center; align-items: center">
+            <div th:if="${ contactoEncontrado != null && mensajeContactoEnLista == null && contactoEncontrado?.enSuspension == true}"
+                 style="display:flex;justify-content: center; align-items: center">
                 <form
                         th:action="@{/agregar/contacto/{id}(id=${contactoEncontrado.id})}"
                         method="post"
@@ -143,15 +145,15 @@
     <!---------------------------------------   BUSQUEDA   --------------------------------------->
 
 
-    <section>
+    <div>
         <!---------------------------------------   Contactos//////Sugeridos   --------------------------------------->
 
 
         <!---------------------------------------   Contactos   --------------------------------------->
-        <aside id="contactos">
+        <section id="contactos">
             <h3 class="contacts__atitle">Contactos</h3>
-            <div th:each="contacto : ${contactos}" style="display:flex;justify-content: center; align-items: center">
-                <article class="contacts__article">
+            <article th:each="contacto : ${contactos}" class="contacts__article">
+                <div class="contacts__data">
                     <img
                             class="contacts__img"
                             th:src="@{img/perfil.jpg}"
@@ -164,11 +166,12 @@
                     >
                         Usuario
                     </p>
-                </article>
+                </div>
 
-                <div th:if="${!contacto.enSuspension}" style="display:flex;justify-content: center; align-items: center">
-                    <form th:action="@{/suspender/usuario/{id}(id=${contacto.id})}" method="post" style="display:flex;justify-content: center; align-items: center">
-                        <textarea name="motivo" id="" cols="30" rows="2.5" placeholder="motivo de suspension"></textarea>
+                <div th:if="${!contacto.enSuspension}" class="contacts__buttons">
+                    <form th:action="@{/suspender/usuario/{id}(id=${contacto.id})}" method="post"
+                          class="contacts__motivo">
+                        <input class="contacts__area" name="motivo" placeholder="Motivo de suspensión" />
                         <button class="contacts__button" type="submit">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -186,7 +189,13 @@
                         </button>
                     </form>
                     <form th:action="@{/eliminar/contacto/{id}(id=${contacto.id})}" method="post">
-                        <button class="button__primary" type="submit">Eliminar Usuario</button>
+                        <button type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="contacts__svg" viewBox="0 0 16 16">
+                                <title>Eliminar</title>
+                                <path d="M12.5 9a3.5 3.5 0 1 1 0 7 3.5 3.5 0 0 1 0-7m.354 5.854 1.5-1.5a.5.5 0 0 0-.708-.708l-.646.647V10.5a.5.5 0 0 0-1 0v2.793l-.646-.647a.5.5 0 0 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0M11 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0M8 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4"/>
+                                <path d="M8.256 14a4.5 4.5 0 0 1-.229-1.004H3c.001-.246.154-.986.832-1.664C4.484 10.68 5.711 10 8 10q.39 0 .74.025c.226-.341.496-.65.804-.918Q8.844 9.002 8 9c-5 0-6 3-6 4s1 1 1 1z"/>
+                            </svg>
+                        </button>
                     </form>
                 </div>
 
@@ -199,18 +208,18 @@
                     </div>
 
                 </div>
-            </div>
-        </aside>
+            </article>
+        </section>
         <!---------------------------------------   /Contactos   --------------------------------------->
 
         <!---------------------------------------   Contactos   SUGERIDOS--------------------------------------->
 
-        <aside
+        <section
                 class="contacts__aside"
                 th:if="${contactosSugeridos != null}"
                 id="sugeridos"
         >
-            <h3 class="contacts__atitle">Contactos Sugeridos</h3>
+            <h3 class="contacts__atitle">Sugeridos</h3>
             <div th:each="contactoSugerido : ${contactosSugeridos}">
 
                 <article class="contacts__article">
@@ -255,12 +264,11 @@
                             th:action="@{/suspender/usuario/{id}(id=${contactoSugerido.id})}"
                             method="post"
                     >
-                                <textarea
+                                <input
+                                        class="contacts__input"
                                         name="motivo"
-                                        cols="30"
-                                        rows="10"
-                                        placeholder="motivo de suspension"
-                                ></textarea>
+                                        placeholder="Motivo de suspensión"
+                                />
                         <button class="contacts__button" type="submit">
                             <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -282,17 +290,17 @@
                         th:if="${ contactoSugerido.enSuspension}"
                 >
 
-                        <p
-                                class="error"
-                                th:if="${contactoSugerido.enSuspension}"
-                                th:text="${mensaje}"
-                        ></p>
+                    <p
+                            class="error"
+                            th:if="${contactoSugerido.enSuspension}"
+                            th:text="${mensaje}"
+                    ></p>
                 </div>
             </div>
-        </aside>
+        </section>
         <!---------------------------------------   Contactos   SUGERIDOS--------------------------------------->
 
-    </section>
+    </div>
 
 </main>
 </body>
