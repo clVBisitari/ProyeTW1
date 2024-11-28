@@ -20,26 +20,31 @@
                 />
             </svg>
         </form>
-        <section>
-            <div>
-                <h1>Datos para cargar saldo</h1>
-                <p>Este es tu CVU. Con él podrás cargar saldo a tu cuenta</p>
-                <h4 th:text="${usuario.cvu}">0008674625351838571517333773</h4>
-            </div>
-        </section>
+        
 
         <div class="investments__button">
             <button id="cargarSaldo" class="button__primary" onclick="generateForm()">Cargar Saldo</button>
         </div>
         <div id="form-container"></div>
     </header>
+    <section style="margin:auto; margin-top: 10%;"> 
+        <h1>Actividad reciente</h1>
+        <h5>Aquí encontrarás los últimos movimientos de tu cuenta.</h5>
+    </section>
     <div class="investments__content">
-        <section class="investments__end" th:each="saldo : ${saldos}">
+        <section class="investments__end">
             <h2 class="investments__title">Saldo</h2>
-            <article class="investment">
+            <article class="investment" th:each="saldo : ${saldos}">
                 <p class="investment__number" th:text="'$' + ${#numbers.formatDecimal(saldo.valor, 0, 'POINT', 2, 'COMMA')}">+$9.000</p>
                 <p class="investment__text" th:text="${saldo.fecha}">26/10</p>
             </article>
+        </section>
+        <section class="investments__end">
+            <div style="margin-top: 10px;">
+                <h2 class="investments__title" style="margin-top: 10px;" >Datos para cargar saldo</h1>
+                <p class="investments__title" style="margin-top: 10px;" >Este es tu CVU. Con él podrás cargar saldo a tu cuenta</p>
+                <h2 class="investments__title" style="margin-top: 10px;" th:text="${usuario.cvu}">0008674625351838571517333773</h2>
+            </div>
         </section>
     </div>
 </main>

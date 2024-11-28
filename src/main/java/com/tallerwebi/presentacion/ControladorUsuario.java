@@ -261,8 +261,6 @@ public class ControladorUsuario {
         if (usuarioDTO.getNombre() == null || usuarioDTO.getApellido() == null) {
             return "editarPerfil";
         }
-
-
         Usuario usuario = servicioUsuario.getUsuarioById(usuarioId);
 
         if (usuario == null) {
