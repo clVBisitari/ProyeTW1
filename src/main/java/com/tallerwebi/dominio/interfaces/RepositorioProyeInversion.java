@@ -19,4 +19,5 @@ import java.util.List;
     Integer saveInversor(InversorDeProyecto inversor, ProyectoInversion proyectoInversion, Usuario usuario);
     List<ProyectoInversion> getProyectosMayorInversion();
     List<InversionDTO> getInversionesByUser(Integer userId);
+    Integer getParticipantesFromProyecto(Integer proyeId);
 }

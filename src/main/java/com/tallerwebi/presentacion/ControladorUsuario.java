@@ -58,7 +58,8 @@ public class ControladorUsuario {
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
         List<ProyectoInversion> proyectosActivos = servicioProyectoInversion.getProyectosUsuario(idUsuarioDto);
         try {
-            List<ProyectoInversion> proyesRecomendados = servicioUsuario.obtenerProyectosRecomendados(idUsuarioDto);
+            List<ProyeInversionDTO> proyesRecomendados = servicioUsuario.obtenerProyectosRecomendados(idUsuarioDto);
+
             modelo.put("proyesRecomendados", proyesRecomendados);
         } catch (Exception e) {
             return new ModelAndView("redirect:/login");
@@ -260,8 +261,6 @@ public class ControladorUsuario {
         if (usuarioDTO.getNombre() == null || usuarioDTO.getApellido() == null) {
             return "editarPerfil";
         }
-
-
         Usuario usuario = servicioUsuario.getUsuarioById(usuarioId);
 
         if (usuario == null) {

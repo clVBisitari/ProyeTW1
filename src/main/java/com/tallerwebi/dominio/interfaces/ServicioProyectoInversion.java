@@ -19,6 +19,6 @@ public interface ServicioProyectoInversion {
     List<ProyectoInversion> listarPublicacionesSupendidas(Integer idUsuario);
     public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto);
     List<ProyectoInversion> getProyectosMayorInversion();
-    ProyectoInversion getProyectoInversionPorId(Integer id);
+    ProyeInversionDTO getProyectoInversionPorId(Integer id);
     public List<InversionDTO>getInversionesPorUsuario(Integer userId);
 }
