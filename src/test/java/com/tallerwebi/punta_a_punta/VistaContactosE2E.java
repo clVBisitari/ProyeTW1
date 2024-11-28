@@ -85,8 +85,6 @@ public class VistaContactosE2E {
 
         int contactosAntes = vistaContactos.obtenerContactos().size();
 
-        System.out.println(contactosAntes);
-
         vistaContactos.hacerClickEnElPrimerAgregarContacto();
 
         List<String> contactos = vistaContactos.obtenerContactos();

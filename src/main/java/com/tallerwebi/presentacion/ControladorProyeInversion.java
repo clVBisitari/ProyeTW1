@@ -52,7 +52,6 @@ public class ControladorProyeInversion {
 
         try {
             List<ProyectoInversion> proyectosRecomendados = this.usuarioService.obtenerProyectosRecomendados(usuarioId);
-            System.out.println(proyectosRecomendados.size());
             model.put("proyesRecomendados", proyectosRecomendados);
             List<InversionDTO> inversionesPropias = this.servicioProyectoInversion.getInversionesPorUsuario(usuarioId);
             model.addAttribute("inversionesPropias", inversionesPropias);
