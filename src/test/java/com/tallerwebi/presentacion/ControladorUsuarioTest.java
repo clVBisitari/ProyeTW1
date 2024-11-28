@@ -1,4 +1,4 @@
-/*package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
@@ -280,4 +280,3 @@ public class ControladorUsuarioTest {
         verify(servicioUsuarioMock).agregarUsuarioAContactos(usuarioQueGuarda, usuarioAGuardar);
     }
 }
-*/

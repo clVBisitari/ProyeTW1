@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Saldo;
 import com.tallerwebi.dominio.Usuario;
 
 import java.math.BigDecimal;
@@ -21,6 +22,8 @@ public interface RepositorioUsuario {
 
     void agregarContacto(Integer idUsuario, Integer idContacto);
     List<ProyectoInversion> getProyectosRecomendados(Integer usuarioId, BigDecimal saldo);
+    public List<Saldo> getSaldosByUserId(Integer idUsuario);
+    public boolean saveSaldoFromUser(Saldo saldo);
 }
 
 

@@ -12,6 +12,7 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -69,6 +70,32 @@ public class ServicioGestorDeGastosImpl implements ServicioGestorGastos {
 
     public List<Gasto> obtenerTodosLosGastosDeUnGestor(Integer usuarioId){
         return repositorioGestorDeGastos.obtenerTodosLosGastosDeUnGestor(usuarioId);
+    }
+
+    @Override
+    public List<Gasto> obtenerLosGastosDelMesEnCursoDeUnUsuario(Integer id){
+        List<Gasto> gastos = this.repositorioGasto.obtenerTodosLosGastosPorUsuarioId(id);
+        List<Gasto> gastoDelMesEnCurso = new ArrayList<Gasto>();
+
+        for (Gasto gasto : gastos) {
+            if (esGastoDelMesEnCurso(gasto.getFechaVencimiento())) {
+                gastoDelMesEnCurso.add(gasto);
+            }
+        }
+        return gastoDelMesEnCurso;
+    }
+
+    @Override
+    public List<Gasto> obtenerLosGastosNoVencidosDeUnUsuario(Integer id){
+            List<Gasto> gastos = this.repositorioGasto.obtenerTodosLosGastosPorUsuarioId(id);
+            List<Gasto> gastoNoVencidos = new ArrayList<Gasto>();
+
+            for (Gasto gasto : gastos) {
+                if (!esGastoVencido(gasto.getFechaVencimiento())) {
+                    gastoNoVencidos.add(gasto);
+                }
+        }
+        return gastoNoVencidos;
     }
 
     public void eliminarGasto(Long id){

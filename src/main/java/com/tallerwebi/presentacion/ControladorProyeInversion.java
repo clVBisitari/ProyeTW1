@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -67,17 +68,21 @@ public class ControladorProyeInversion {
     }
 
 
-    @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
-    public ModelAndView buscarProyectoInversion(@RequestParam("nombre") String nombre)
+    @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.POST)
+    public String buscarProyectoInversion(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request)
     {
 
         ModelMap model = new ModelMap();
 
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.buscarProyectoInversion(nombre);
 
-        model.put("response", proyectos);
+        if (proyectos.isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensajeProyectoNoEncontrado", "proyectos no encontrados con ese nombre");
+        } else {
+            redirectAttributes.addFlashAttribute("proyectosEncontrados", proyectos);
+        }
 
-        return new ModelAndView("redirect:inversiones", model);
+        return"redirect:inversiones";
     }
 
 

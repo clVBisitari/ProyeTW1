@@ -40,6 +40,26 @@ public class Usuario {
     private List<ProyectoInversion> proyectos;
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Gasto> gastos = new ArrayList<Gasto>();
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Saldo> saldos;
+    private String cvu;
+
+    public String getCvu() {
+        return cvu;
+    }
+
+    public void setCvu(String cvu) {
+        this.cvu = cvu;
+    }
+
+    public List<Saldo> getSaldos() {
+        return saldos;
+    }
+
+    public void setSaldos(List<Saldo> saldos) {
+        this.saldos = saldos;
+    }
+
 
     public Usuario(){}
 
