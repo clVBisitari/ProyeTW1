@@ -140,23 +140,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     public List<Usuario> getContactosSugeridos(Integer id) {
         List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
 
-        /*  List<Usuario> contactosSugeridos = new ArrayList<>();
-
-      Random random = new Random();
-
-        for (Usuario contacto : contactos) {
-            List<Usuario> contactosDeContacto = contacto.getContactos();
-
-            if (!contactosDeContacto.isEmpty()) {
-                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if (contactoAleatorio.getId() != id) {
-                    contactosSugeridos.add(contactoAleatorio);
-                }
-            }
-        }
-
-        return contactosSugeridos;
-*/
         return contactos;
     }
 
@@ -210,23 +193,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return repositorioUsuario.getProyectosRecomendados(usuarioId, saldo);
     }
 
-       /* @Override
-    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
-        return null;
-    }*/
-  /*  @Override
-    public void activarRecomendacionesAutomaticas(Double valor, int idUser) {
-
-    }*/
-      /* @Override
-    public Boolean reportarUsuarioSospechoso(String motivo, int idUserReportado, int idUserQueReporta) {
-        return null;
-    }*/
-       /* @Override
-    public Boolean invertirEnProyecto(int valor, int idProyecto) { ///
-        return null;
-    }*/
-
+    @Override
+    public List<Saldo> getHistorialSaldoByIdUsuario(Integer idUsuario){
+        List<Saldo> saldos = this.repositorioUsuario.getSaldosByUserId(idUsuario);
+        return saldos;
+    }
 
 
 }

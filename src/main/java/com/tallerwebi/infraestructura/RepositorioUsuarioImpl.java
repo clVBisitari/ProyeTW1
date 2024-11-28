@@ -1,6 +1,7 @@
 package com.tallerwebi.infraestructura;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Saldo;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.Usuario;
 import org.hibernate.Session;
@@ -15,7 +16,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Transactional
 @Repository("repositorioUsuario")
 public class RepositorioUsuarioImpl implements RepositorioUsuario {
 
@@ -152,4 +153,26 @@ public class RepositorioUsuarioImpl implements RepositorioUsuario {
         return proyectos;
     }
 
+    @Override
+    public List<Saldo> getSaldosByUserId(Integer idUsuario){
+        Session session = sessionFactory.getCurrentSession();
+        String hql = "SELECT * FROM saldo s " +
+                "WHERE s.usuario_id = :idUsuario ";
+
+        List<Saldo> saldos = session.createNativeQuery(hql, Saldo.class)
+                .setParameter("idUsuario", idUsuario)
+                .getResultList();
+        return saldos;
+    }
+    @Override
+    public boolean saveSaldoFromUser(Saldo saldo){
+        Session session = sessionFactory.getCurrentSession();
+        try {
+            session.save(saldo);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+
+    }
 }

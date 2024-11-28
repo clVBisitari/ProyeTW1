@@ -2,6 +2,7 @@ package com.tallerwebi.presentacion;
 
 import com.tallerwebi.dominio.Gasto;
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.dominio.Saldo;
 import com.tallerwebi.dominio.interfaces.ServicioGestorGastos;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
@@ -228,8 +229,15 @@ public class ControladorUsuario {
     @Transactional
     @RequestMapping(path = "/saldo", method = RequestMethod.GET)
     public ModelAndView getSaldo(HttpServletRequest request) {
+        ModelMap model = new ModelMap();
 
-        return new ModelAndView("saldo");
+        UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("USUARIO");
+        Integer idUsuario = usuario.getId();
+        List<Saldo> saldosUsuario = servicioUsuario.getHistorialSaldoByIdUsuario(idUsuario);
+        model.addAttribute("saldos", saldosUsuario);
+        model.addAttribute("usuario", usuario);
+
+        return new ModelAndView("saldo", model);
     }
 
     @Transactional

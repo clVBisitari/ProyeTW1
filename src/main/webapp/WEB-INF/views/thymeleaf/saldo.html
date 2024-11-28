@@ -13,32 +13,36 @@
 <main class="investments__main">
     <header class="investments__header">
         <form class="investments__search">
-            <input class="investments__input" type="text" placeholder="Buscar proyecto" />
+            <input class="investments__input" type="text" placeholder="Buscar saldo" />
             <svg xmlns="http://www.w3.org/2000/svg" class="investments__icon" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
                 />
             </svg>
         </form>
+        <section>
+            <div>
+                <h1>Datos para cargar saldo</h1>
+                <p>Este es tu CVU. Con él podrás cargar saldo a tu cuenta</p>
+                <h4 th:text="${usuario.cvu}">0008674625351838571517333773</h4>
+            </div>
+        </section>
+
         <div class="investments__button">
             <a class="investments__link" th:href="@{/crear-pago}">
-                <button class="button__primary">Saldo Total</button>
+                <button id="cargarSaldo" class="button__primary" onclick="generateForm()">Cargar Saldo</button>
             </a>
         </div>
+        <div id="form-container"></div>
     </header>
     <div class="investments__content">
-        <section class="investments__end">
+        <section class="investments__end" th:each="saldo : ${saldos}">
             <h2 class="investments__title">Saldo</h2>
             <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra de auto usado para refacción y reventa</p>
+                <p class="investment__number" th:text="${saldo.valor}">+$9.000</p>
+                <p class="investment__text" th:text="${saldo.fecha}">26/10</p>
             </article>
         </section>
-    </div>
-    <div>
-        <h1>Realizar Pago</h1>
-        <p>Serás redirigido a MercadoPago para completar el pago.</p>
-        <a th:href="@{/initPoint}" target="_blank">Ir a MercadoPago</a>
     </div>
 </main>
     <script>
@@ -56,7 +60,53 @@
                 },
             },
         });
+        function generateForm() {
+        // Referencia al contenedor donde se añadirá el formulario
+        const formContainer = document.getElementById("form-container");
 
+        // Limpiar el contenedor por si ya existe un formulario
+        formContainer.innerHTML = "";
+
+        // Crear el formulario dinámicamente
+        const form = document.createElement("form");
+        form.method = "POST"; // Método POST
+        form.action = /* Thymeleaf genera la URL aquí */ "[[@{/crear-pago}]]";
+
+        // Crear el select con opciones
+        const select = document.createElement("select");
+        select.name = "metodoPago";
+        select.required = false; // Campo NO obligatorio
+
+        // Opciones del select
+        const options = ["MercadoPago", "Ualá", "MODO"];
+        options.forEach((optionText) => {
+            const option = document.createElement("option");
+            option.value = optionText;
+            option.textContent = optionText;
+            select.appendChild(option);
+        });
+
+        // Crear el input para el importe
+        const input = document.createElement("input");
+        input.type = "number";
+        input.name = "importe";
+        input.placeholder = "Ingrese el importe";
+        input.required = true; // Campo obligatorio
+
+        // Crear el botón de enviar
+        const submitButton = document.createElement("button");
+        submitButton.type = "submit";
+        submitButton.textContent = "Cargar Importe";
+        submitButton.classList.add("button__primary");
+
+        // Agregar los elementos al formulario
+        form.appendChild(select);
+        form.appendChild(input);
+        form.appendChild(submitButton);
+
+        // Agregar el formulario al contenedor
+        formContainer.appendChild(form);
+    }
     </script>
 </body>
 </html>
