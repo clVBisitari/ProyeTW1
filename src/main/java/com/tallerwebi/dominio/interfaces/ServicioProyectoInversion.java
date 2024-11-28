@@ -1,6 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
+import com.tallerwebi.presentacion.InversionDTO;
 import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -19,4 +20,5 @@ public interface ServicioProyectoInversion {
     public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto);
     List<ProyectoInversion> getProyectosMayorInversion();
     ProyectoInversion getProyectoInversionPorId(Integer id);
+    public List<InversionDTO>getInversionesPorUsuario(Integer userId);
 }

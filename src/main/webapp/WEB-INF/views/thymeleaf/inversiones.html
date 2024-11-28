@@ -57,7 +57,10 @@
     <div class="investments__content">
         <section class="investments__start">
             <h2 class="investments__title">Proyectos con mayor recaudación:</h2>
-            <div th:each="proyecto : ${mayorRecaudacion}">
+            <article class="proyect" th:if="${proyesRecomendados == null or #lists.isEmpty(proyesRecomendados)}">
+                <h4>No se encontraron proyectos</h4>
+            </article>
+            <div th:if="${proyesRecomendados != null and !#lists.isEmpty(proyesRecomendados)}" th:each="proyecto : ${proyesRecomendados}">
                 <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
                     <article class="proyect">
                         <h3 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h3>
@@ -77,10 +80,18 @@
         </section>
         <section class="investments__end">
             <h2 class="investments__title">Inversiones</h2>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra de auto usado para refacción y reventa</p>
+            <article th:if="${inversionesPropias == null}">
+                <h4>No se encontraron proyectos propios creados</h4>
             </article>
+            <div th:if="${inversionesPropias != null and !#lists.isEmpty(inversionesPropias)}" th:each="inversion : ${inversionesPropias}">
+                <a th:href="@{/inversion/{id}(id=${inversion.proyectoId})}" style="color: unset; text-decoration: none;"></a>
+                    <article class="investment" >
+                        <p class="investment__number" th:text="${#numbers.formatDecimal(inversion.monto, 0, 'POINT', 2, 'COMMA')}">$9.000</p>
+                        <p class="investment__text" th:text="${inversion.titulo}">Compra de auto usado para refacción y reventa</p>
+                    </article>
+                </a>
+            </div>
+
         </section>
     </div>
 </main>

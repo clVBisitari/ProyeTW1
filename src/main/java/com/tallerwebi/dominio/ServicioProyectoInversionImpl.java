@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.presentacion.InversionDTO;
 import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -153,5 +154,11 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion, usuarioValidado);
 
         return idInversor;
+    }
+
+    @Override
+    public List<InversionDTO>getInversionesPorUsuario(Integer userId){
+        List<InversionDTO> inversionesPropias = this.repoProyeInversion.getInversionesByUser(userId);
+        return inversionesPropias;
     }
 }

@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
+import com.tallerwebi.presentacion.InversionDTO;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -175,6 +176,18 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+    @Override
+    public List<InversionDTO> getInversionesByUser(Integer userId){
+        final Session session = sessionFactory.getCurrentSession();
+
+        String hql = "SELECT new com.tallerwebi.presentacion.InversionDTO(ip.monto, pi.id, pi.titulo)" +
+                "FROM InversorDeProyecto ip " +
+                "JOIN ip.proyecto pi " +
+                "WHERE ip.usuario.id = :userId";
+        Query query =  sessionFactory.getCurrentSession().createQuery(hql).setParameter("userId", userId);
+
+        return query.getResultList();
     }
 
 }

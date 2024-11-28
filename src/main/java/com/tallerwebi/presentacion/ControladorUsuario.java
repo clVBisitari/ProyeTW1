@@ -37,6 +37,7 @@ public class ControladorUsuario {
     @Transactional
     @RequestMapping(path = "/dashboard", method = RequestMethod.GET)
     public ModelAndView irADashboard(HttpServletRequest request) {
+        ModelMap modelo = new ModelMap();
 
         // Redirigir si no esta loggeado
         if (!Usuario.isUserLoggedIn(request)) {
@@ -56,10 +57,14 @@ public class ControladorUsuario {
 
         Integer cantidadGastosPorVencer = servicioGastos.actualizarCantidadServiciosPorVencerMesEnCurso(idUsuarioDto);
         List<ProyectoInversion> proyectosActivos = servicioProyectoInversion.getProyectosUsuario(idUsuarioDto);
-
+        try {
+            List<ProyectoInversion> proyesRecomendados = servicioUsuario.obtenerProyectosRecomendados(idUsuarioDto);
+            modelo.put("proyesRecomendados", proyesRecomendados);
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/login");
+        }
         List<Gasto> gastos = servicioGastos.obtenerTodosLosGastosDeUnGestor(idUsuarioDto);
 
-        ModelMap modelo = new ModelMap();
         modelo.put("usuario", usuarioDtoParaSerGuardado);
 
         modelo.addAttribute("totalGastosMesEnCurso", totalGastosMesEnCurso);
@@ -319,6 +324,6 @@ public class ControladorUsuario {
         }
         ModelMap model = new ModelMap();
         model.put("usuario", usuario);
-        return new ModelAndView("saldo", model);
+        return new ModelAndView("redirect:/dashboard", model);
     }
 }

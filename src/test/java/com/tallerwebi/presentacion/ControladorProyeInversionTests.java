@@ -1,10 +1,8 @@
 package com.tallerwebi.presentacion;
-import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
-import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.Session;
@@ -48,10 +46,9 @@ public class ControladorProyeInversionTests {
 
     @Mock
     private ServicioProyectoInversion proyeInvServiceMock;
-
     private ServicioMercadoPago mpServiceMock;
+    private ServicioUsuario usuarioServiceMock;
     private HttpServletRequest requestMock = mock(HttpServletRequest.class);
-
     private Usuario userMock;
     private HttpSession sessionMock = mock(HttpSession.class);
     @InjectMocks
@@ -83,7 +80,8 @@ public class ControladorProyeInversionTests {
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
         mpServiceMock = mock(ServicioMercadoPagoImpl.class);
-        controlador = new ControladorProyeInversion(proyeInvServiceMock, mpServiceMock);
+        usuarioServiceMock = mock(ServicioUsuarioImpl.class);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock, mpServiceMock, usuarioServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
 
@@ -120,7 +118,7 @@ public class ControladorProyeInversionTests {
         ModelAndView modelAndView = this.controlador.getAll(this.requestMock);
 
         assert modelAndView != null;
-        var array = modelAndView.getModel().get("mayorRecaudacion");
+        var array = modelAndView.getModel().get("proyesRecomendados");
 
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("inversiones"));
         assertThat(false, is(modelAndView.getModel().isEmpty()));
