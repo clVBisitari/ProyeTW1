@@ -29,9 +29,7 @@
         </section>
 
         <div class="investments__button">
-            <a class="investments__link" th:href="@{/crear-pago}">
-                <button id="cargarSaldo" class="button__primary" onclick="generateForm()">Cargar Saldo</button>
-            </a>
+            <button id="cargarSaldo" class="button__primary" onclick="generateForm()">Cargar Saldo</button>
         </div>
         <div id="form-container"></div>
     </header>
@@ -39,7 +37,7 @@
         <section class="investments__end" th:each="saldo : ${saldos}">
             <h2 class="investments__title">Saldo</h2>
             <article class="investment">
-                <p class="investment__number" th:text="${saldo.valor}">+$9.000</p>
+                <p class="investment__number" th:text="'$' + ${#numbers.formatDecimal(saldo.valor, 0, 'POINT', 2, 'COMMA')}">+$9.000</p>
                 <p class="investment__text" th:text="${saldo.fecha}">26/10</p>
             </article>
         </section>
@@ -70,7 +68,7 @@
         // Crear el formulario dinámicamente
         const form = document.createElement("form");
         form.method = "POST"; // Método POST
-        form.action = /* Thymeleaf genera la URL aquí */ "[[@{/crear-pago}]]";
+        form.action = /* Thymeleaf genera la URL aquí */ "[[@{/cargarSaldo}]]";
 
         // Crear el select con opciones
         const select = document.createElement("select");

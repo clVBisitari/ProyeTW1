@@ -5,11 +5,14 @@ import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
+import org.hibernate.type.ZonedDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Service("servicioUsuario")
@@ -32,12 +35,25 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public Boolean cargarSaldo(BigDecimal valor, int idUser) throws Exception {
         try {
+            // Zona horaria de Buenos Aires
+            ZoneId zoneId = ZoneId.of("America/Argentina/Buenos_Aires");
+
+            // Fecha y hora actual en esa zona
+            ZonedDateTime fechaHoraBuenosAires = ZonedDateTime.now(zoneId);
+
             Usuario usuario = this.repositorioUsuario.buscarUsuarioPorId(idUser);
             if (usuario == null) {
                 throw new Exception("Usuario no encontrado en la base de datos");
             }
             usuario.setSaldo(usuario.getSaldo().add(valor));
+
+            Saldo saldo = new Saldo();
+            saldo.setUsuario(usuario);
+            saldo.setFecha(Date.from(fechaHoraBuenosAires.toInstant()));
+            saldo.setValor("+" + valor.toString());
+
             this.repositorioUsuario.modificar(usuario);
+            this.repositorioUsuario.saveSaldoFromUser(saldo);
 
             return true;
         } catch (Exception e) {

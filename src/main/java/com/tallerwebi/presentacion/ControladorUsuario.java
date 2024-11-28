@@ -305,4 +305,20 @@ public class ControladorUsuario {
 
         return new ModelAndView("vistaAdministrador", modelo);
     }
+    @RequestMapping(path="/cargarSaldo", method = RequestMethod.POST)
+    public ModelAndView cargarSaldo(@RequestParam("importe") Integer monto, HttpServletRequest request) {
+        UsuarioDTO usuario = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+        Integer idUsuario = usuario.getId();
+        try {
+            var saldoCargado = this.servicioUsuario.cargarSaldo(new BigDecimal(monto), idUsuario);
+            if(saldoCargado == null || saldoCargado == false) {
+                return new ModelAndView("redirect:/login");
+            }
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/login");
+        }
+        ModelMap model = new ModelMap();
+        model.put("usuario", usuario);
+        return new ModelAndView("saldo", model);
+    }
 }
