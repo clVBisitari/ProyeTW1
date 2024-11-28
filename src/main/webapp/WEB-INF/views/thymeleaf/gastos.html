@@ -13,11 +13,12 @@
         <div th:include="fragments :: navegadorLateral"></div>
         <main class="investments__main">
             <header class="investments__header">
-                <form class="investments__search">
+                <form class="investments__search" th:action="@{/buscar/gasto}" method="post">
                     <input
                         class="investments__input"
                         type="text"
                         placeholder="Buscar gasto"
+                        name="descripcion"
                     />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
