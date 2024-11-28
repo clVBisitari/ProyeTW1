@@ -84,6 +84,29 @@ public class ControladorGestorDeGastos {
 
     @RequestMapping(path = "/vencimientos", method = RequestMethod.GET)
     public ModelAndView getVencimientos(HttpServletRequest request){
-        return new ModelAndView("servicios");
+
+        ModelMap model = new ModelMap();
+
+        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        List<Gasto> gastos = servicioGestorGastos.obtenerLosGastosNoVencidosDeUnUsuario(usuarioConectado.getId());
+
+        model.addAttribute("gastos", gastos);
+
+        return new ModelAndView("gastos", model);
+    }
+
+    @RequestMapping(path = "/gastosMesEnCurso", method = RequestMethod.GET)
+    public ModelAndView getGastosMesEnCurso(HttpServletRequest request){
+
+        ModelMap model = new ModelMap();
+
+        UsuarioDTO usuarioConectado = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        List<Gasto> gastos = servicioGestorGastos.obtenerLosGastosDelMesEnCursoDeUnUsuario(usuarioConectado.getId());
+
+        model.addAttribute("gastos", gastos);
+
+        return new ModelAndView("gastos", model);
     }
 }
