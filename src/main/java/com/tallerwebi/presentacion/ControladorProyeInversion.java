@@ -51,7 +51,8 @@ public class ControladorProyeInversion {
         ModelMap model = new ModelMap();
 
         try {
-            List<ProyectoInversion> proyectosRecomendados = this.usuarioService.obtenerProyectosRecomendados(usuarioId);
+            List<ProyeInversionDTO> proyectosRecomendados = this.usuarioService.obtenerProyectosRecomendados(usuarioId);
+
             model.put("proyesRecomendados", proyectosRecomendados);
             List<InversionDTO> inversionesPropias = this.servicioProyectoInversion.getInversionesPorUsuario(usuarioId);
             model.addAttribute("inversionesPropias", inversionesPropias);
@@ -73,9 +74,9 @@ public class ControladorProyeInversion {
 
         ModelMap model = new ModelMap();
 
-        ProyectoInversion proyecto = this.servicioProyectoInversion.getProyectoInversionPorId(id);
+        ProyeInversionDTO proyecto = this.servicioProyectoInversion.getProyectoInversionPorId(id);
         model.put("InversorDeProyectoDTO", new InversorDeProyectoDTO());
-        model.put("proyecto", ProyeInversionDTO.convertToDTO(proyecto));
+        model.put("proyecto", proyecto);
 
         return new ModelAndView("inversion", model);
     }

@@ -190,4 +190,18 @@ public class ProyeInversionRepositorio implements RepositorioProyeInversion
         return query.getResultList();
     }
 
+    @Transactional
+    @Override
+    public Integer getParticipantesFromProyecto(Integer proyeId){
+        final Session session = sessionFactory.getCurrentSession();
+        String hql = "SELECT COUNT(DISTINCT ip.usuario.id) " +
+                "FROM InversorDeProyecto ip " +
+                "WHERE ip.proyecto.id = :proyeId";
+        Query query = session.createQuery(hql);
+        query.setParameter("proyeId", proyeId);
+        var result = query.getSingleResult();
+
+        return Integer.parseInt(result.toString());
+    }
+
 }

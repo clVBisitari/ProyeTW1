@@ -1,5 +1,7 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
+import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
 import com.tallerwebi.infraestructura.RepositorioGestorDeGastosImpl;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.RepositorioUsuarioImpl;
@@ -9,6 +11,7 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import static org.hamcrest.Matchers.empty;
@@ -34,11 +37,15 @@ public class ServicioUsuarioTest {
     private UsuarioDTO usuarioDTOMock;
     private ServicioUsuario servicioUsuario;
     private RepositorioUsuarioImpl repositorioUsuarioMock;
+    @Mock
+    private RepositorioProyeInversion repositorioProyeInversionMock;
 
     @BeforeEach
     public void init() {
         repositorioUsuarioMock = mock(RepositorioUsuarioImpl.class);
-        this.servicioUsuario = new ServicioUsuarioImpl(repositorioUsuarioMock);
+        repositorioProyeInversionMock = mock(ProyeInversionRepositorio.class);
+
+        this.servicioUsuario = new ServicioUsuarioImpl(repositorioUsuarioMock, repositorioProyeInversionMock);
         this.usuarioDTOMock = mock(UsuarioDTO.class);
     }
 
