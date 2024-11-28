@@ -213,16 +213,64 @@ public class ControladorUsuario {
         }
 
         UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
-        List<ProyectoInversion>recomendados = servicioUsuario.obtenerProyectosRecomendados(usuarioDTO.getId());
 
         ModelMap modelo = new ModelMap();
 
         modelo.put("usuario", usuarioDTO);
-        modelo.put("recomendados", recomendados);
-
-        System.out.println(recomendados);
 
         return new ModelAndView("perfil", modelo);
+    }
+    @Transactional
+    @RequestMapping(path = "/editarPerfil", method = RequestMethod.GET)
+    public ModelAndView irAEditar(HttpServletRequest request) {
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return new ModelAndView("redirect:/login");
+
+        }
+        UsuarioDTO usuarioDTO = (UsuarioDTO) request.getSession().getAttribute("USUARIO");
+
+        ModelMap modelo = new ModelMap();
+
+        modelo.put("usuario", usuarioDTO);
+
+        return new ModelAndView("editarPerfil", modelo);
+    }
+    @Transactional
+    @RequestMapping(path = "/editarPerfil/usuario", method = RequestMethod.POST)
+    public String editarPerfil(@RequestParam("usuarioId") Integer usuarioId,
+                               @ModelAttribute("usuario") UsuarioDTO usuarioDTO,
+                               HttpServletRequest request) throws Exception {
+
+
+        if (!Usuario.isUserLoggedIn(request)) {
+            return "redirect:/login";
+        }
+
+        if (usuarioId == null) {
+
+            return "redirect:/login";
+        }
+        if (usuarioDTO.getNombre() == null || usuarioDTO.getApellido() == null) {
+            return "editarPerfil";
+        }
+
+
+        Usuario usuario = servicioUsuario.getUsuarioById(usuarioId);
+
+        if (usuario == null) {
+            return "redirect:/login";
+        }
+
+
+        usuario.setSaldo(usuarioDTO.getSaldo());
+        usuario.setApellido(usuarioDTO.getApellido());
+        usuario.setNombre(usuarioDTO.getNombre());
+        usuario.setEmail(usuarioDTO.getEmail());
+        usuario.setDni(usuarioDTO.getDni());
+                servicioUsuario.actualizarDatos(usuario);
+
+        return "redirect:/dashboard";
     }
 
     @Transactional

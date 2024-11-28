@@ -38,7 +38,7 @@ VALUES
     (4, 6, 'Compra de bicicletas eléctricas para su posterior alquiler en de carbono en las ciudades.',
     false, 850000, 1300000, NULL, '2024-12-20', '2024-10-26', 'Compra y alquiler de bicicletas eléctricas', 4),
 
-    (5, 2, 'Construcción de viviendas económicas y ecológicamente sostenibles utilizando materiales reciclados y técnicas de construcción modernatacionales accesibles para comunidades vulnerables.',
+    (5, 2, 'Construcción de viviendas accesibles para comunidades vulnerables.',
     true, 500000, 2000000, 'Falta de inversores', '2025-01-31', '2024-10-26', 'Construcción de viviendas sustentables', 5)
 ON CONFLICT DO NOTHING;
 

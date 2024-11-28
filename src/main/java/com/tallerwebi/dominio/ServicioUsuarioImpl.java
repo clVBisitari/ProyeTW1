@@ -200,6 +200,12 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
         repositorioUsuario.modificar(usuarioCambio);
     }
+
+    @Override
+    public void actualizarDatos(Usuario usuario) {
+        repositorioUsuario.modificar(usuario);
+    }
+
     @Override
     public List<ProyectoInversion> obtenerProyectosRecomendados(Integer usuarioId) throws Exception {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(usuarioId);
