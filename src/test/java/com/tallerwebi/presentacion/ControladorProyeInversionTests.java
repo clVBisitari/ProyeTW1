@@ -1,4 +1,4 @@
-/*package com.tallerwebi.presentacion;
+package com.tallerwebi.presentacion;
 import com.tallerwebi.dominio.ProyectoInversion;
 import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
 import com.tallerwebi.dominio.Usuario;
@@ -21,6 +21,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -59,6 +60,9 @@ public class ControladorProyeInversionTests {
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
+    @Mock
+    private RedirectAttributes redirectAttributesMock = mock(RedirectAttributes.class);
+
 
     @BeforeEach
     public void init(){
@@ -85,11 +89,17 @@ public class ControladorProyeInversionTests {
 
 //        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
-
     @Test
     public void DadosDatosValidos_CuandoSellamaaBuscarProyectos_RetornaListaOk() throws Exception {
 
-        ModelAndView modelAndView = this.controlador.buscarProyectoInversion("algo");
+        String string = this.controlador.buscarProyectoInversion("algo",redirectAttributesMock, requestMock);
+        assertThat("redirect:inversiones", equalToIgnoringCase(string));
+    }
+
+  /*  @Test
+    public void DadosDatosValidos_CuandoSellamaaBuscarProyectos_RetornaListaOk() throws Exception {
+
+     String string = this.controlador.buscarProyectoInversion("algo");
 
         assert modelAndView != null;
         var array = modelAndView.getModel().get("response");
@@ -97,7 +107,7 @@ public class ControladorProyeInversionTests {
         assertThat("redirect:inversiones", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
         assertThat(true,     is(modelAndView.getModel().containsValue(array)));
         assertThat(((ArrayList<?>) array).size(), is(2));
-    }
+    }*/
 
     @Test
     public void DadosDatosValidos_CuandoGetProyectosSugeridos_RetornaListaDeProyectos(){
@@ -116,4 +126,4 @@ public class ControladorProyeInversionTests {
         assertThat(false, is(modelAndView.getModel().isEmpty()));
         assertThat(((ArrayList<ProyectoInversion>) array).size(), is(2));
     }
-}*/
+}
