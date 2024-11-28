@@ -5,11 +5,14 @@ import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.infraestructura.ProyeInversionRepositorio;
+import org.hibernate.type.ZonedDateTimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 @Service("servicioUsuario")
@@ -32,12 +35,25 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     @Override
     public Boolean cargarSaldo(BigDecimal valor, int idUser) throws Exception {
         try {
+            // Zona horaria de Buenos Aires
+            ZoneId zoneId = ZoneId.of("America/Argentina/Buenos_Aires");
+
+            // Fecha y hora actual en esa zona
+            ZonedDateTime fechaHoraBuenosAires = ZonedDateTime.now(zoneId);
+
             Usuario usuario = this.repositorioUsuario.buscarUsuarioPorId(idUser);
             if (usuario == null) {
                 throw new Exception("Usuario no encontrado en la base de datos");
             }
             usuario.setSaldo(usuario.getSaldo().add(valor));
+
+            Saldo saldo = new Saldo();
+            saldo.setUsuario(usuario);
+            saldo.setFecha(Date.from(fechaHoraBuenosAires.toInstant()));
+            saldo.setValor("+" + valor.toString());
+
             this.repositorioUsuario.modificar(usuario);
+            this.repositorioUsuario.saveSaldoFromUser(saldo);
 
             return true;
         } catch (Exception e) {
@@ -140,23 +156,6 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
     public List<Usuario> getContactosSugeridos(Integer id) {
         List<Usuario> contactos = repositorioUsuario.getContactosSugeridos(id);
 
-        /*  List<Usuario> contactosSugeridos = new ArrayList<>();
-
-      Random random = new Random();
-
-        for (Usuario contacto : contactos) {
-            List<Usuario> contactosDeContacto = contacto.getContactos();
-
-            if (!contactosDeContacto.isEmpty()) {
-                Usuario contactoAleatorio = contactosDeContacto.get(random.nextInt(contactosDeContacto.size()));
-                if (contactoAleatorio.getId() != id) {
-                    contactosSugeridos.add(contactoAleatorio);
-                }
-            }
-        }
-
-        return contactosSugeridos;
-*/
         return contactos;
     }
 
@@ -200,6 +199,12 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         }
         repositorioUsuario.modificar(usuarioCambio);
     }
+
+    @Override
+    public void actualizarDatos(Usuario usuario) {
+        repositorioUsuario.modificar(usuario);
+    }
+
     @Override
     public List<ProyectoInversion> obtenerProyectosRecomendados(Integer usuarioId) throws Exception {
         Usuario usuario = repositorioUsuario.buscarUsuarioPorId(usuarioId);
@@ -210,23 +215,11 @@ public class ServicioUsuarioImpl implements ServicioUsuario {
         return repositorioUsuario.getProyectosRecomendados(usuarioId, saldo);
     }
 
-       /* @Override
-    public ProyectoInversion publicarProyectoPropio(String descripción, int montoRequerido, Rubro rubro, int plazoParaInicio) {
-        return null;
-    }*/
-  /*  @Override
-    public void activarRecomendacionesAutomaticas(Double valor, int idUser) {
-
-    }*/
-      /* @Override
-    public Boolean reportarUsuarioSospechoso(String motivo, int idUserReportado, int idUserQueReporta) {
-        return null;
-    }*/
-       /* @Override
-    public Boolean invertirEnProyecto(int valor, int idProyecto) { ///
-        return null;
-    }*/
-
+    @Override
+    public List<Saldo> getHistorialSaldoByIdUsuario(Integer idUsuario){
+        List<Saldo> saldos = this.repositorioUsuario.getSaldosByUserId(idUsuario);
+        return saldos;
+    }
 
 
 }

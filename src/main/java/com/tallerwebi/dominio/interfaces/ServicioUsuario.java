@@ -1,7 +1,7 @@
 package com.tallerwebi.dominio.interfaces;
 
 import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.Rubro;
+import com.tallerwebi.dominio.Saldo;
 import com.tallerwebi.dominio.Usuario;
 
 import java.math.BigDecimal;
@@ -30,4 +30,8 @@ public interface ServicioUsuario {
     Boolean eliminarUsuarioDeContactos(Usuario usuarioQueElimina, Usuario usuarioAEliminar);
     List<ProyectoInversion> obtenerProyectosRecomendados(Integer usuarioId) throws Exception;
     void cambiarEstadoUsuario(Usuario usuario) throws Exception;
+
+
+    void actualizarDatos(Usuario usuario);
+    List<Saldo> getHistorialSaldoByIdUsuario(Integer idUsuario);
 }

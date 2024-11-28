@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AssistPyme - Registro</title>
+    <!-- custom style -->
+    <link rel="stylesheet" th:href="@{/css/main.css}"/>
+    <link rel="stylesheet" th:href="@{/css/registro.css}"/>
+</head>
+<body class="login__body">
+<aside class="login__aside"></aside>
+<main class="login__main">
+    <div class="login__content">
+        <h1 class="login__h1">Editar datos</h1>
+
+      <form id="userForm" class="login__form" th:action="@{/editarPerfil/usuario}" th:object="${usuario}" method="post">
+        <fieldset class="login__fieldset">
+          <input type="hidden" name="usuarioId" th:value="${usuario.id}" />
+          <label class="login__label" for="nombre">Nombre</label>
+          <input th:field="*{nombre}" class="login__input" type="text" id="nombre" name="nombre" required />
+        </fieldset>
+
+        <fieldset class="login__fieldset">
+          <label class="login__label" for="apellido">Apellido</label>
+          <input th:field="*{apellido}" class="login__input" type="text" id="apellido" name="apellido" required />
+        </fieldset>
+
+        <fieldset class="login__fieldset">
+          <label class="login__label" for="dni">DNI</label>
+          <input th:field="*{dni}" class="login__input" type="number" id="dni" name="dni" required />
+        </fieldset>
+
+        <fieldset class="login__fieldset">
+          <label class="login__label" for="email">Email</label>
+          <input th:field="*{email}" class="login__input" type="email" id="email" name="email" required />
+        </fieldset>
+
+        <fieldset class="login__fieldset">
+          <label class="login__label" for="saldo">Saldo</label>
+          <input th:field="*{saldo}" class="login__input" type="number" id="saldo" name="saldo" required />
+        </fieldset>
+
+        <div class="login__button">
+          <button class="button__primary" type="submit">Actualizar datos</button>
+        </div>
+      </form>
+
+
+    </div>
+</main>
+<script type="text/javascript">
+    document
+        .getElementById('userForm')
+        .addEventListener('submit', function (event) {
+            var password = document.getElementById('password').value
+            var confirmPassword =
+                document.getElementById('repeat').value
+
+            // Validación de longitud del password
+            if (password.length < 3 || password.length > 15) {
+                alert('El password debe tener entre 3 y 15 caracteres.')
+                event.preventDefault() // Evita el envío del formulario
+                return
+            }
+
+            // Validación de que ambas contraseñas coincidan
+            if (password !== confirmPassword) {
+                alert('Las contraseñas no coinciden.')
+                event.preventDefault() // Evita el envío del formulario
+            }
+        })
+</script>
+</body>
+</html>

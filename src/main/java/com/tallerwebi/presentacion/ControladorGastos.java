@@ -14,12 +14,12 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
-public class ControladorGestorDeGastos {
+public class ControladorGastos {
 
     private ServicioGestorGastos servicioGestorGastos;
 
     @Autowired
-    public ControladorGestorDeGastos(ServicioGestorGastos servicioGestorDeGastos) {
+    public ControladorGastos(ServicioGestorGastos servicioGestorDeGastos) {
         this.servicioGestorGastos = servicioGestorDeGastos;
     }
 

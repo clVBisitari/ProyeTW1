@@ -5,6 +5,7 @@ import com.tallerwebi.dominio.excepcion.PagoException;
 import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.Usuario;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,12 +25,16 @@ public class ControladorProyeInversion {
 
     private ServicioProyectoInversion servicioProyectoInversion;
     private final ServicioMercadoPago mercadoPagoService;
+    private final ServicioUsuario usuarioService;
     private UsuarioDTO user;
 
     @Autowired
-    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion, ServicioMercadoPago serviceMp) {
+    public ControladorProyeInversion(ServicioProyectoInversion proyectoInversion,
+                                     ServicioMercadoPago serviceMp,
+                                     ServicioUsuario usuarioService) {
         this.servicioProyectoInversion = proyectoInversion;
         this.mercadoPagoService = serviceMp;
+        this.usuarioService = usuarioService;
     }
 
 
@@ -39,12 +45,20 @@ public class ControladorProyeInversion {
         if (!Usuario.isUserLoggedIn(request)) {
             return new ModelAndView("redirect:/login");
         }
+        UsuarioDTO usuario = (UsuarioDTO)request.getSession().getAttribute("USUARIO");
+        Integer usuarioId = usuario.getId();
 
         ModelMap model = new ModelMap();
 
-        List<ProyectoInversion> mayorRecaudacion = this.servicioProyectoInversion.getProyectosMayorInversion();
+        try {
+            List<ProyectoInversion> proyectosRecomendados = this.usuarioService.obtenerProyectosRecomendados(usuarioId);
+            model.put("proyesRecomendados", proyectosRecomendados);
+            List<InversionDTO> inversionesPropias = this.servicioProyectoInversion.getInversionesPorUsuario(usuarioId);
+            model.addAttribute("inversionesPropias", inversionesPropias);
 
-        model.put("mayorRecaudacion", mayorRecaudacion);
+        } catch (Exception e) {
+            return new ModelAndView("redirect:/dashboard");
+        }
 
         return new ModelAndView("inversiones", model);
     }
@@ -67,17 +81,21 @@ public class ControladorProyeInversion {
     }
 
 
-    @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.GET)
-    public ModelAndView buscarProyectoInversion(@RequestParam("nombre") String nombre)
+    @RequestMapping(path = "/buscarProyeInversion", method = RequestMethod.POST)
+    public String buscarProyectoInversion(@RequestParam("nombre") String nombre, RedirectAttributes redirectAttributes, HttpServletRequest request)
     {
 
         ModelMap model = new ModelMap();
 
         List<ProyectoInversion> proyectos = this.servicioProyectoInversion.buscarProyectoInversion(nombre);
 
-        model.put("response", proyectos);
+        if (proyectos.isEmpty()) {
+            redirectAttributes.addFlashAttribute("mensajeProyectoNoEncontrado", "proyectos no encontrados con ese nombre");
+        } else {
+            redirectAttributes.addFlashAttribute("proyectosEncontrados", proyectos);
+        }
 
-        return new ModelAndView("redirect:inversiones", model);
+        return"redirect:inversiones";
     }
 
 

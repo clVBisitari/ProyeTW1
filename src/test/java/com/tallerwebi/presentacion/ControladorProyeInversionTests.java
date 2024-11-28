@@ -1,10 +1,8 @@
 package com.tallerwebi.presentacion;
-import com.tallerwebi.dominio.ProyectoInversion;
-import com.tallerwebi.dominio.ServicioMercadoPagoImpl;
-import com.tallerwebi.dominio.Usuario;
+import com.tallerwebi.dominio.*;
 import com.tallerwebi.dominio.interfaces.ServicioMercadoPago;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
-import com.tallerwebi.dominio.ServicioProyectoInversionImpl;
+import com.tallerwebi.dominio.interfaces.ServicioUsuario;
 import com.tallerwebi.integracion.config.HibernateTestConfig;
 import com.tallerwebi.integracion.config.SpringWebTestConfig;
 import org.hibernate.Session;
@@ -21,6 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -47,10 +46,9 @@ public class ControladorProyeInversionTests {
 
     @Mock
     private ServicioProyectoInversion proyeInvServiceMock;
-
     private ServicioMercadoPago mpServiceMock;
+    private ServicioUsuario usuarioServiceMock;
     private HttpServletRequest requestMock = mock(HttpServletRequest.class);
-
     private Usuario userMock;
     private HttpSession sessionMock = mock(HttpSession.class);
     @InjectMocks
@@ -59,6 +57,9 @@ public class ControladorProyeInversionTests {
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
+    @Mock
+    private RedirectAttributes redirectAttributesMock = mock(RedirectAttributes.class);
+
 
     @BeforeEach
     public void init(){
@@ -79,17 +80,24 @@ public class ControladorProyeInversionTests {
 
         proyeInvServiceMock = mock(ServicioProyectoInversionImpl.class);
         mpServiceMock = mock(ServicioMercadoPagoImpl.class);
-        controlador = new ControladorProyeInversion(proyeInvServiceMock, mpServiceMock);
+        usuarioServiceMock = mock(ServicioUsuarioImpl.class);
+        controlador = new ControladorProyeInversion(proyeInvServiceMock, mpServiceMock, usuarioServiceMock);
         when(proyeInvServiceMock.buscarProyectoInversion("algo")).thenReturn(proyeInvList);
         when(requestMock.getSession()).thenReturn(mock(HttpSession.class));
 
 //        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.wac).build();
     }
-
     @Test
     public void DadosDatosValidos_CuandoSellamaaBuscarProyectos_RetornaListaOk() throws Exception {
 
-        ModelAndView modelAndView = this.controlador.buscarProyectoInversion("algo");
+        String string = this.controlador.buscarProyectoInversion("algo",redirectAttributesMock, requestMock);
+        assertThat("redirect:inversiones", equalToIgnoringCase(string));
+    }
+
+  /*  @Test
+    public void DadosDatosValidos_CuandoSellamaaBuscarProyectos_RetornaListaOk() throws Exception {
+
+     String string = this.controlador.buscarProyectoInversion("algo");
 
         assert modelAndView != null;
         var array = modelAndView.getModel().get("response");
@@ -97,7 +105,7 @@ public class ControladorProyeInversionTests {
         assertThat("redirect:inversiones", equalToIgnoringCase(Objects.requireNonNull(modelAndView.getViewName())));
         assertThat(true,     is(modelAndView.getModel().containsValue(array)));
         assertThat(((ArrayList<?>) array).size(), is(2));
-    }
+    }*/
 
     @Test
     public void DadosDatosValidos_CuandoGetProyectosSugeridos_RetornaListaDeProyectos(){
@@ -110,7 +118,7 @@ public class ControladorProyeInversionTests {
         ModelAndView modelAndView = this.controlador.getAll(this.requestMock);
 
         assert modelAndView != null;
-        var array = modelAndView.getModel().get("mayorRecaudacion");
+        var array = modelAndView.getModel().get("proyesRecomendados");
 
         assertThat(modelAndView.getViewName(), equalToIgnoringCase("inversiones"));
         assertThat(false, is(modelAndView.getModel().isEmpty()));

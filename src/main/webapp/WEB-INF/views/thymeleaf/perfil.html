@@ -14,7 +14,13 @@
 
 <main class="perfil__main">
   <div class="perfil__content">
-    <h1 class="perfil__h1">Perfil de Usuario</h1>
+    <form
+            id="userForm"
+            class="login__form"
+            th:action="@{/editarPerfil}"
+            method="GET"
+    >
+    <h1 class="perfil__h1">Datos de Usuario</h1>
     <div class="perfil__info">
       <p><strong>Nombre:</strong> <span th:text="${usuario.nombre}">Nombre del Usuario</span></p>
       <p><strong>Apellido:</strong> <span th:text="${usuario.apellido}">Apellido del Usuario</span></p>
@@ -22,7 +28,8 @@
       <p><strong>DNI:</strong> <span th:text="${usuario.dni}">DNI del Usuario</span></p>
       <p><strong>Saldo:</strong> <span th:text="${usuario.saldo}">0.00</span> ARS</p>
     </div>
-    <button class="button__primary" th:onclick="'location.href=\'/editar-perfil\''">Editar Información</button>
+    <button class="button__primary" type="submit">Editar Información</button>
+      </form>
   </div>
 
 </main>

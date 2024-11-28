@@ -1,4 +1,5 @@
 package com.tallerwebi.presentacion;
+import com.tallerwebi.dominio.Saldo;
 import com.tallerwebi.dominio.Usuario;
 
 import java.math.BigDecimal;
@@ -19,6 +20,25 @@ public class UsuarioDTO {
     private boolean estaActivo;
     private List<UsuarioDTO> contactos;
     private BigDecimal saldo;
+    private String cvu;
+    private List<Saldo> saldos;
+
+
+    public String getCvu() {
+        return cvu;
+    }
+
+    public void setCvu(String cvu) {
+        this.cvu = cvu;
+    }
+
+    public List<Saldo> getSaldos() {
+        return saldos;
+    }
+
+    public void setSaldos(List<Saldo> saldos) {
+        this.saldos = saldos;
+    }
 
     public UsuarioDTO() {
 
@@ -54,6 +74,7 @@ public class UsuarioDTO {
         usuarioDTO.setSaldo(usuario.getSaldo());
         usuarioDTO.setContactos(Usuario.mapToUsuarioDTOList(usuario.getContactos()));
         usuarioDTO.setEstaActivo(usuario.getEstaActivo());
+        usuarioDTO.setCvu(usuario.getCvu());
         return usuarioDTO;
     }
 

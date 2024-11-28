@@ -4,6 +4,7 @@ import com.tallerwebi.dominio.excepcion.ProyeInversionException;
 import com.tallerwebi.dominio.interfaces.RepositorioProyeInversion;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.interfaces.ServicioProyectoInversion;
+import com.tallerwebi.presentacion.InversionDTO;
 import com.tallerwebi.presentacion.InversorDeProyectoDTO;
 import com.tallerwebi.presentacion.ProyeInversionDTO;
 import com.tallerwebi.presentacion.UsuarioDTO;
@@ -13,6 +14,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -118,13 +122,27 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
     @Override
     public Integer invertirEnProyecto(InversorDeProyectoDTO inversorDto){
         InversorDeProyecto inversor = InversorDeProyecto.convertToInversorDeProyecto(inversorDto);
+        LocalDateTime fechaLocal = LocalDateTime.now();
 
         Integer idUsuario = Integer.parseInt(inversorDto.idUsuario);
 //        Integer idProye = Integer.parseInt(inversorDto.idProyecto);
         BigDecimal monto = new BigDecimal(inversorDto.monto);
         Usuario usuarioValidado = this.repoUsuario.buscarUsuarioPorId(idUsuario);
+        // Zona horaria de Buenos Aires
+        ZoneId zoneId = ZoneId.of("America/Argentina/Buenos_Aires");
+
+        // Fecha y hora actual en esa zona
+        ZonedDateTime fechaHoraBuenosAires = ZonedDateTime.now(zoneId);
+
+        if(usuarioValidado == null) return 0;
         //si el monto del usuario que quiere es menor a su saldo
         if(monto.compareTo(usuarioValidado.getSaldo()) > 0) return 0;
+        Saldo saldo = new Saldo();
+        saldo.setFecha(Date.from(fechaHoraBuenosAires.toInstant()));
+        saldo.setValor("-" + monto.toString());
+        saldo.setUsuario(usuarioValidado);
+
+        this.repoUsuario.saveSaldoFromUser(saldo);
 
         usuarioValidado.setSaldo(usuarioValidado.getSaldo().subtract(monto));
 
@@ -136,5 +154,11 @@ public class ServicioProyectoInversionImpl implements ServicioProyectoInversion
         Integer idInversor = this.repoProyeInversion.saveInversor(inversor, proyectoInversion, usuarioValidado);
 
         return idInversor;
+    }
+
+    @Override
+    public List<InversionDTO>getInversionesPorUsuario(Integer userId){
+        List<InversionDTO> inversionesPropias = this.repoProyeInversion.getInversionesByUser(userId);
+        return inversionesPropias;
     }
 }

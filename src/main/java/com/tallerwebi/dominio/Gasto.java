@@ -26,11 +26,11 @@ public class Gasto {
     @Column(nullable = false)
     private BigDecimal valor;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column(nullable = false)
     private Date fechaVencimiento;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     @Column
     private Date fechaRecordatorio;
 

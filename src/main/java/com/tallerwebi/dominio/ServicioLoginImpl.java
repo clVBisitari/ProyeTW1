@@ -1,5 +1,6 @@
 package com.tallerwebi.dominio;
 
+import com.tallerwebi.dominio.helpers.GeneradorCvu;
 import com.tallerwebi.dominio.interfaces.RepositorioUsuario;
 import com.tallerwebi.dominio.excepcion.UsuarioExistente;
 import com.tallerwebi.dominio.interfaces.ServicioLogin;
@@ -35,18 +36,15 @@ public class ServicioLoginImpl implements ServicioLogin {
         if(usuarioEncontrado != null){
             throw new UsuarioExistente();
         }
+        String cvu = GeneradorCvu.generarCvu();
+
 
         Usuario nuevoUser = new Usuario(usuario.getEmail(), usuario.getPassword(), usuario.getNombre(), usuario.getApellido(), usuario.getDni());
-
-
-//        GestorDeGastos gestor = new GestorDeGastos();
-//        gestor.setGastos(new ArrayList<>());
-//        gestor.setUsuario(nuevoUser);
 
         nuevoUser.setEsAdmin(false);
         nuevoUser.setEnSuspension(false);
         nuevoUser.setSaldo(new BigDecimal(0.00));
-//        nuevoUser.setGestorDeGastos(gestor);
+        nuevoUser.setCvu(cvu);
 
         repositorioUsuario.guardar(nuevoUser);
     }

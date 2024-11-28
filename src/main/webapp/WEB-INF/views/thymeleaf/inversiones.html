@@ -10,26 +10,57 @@
 </head>
 <body class="body">
 <div th:include="fragments :: navegadorLateral"></div>
-<main class="investments__main">
+<main class="investments__main" >
     <header class="investments__header">
-        <form class="investments__search">
-            <input class="investments__input" type="text" placeholder="Buscar proyecto"/>
+        <form class="investments__search" th:action="@{/buscarProyeInversion}" method="post">
+            <input class="investments__input" name="nombre" type="text" placeholder="Buscar proyecto"/>
             <svg xmlns="http://www.w3.org/2000/svg" class="investments__icon" viewBox="0 0 16 16">
                 <path
                         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"
                 />
             </svg>
         </form>
-        <div class="investments__button">
+
+                <div class="investments__button">
             <a class="investments__link" th:href="@{/crearProyeInversion}">
                 <button class="button__primary">Crear proyecto</button>
             </a>
         </div>
     </header>
+    <aside
+            class="contacts__aside"
+            th:if="${proyectosEncontrados != null}"
+    >
+        <h2 class="investments__title">Proyectos encontrados:</h2>
+        <div th:each="proyecto : ${proyectosEncontrados}">
+            <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
+                <article class="proyect">
+                    <h3 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h3>
+                    <p class="proyect__number">
+                        Inicia el <b th:text="${proyecto.plazoParaInicio}">26/10</b>
+                    </p>
+                    <p class="proyect__description">
+                        Llevado por <span th:text="${proyecto.titular.nombre + ' ' + proyecto.titular.apellido}">Jorge Gómez</span>
+                    </p>
+                    <p class="proyect__date">
+                        Recaudado <b
+                            th:text="${#numbers.formatDecimal(proyecto.montoRecaudado, 0, 'POINT', 2, 'COMMA')}">754.159</b>
+                        de <b th:text="${#numbers.formatDecimal(proyecto.montoRequerido, 0, 'POINT', 2, 'COMMA')}">1.000.000</b>
+                    </p>
+                </article>
+            </a>
+
+        </div>
+
+    </aside>
+
     <div class="investments__content">
         <section class="investments__start">
             <h2 class="investments__title">Proyectos con mayor recaudación:</h2>
-            <div th:each="proyecto : ${mayorRecaudacion}">
+            <article class="proyect" th:if="${proyesRecomendados == null or #lists.isEmpty(proyesRecomendados)}">
+                <h4>No se encontraron proyectos</h4>
+            </article>
+            <div th:if="${proyesRecomendados != null and !#lists.isEmpty(proyesRecomendados)}" th:each="proyecto : ${proyesRecomendados}">
                 <a th:href="@{/inversion/{id}(id=${proyecto.id})}" style="color: unset; text-decoration: none;">
                     <article class="proyect">
                         <h3 class="proyect__subtitle" th:text="${proyecto.titulo}">Título del proyecto</h3>
@@ -49,10 +80,18 @@
         </section>
         <section class="investments__end">
             <h2 class="investments__title">Inversiones</h2>
-            <article class="investment">
-                <p class="investment__number">$9.000</p>
-                <p class="investment__text">Compra de auto usado para refacción y reventa</p>
+            <article th:if="${inversionesPropias == null}">
+                <h4>No se encontraron proyectos propios creados</h4>
             </article>
+            <div th:if="${inversionesPropias != null and !#lists.isEmpty(inversionesPropias)}" th:each="inversion : ${inversionesPropias}">
+                <a th:href="@{/inversion/{id}(id=${inversion.proyectoId})}" style="color: unset; text-decoration: none;"></a>
+                    <article class="investment" >
+                        <p class="investment__number" th:text="${#numbers.formatDecimal(inversion.monto, 0, 'POINT', 2, 'COMMA')}">$9.000</p>
+                        <p class="investment__text" th:text="${inversion.titulo}">Compra de auto usado para refacción y reventa</p>
+                    </article>
+                </a>
+            </div>
+
         </section>
     </div>
 </main>
